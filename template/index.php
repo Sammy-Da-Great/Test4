@@ -62,6 +62,9 @@ if (filesize("rawData.csv")>0) {
 
 <head><title><?php echo $teamNumber ?> - ORF Scouting</title>
 <style>
+a {
+	color:white;
+}
 table, th, td {
     border: 1px solid white;
 }
@@ -72,6 +75,7 @@ table.center {
 }
 p, h1, h3, td, th {
 	color: white;
+	text-align: center;
 }
 body {
 	background-color: black;
@@ -120,5 +124,6 @@ if (filesize("rawdata.csv") > 0) {
 } ?>
 </table>
 <p></p>
+<p>Link for sharing: <a href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p>
 <div style="text-align:center"><input type="button" onclick="returnHome()" value="Go Back"></div>
 </body>
