@@ -1,0 +1,10 @@
+*
+**/
+!.gitignore
+!*.php
+!/template
+!template/index.php
+!template/picture.png
+!template/pitScout.csv
+!template/rawData.csv
+!template/teamNumber.txt
