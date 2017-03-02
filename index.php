@@ -25,15 +25,18 @@ if (isSet($_GET["team"])) {
 body {
 	background-color: black;
 }
-
+img {
+    height: 70%;
+    width: 80%;
+}
 p, h1, h2, h3 {
 	color: white;
 }
 
 div {
-    width: 100px;
-    height: 100px;
-
+    width: 50%;
+    height: 70%;
+	border: 1px solid white;
     position: absolute;
     top:0;
     bottom: 0;
@@ -41,6 +44,7 @@ div {
     right: 0;
 
     margin: auto;
+	text-align: center;
 }
 </style><script>
 function onLoad() {
@@ -48,6 +52,7 @@ function onLoad() {
 }
 </script></head><body onload="onLoad()">
 <div>
+	<img src="template/picture.png"/>
 	<form method="get">
 	<p>Team Number:</p>
 	<p><input id="team" name="team" type="number"></input></p>
