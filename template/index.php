@@ -60,7 +60,10 @@ if (filesize("rawData.csv")>0) {
 }
 ?>
 
-<head><title><?php echo $teamNumber ?> - ORF Scouting</title>
+<head>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<title><?php echo $teamNumber ?> - ORF Scouting</title>
 <style>
 a {
 	color:white;
