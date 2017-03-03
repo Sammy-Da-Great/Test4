@@ -20,7 +20,10 @@ if (isSet($_GET["team"])) {
 }
 ?>
 
-<head><title>ORF Scouter</title>
+<head>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<title>ORF Scouter</title>
 <style>
 body {
 	background-color: black;

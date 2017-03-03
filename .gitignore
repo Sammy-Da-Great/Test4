@@ -1,6 +1,7 @@
 *
 **/
 !.gitignore
+!favicon.ico
 !*.php
 !/template
 !template/index.php
