@@ -10,13 +10,13 @@ fclose($file);
 if (filesize("pitScout.csv")>0) {
 $file = fopen("pitScout.csv","r");
 $raw = explode(",",fread ($file,filesize("pitScout.csv")));
-$autonomousPit = $raw[4];
-$notesPit = $raw[3];
-$lowPit = $raw[5];
-$highPit = $raw[6];
-$climbPit = $raw[7];
-$gearsPit = $raw[8];
-$teleopPit = $raw[9];
+$autonomousPit = $raw[7];
+$notesPit = $raw[6];
+$lowPit = $raw[3];
+$highPit = $raw[4];
+$climbPit = $raw[9];
+$gearsPit = $raw[5];
+$teleopPit = $raw[8];
 fclose($file);
 } else {
 	$autonomousPit = "Unknown";
@@ -103,9 +103,10 @@ function returnHome() {
 <tr><td>Autonomous:</td><td><?php echo $autonomousPit ?></td></tr>
 <tr><td>Teleoperated:</td><td><?php echo $teleopPit ?></td></tr>
 <tr><td>General Notes:</td><td><?php echo $notesPit ?></td></tr>
-<tr><td>Low Goal visits per match:</td><td>Pit: <?php echo $lowPit ?></td><td> Average: <?php echo $Low ?></td></tr>
-<tr><td>High Goal visits per match:</td><td>Pit: <?php echo $highPit ?></td><td> Average: <?php echo $High ?></td></tr>
-<tr><td>Gears per match</td><td>Pit: <?php echo $gearsPit ?></td><td> Average: <?php echo $Gears ?></td></tr>
+<tr><td>Low Goal visits per match:</td><td>Pit: <?php echo $lowPit ?></td><td>Average: <?php echo $Low ?></td></tr>
+<tr><td>High Goal visits per match:</td><td>Pit: <?php echo $highPit ?></td><td>Average: <?php echo $High ?></td></tr>
+<tr><td>Gears per match</td><td>Pit: <?php echo $gearsPit ?></td><td>Average: <?php echo $Gears ?></td></tr>
+<tr><td>Climb:</td><td>Pit: <?php echo $climbPit ?></td><td>Average: See table below</td></tr>
 </table>
 <p></p>
 <h3 style="text-align:center">Raw Data</h3>
