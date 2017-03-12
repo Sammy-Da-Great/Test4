@@ -6,12 +6,11 @@ if (isSet($_GET["team"])) {
 	$directories = glob('*' , GLOB_ONLYDIR);
 	$teams = array();
 	foreach($directories as $fileName) {
-		if ($fileName != "template"){
+		if ($fileName != "template" && $fileName != "js" && $fileName != "sortableTable"){
 			array_push($teams, $fileName);
 		}
 	}
 	foreach ($teams as $team) {
-		echo $team;
 		if ($_GET["team"] == $team) {
 			header("Location: ./".$team,true);
 		}
