@@ -64,7 +64,7 @@ if (filesize("rawData.csv")>0) {
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <script type="text/javascript" src="/js/sortable.js"></script>
-<title><?php echo $teamNumber ?> - ORF Scouting</title>
+<title><?php echo $teamNumber ?> No Alliance List - ORF Scouting</title>
 <style>
 a {
 	color:white;
@@ -104,21 +104,9 @@ function returnHome() {
 }
 </script></head>
 <body>
-<h1 style="text-align:center"><?php echo $teamNumber ?></h1>
+<h1 style="text-align:center"><?php echo $teamNumber ?> - "No Alliance" Reports</h1>
 <img src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white;"/>
-<h3 style="text-align:center">Quick Facts:</h3>
-<table class="center">
-<tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr>
-<tr><td>Autonomous:</td><td><?php echo $autonomousPit ?></td></tr>
-<tr><td>Teleoperated:</td><td><?php echo $teleopPit ?></td></tr>
-<tr><td>General Notes:</td><td><?php echo $notesPit ?></td></tr>
-<tr><td>Low Goal visits per match:</td><td>Pit: <?php echo $lowPit ?></td><td>Average: <?php echo $Low ?></td></tr>
-<tr><td>High Goal visits per match:</td><td>Pit: <?php echo $highPit ?></td><td>Average: <?php echo $High ?></td></tr>
-<tr><td>Gears delivered per match</td><td>Pit: <?php echo $gearsPit ?></td><td>Average: <?php echo $GearsDelivered ?></td></tr>
-<tr><td>Climb:</td><td>Pit: <?php echo $climbPit ?></td><td>Average: See table below</td></tr>
-</table>
-<p></p>
-<h3 style="text-align:center">Raw Data</h3>
+<h3 style="text-align:center">"No Alliance" Reports</h3>
 <table class="sortable" id = "center">
 <tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>Low Goal Visits</th><th>High Goal Visits</th><th>Gears Picked up</th><th>Gears Delivered</th><th>Climb</th><th>Dead On Field</th><th>Furl impacts driving</th><th>Blocked by defense</th><th class="unsortable">Autonomous Notes</th><th class="unsortable">Teleoperated Notes</th><th class="unsortable">General Notes</th></tr>
 <?php
@@ -128,12 +116,10 @@ if (filesize("rawdata.csv") > 0) {
 	foreach ($rawData as $dataLine) {
 		if ($dataLine == "") continue;
 		$dataArray = explode(",",$dataLine);
+		if ($dataArray[13] == "False") continue;
 		echo "<tr><td>".$dataArray[2]."</td><td>".$dataArray[1]."</td><td>".$dataArray[3]."</td><td>".$dataArray[4]."</td><td>".$dataArray[5]."</td><td>".$dataArray[12]."</td><td>".$dataArray[6]."</td><td>".$dataArray[11]."</td><td>".$dataArray[10]."</td><td>".$dataArray[14]."</td><td>".$dataArray[15]."</td><td>".$dataArray[8]."</td><td>".$dataArray[9]."</td><td>".$dataArray[7]."</td></tr>\n";
 	}
 	fclose($rawFile);
 } ?>
-</table>
-<p></p>
-<p>Link for sharing: <a href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p>
-<div style="text-align:center"><input type="button" onclick="returnHome()" value="Go Back"></div>
-</body>
+</table><p></p>
+<div style="text-align:center"><input type="button" onclick="returnHome()" value="Go Back"></div></body>

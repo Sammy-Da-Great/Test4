@@ -9,3 +9,7 @@
 !template/pitScout.csv
 !template/rawData.csv
 !template/teamNumber.txt
+!/js
+!js/sortable.js
+!/sortableTable
+!sortableTable/*.gif
