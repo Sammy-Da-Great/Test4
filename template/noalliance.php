@@ -99,7 +99,7 @@ function returnHome() {
 	for (var i = 2; i < broken.length-1; i++) {
 		newUrl = newUrl.concat("/",broken[i-1]);
 	}
-	newUrl = newUrl.concat("/index.php");
+	newUrl = newUrl.concat("/noalliance.php");
 	window.location.href = newUrl;
 }
 </script></head>
