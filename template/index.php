@@ -134,7 +134,7 @@ function onLoad() {
 </head>
 <body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $teamNumber ?></h1>
-<img id="logo" src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white;"/>
+<img id="logo" src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr>
