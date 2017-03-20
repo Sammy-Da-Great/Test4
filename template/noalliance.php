@@ -92,6 +92,12 @@ body {
 </style>
 <script>
 function returnHome() {
+	
+	newUrl = getBackPage()+"/noalliance.php";
+	window.location.href = newUrl;
+}
+
+function getBackPage() {
 	var url = window.location.href;
 	var broken = url.split("/");
 	var newUrl = broken[0];
@@ -99,13 +105,34 @@ function returnHome() {
 	for (var i = 2; i < broken.length-1; i++) {
 		newUrl = newUrl.concat("/",broken[i-1]);
 	}
-	newUrl = newUrl.concat("/noalliance.php");
-	window.location.href = newUrl;
+	return newUrl;
 }
-</script></head>
-<body>
+
+function onLoad() {
+	
+	var teamShareUrl = getBackPage()+"?team=<?php echo $teamNumber ?>";
+	document.getElementById("ShareLink").href = teamShareUrl;
+	document.getElementById("ShareLink").innerHTML = teamShareUrl;
+	
+	$.ajaxSetup({headers: {"X-TBA-App-Id": "4450:scouting_images:v0.1"}})
+	if (isNaN(<?php echo $teamNumber ?>) == false) {
+		$.get("https://www.thebluealliance.com/api/v2/team/frc<?php echo $teamNumber ?>/media", function(data, status) {
+			if (data.length == 0) return;
+			var primary = data[0];
+			switch (primary.type) {
+				case "imgur":
+					document.getElementById("logo").src = "http://imgur.com/"+primary.foreign_key+".png";
+				break;
+				
+				case "cdphotothread":
+					document.getElementById("logo").src = "http://www.chiefdelphi.com/media/img/"+primary.details.image_partial;
+			}
+		});
+	}
+}</script></head>
+<body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $teamNumber ?> - "No Alliance" Reports</h1>
-<img src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white;"/>
+<img id="logo" src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white;"/>
 <h3 style="text-align:center">"No Alliance" Reports</h3>
 <table class="sortable" id = "center">
 <tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>Low Goal Visits</th><th>High Goal Visits</th><th>Gears Picked up</th><th>Gears Delivered</th><th>Climb</th><th>Dead On Field</th><th>Fuel impacts driving</th><th>Blocked by defense</th><th class="unsortable">Autonomous Notes</th><th class="unsortable">Teleoperated Notes</th><th class="unsortable">General Notes</th></tr>

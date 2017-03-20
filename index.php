@@ -28,7 +28,6 @@ body {
 	background-color: black;
 }
 img {
-    height: 70%;
     width: 80%;
 }
 p, h1, h2, h3 {

@@ -61,6 +61,7 @@ if (filesize("rawData.csv")>0) {
 ?>
 
 <head>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <script type="text/javascript" src="/js/sortable.js"></script>
@@ -92,20 +93,49 @@ body {
 </style>
 <script>
 function returnHome() {
+	var newUrl = getBackPage();
+	window.location.href = newUrl;
+}
+
+function getBackPage() {
 	var url = window.location.href;
 	var broken = url.split("/");
 	var newUrl = broken[0];
-	console.log(broken[0]);
 	for (var i = 2; i < broken.length-1; i++) {
 		newUrl = newUrl.concat("/",broken[i-1]);
 	}
 	newUrl = newUrl.concat("/index.php");
-	window.location.href = newUrl;
+	return newUrl;
 }
-</script></head>
+
+
+function onLoad() {
+	
+	var teamShareUrl = getBackPage()+"?team=<?php echo $teamNumber ?>";
+	console.log(document.getElementById("ShareLink"));
+	document.getElementById("ShareLink").href = teamShareUrl;
+	document.getElementById("ShareLink").innerHTML = teamShareUrl;
+		
+	$.ajaxSetup({headers: {"X-TBA-App-Id": "4450:scouting_images:v0.1"}})
+	if (inNaN(<?php echo $teamNumber ?>) == false) {
+		$.get("https://www.thebluealliance.com/api/v2/team/frc<?php echo $teamNumber ?>/media", function(data, status) {
+			var json = JSON.parse(data);
+			switch (json.type) {
+				case "imgur":
+					document.getElementById("logo").src = "http://imgur.com/"+json[0].foreign_key+".png";
+				break;
+				
+				case "cdphotothread":
+					document.getElementById("logo").src = "http://www.chiefdelphi.com/media/img/"+json[0].details.image_partial;
+			}
+		});
+	}
+}
+</script>
+</head>
 <body>
 <h1 style="text-align:center"><?php echo $teamNumber ?></h1>
-<img src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white;"/>
+<img id="logo" src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 75%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr>
@@ -134,6 +164,6 @@ if (filesize("rawdata.csv") > 0) {
 } ?>
 </table>
 <p></p>
-<p>Link for sharing: <a href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p>
+<p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p>
 <div style="text-align:center"><input type="button" onclick="returnHome()" value="Go Back"></div>
 </body>
