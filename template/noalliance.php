@@ -111,7 +111,7 @@ function getBackPage() {
 
 function onLoad() {
 	
-	var teamShareUrl = getBackPage()+"?team=<?php echo $teamNumber ?>";
+	var teamShareUrl = getBackPage()+"/noalliance.php?team=<?php echo $teamNumber ?>";
 	document.getElementById("ShareLink").href = teamShareUrl;
 	document.getElementById("ShareLink").innerHTML = teamShareUrl;
 	
