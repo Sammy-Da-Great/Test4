@@ -61,6 +61,7 @@ if (filesize("rawData.csv")>0) {
 ?>
 
 <head>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <script type="text/javascript" src="/js/sortable.js"></script>
@@ -149,4 +150,5 @@ if (filesize("rawdata.csv") > 0) {
 	fclose($rawFile);
 } ?>
 </table><p></p>
+<p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p>
 <div style="text-align:center"><input type="button" onclick="returnHome()" value="Go Back"></div></body>

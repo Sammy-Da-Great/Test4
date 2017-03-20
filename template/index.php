@@ -93,7 +93,8 @@ body {
 </style>
 <script>
 function returnHome() {
-	var newUrl = getBackPage();
+	
+	newUrl = getBackPage()+"/index.php";
 	window.location.href = newUrl;
 }
 
@@ -101,32 +102,30 @@ function getBackPage() {
 	var url = window.location.href;
 	var broken = url.split("/");
 	var newUrl = broken[0];
+	console.log(broken[0]);
 	for (var i = 2; i < broken.length-1; i++) {
 		newUrl = newUrl.concat("/",broken[i-1]);
 	}
-	newUrl = newUrl.concat("/index.php");
 	return newUrl;
 }
-
 
 function onLoad() {
 	
 	var teamShareUrl = getBackPage()+"?team=<?php echo $teamNumber ?>";
-	console.log(document.getElementById("ShareLink"));
 	document.getElementById("ShareLink").href = teamShareUrl;
 	document.getElementById("ShareLink").innerHTML = teamShareUrl;
-		
+	
 	$.ajaxSetup({headers: {"X-TBA-App-Id": "4450:scouting_images:v0.1"}})
 	if (isNaN(<?php echo $teamNumber ?>) == false) {
 		$.get("https://www.thebluealliance.com/api/v2/team/frc<?php echo $teamNumber ?>/media", function(data, status) {
-			var json = JSON.parse(data);
-			switch (json.type) {
+			var primary = data[0];
+			switch (primary.type) {
 				case "imgur":
-					document.getElementById("logo").src = "http://imgur.com/"+json[0].foreign_key+".png";
+					document.getElementById("logo").src = "http://imgur.com/"+primary.foreign_key+".png";
 				break;
 				
 				case "cdphotothread":
-					document.getElementById("logo").src = "http://www.chiefdelphi.com/media/img/"+json[0].details.image_partial;
+					document.getElementById("logo").src = "http://www.chiefdelphi.com/media/img/"+primary.details.image_partial;
 			}
 		});
 	}
@@ -135,7 +134,7 @@ function onLoad() {
 </head>
 <body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $teamNumber ?></h1>
-<img id="logo" src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 75%"/>
+<img id="logo" src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white;"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr>
