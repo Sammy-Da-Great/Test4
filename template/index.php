@@ -117,7 +117,7 @@ function onLoad() {
 	document.getElementById("ShareLink").innerHTML = teamShareUrl;
 		
 	$.ajaxSetup({headers: {"X-TBA-App-Id": "4450:scouting_images:v0.1"}})
-	if (inNaN(<?php echo $teamNumber ?>) == false) {
+	if (isNaN(<?php echo $teamNumber ?>) == false) {
 		$.get("https://www.thebluealliance.com/api/v2/team/frc<?php echo $teamNumber ?>/media", function(data, status) {
 			var json = JSON.parse(data);
 			switch (json.type) {
