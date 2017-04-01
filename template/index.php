@@ -15,8 +15,11 @@ $notesPit = $raw[6];
 $lowPit = $raw[3];
 $highPit = $raw[4];
 $climbPit = $raw[9];
-$gearsPit = $raw[5];
+$gearsDeliverPit = $raw[5];
 $teleopPit = $raw[8];
+$gearsPickupPit = $raw[10];
+$defensePit = $raw[11];
+$fuelDrivePit = $ray[12];
 fclose($file);
 } else {
 	$autonomousPit = "Unknown";
@@ -24,8 +27,11 @@ fclose($file);
 	$lowPit = "Unknown";
 	$highPit = "Unknown";
 	$climbPit = "Unknown";
-	$gearsPit = "Unknown";
+	$gearsDeliverPit = "Unknown";
+	$gearsPickupPit = "Unknown";
 	$teleopPit = "Unknown";
+	$defensePit = "Unknown";
+	$fuelDrivePit = "Unknown";
 }
 
 if (filesize("rawData.csv")>0) {
@@ -34,6 +40,7 @@ if (filesize("rawData.csv")>0) {
 	$GearsDelivered = 0;
 	$Low = 0;
 	$High = 0;
+	$GearsPickup = 0;
 	foreach($rawLine as $line) {
 		$break = explode(",",$line);
 		for ($i = 0; $i < count($break); $i++) {
@@ -46,10 +53,15 @@ if (filesize("rawData.csv")>0) {
 					break;
 				case 6:
 					$GearsDelivered += $break[$i];
+					break;
+				case 12:
+					$GearsPickup += $break[$i];
+					break;
 			}
 		}
 	}
 	$GearsDelivered = $GearsDelivered/(count($rawLine)-1);
+	$GearsPickup = $GearsPickup/(count($rawLine)-1);
 	$Low = $Low/(count($rawLine)-1);
 	$High = $High/(count($rawLine)-1);
 	fclose($file);
@@ -57,6 +69,7 @@ if (filesize("rawData.csv")>0) {
 	$GearsDelivered = "Unknown";
 	$Low = "Unknown";
 	$High = "Unknown";
+	$GearsPickup = "Unknown";
 }
 ?>
 
@@ -143,7 +156,10 @@ function onLoad() {
 <tr><td>General Notes:</td><td><?php echo $notesPit ?></td></tr>
 <tr><td>Low Goal visits per match:</td><td>Pit: <?php echo $lowPit ?></td><td>Average: <?php echo $Low ?></td></tr>
 <tr><td>High Goal visits per match:</td><td>Pit: <?php echo $highPit ?></td><td>Average: <?php echo $High ?></td></tr>
-<tr><td>Gears delivered per match</td><td>Pit: <?php echo $gearsPit ?></td><td>Average: <?php echo $GearsDelivered ?></td></tr>
+<tr><td>Gears delivered per match:</td><td>Pit: <?php echo $gearsDeliverPit ?></td><td>Average: <?php echo $GearsDelivered ?></td></tr>
+<tr><td>Gears picked up per match:</td><td>Pit: <?php echo $gearsPickupPit ?></td><td>Average: <?php echo $GearsPickup ?></td></tr>
+<tr><td>Affected by fuel on field:</td><td>Pit: <?php echo $fuelDrivePit ?></td><td>Average: See table below</td></tr>
+<tr><td>Affected by defense:</td><td>Pit: <?php echo $defensePit ?></td><td>Average: See table below</td></tr>
 <tr><td>Climb:</td><td>Pit: <?php echo $climbPit ?></td><td>Average: See table below</td></tr>
 </table>
 <p></p>

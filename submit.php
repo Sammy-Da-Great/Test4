@@ -24,7 +24,7 @@
 		} elseif ($_POST["App"] == "pit") {
 			//echo "Welcome to pit scouting!";
 			if (isSet($_POST["Version"]) && isSet($_POST["ScouterName"]) && isSet($_POST["TeamNumber"])&& isSet($_POST["LowGoalFuel"]) && isSet($_POST["HighGoalFuel"]) && isSet($_POST["GearsDelivered"]) && isSet($_POST["Notes"]) && isSet($_POST["AutoNotes"]) && isSet($_POST["TeleopNotes"]) && isSet($_POST["Climb"])) {
-				$lineToAppend = $_POST["Version"].",".$_POST["ScouterName"].",".$_POST["TeamNumber"].",".$_POST["LowGoalFuel"].",".$_POST["HighGoalFuel"].",".$_POST["GearsDelivered"].",".$_POST["Notes"].",".$_POST["AutoNotes"].",".$_POST["TeleopNotes"].",".$_POST["Climb"];
+				$lineToAppend = $_POST["Version"].",".$_POST["ScouterName"].",".$_POST["TeamNumber"].",".$_POST["LowGoalFuel"].",".$_POST["HighGoalFuel"].",".$_POST["GearsDelivered"].",".$_POST["Notes"].",".$_POST["AutoNotes"].",".$_POST["TeleopNotes"].",".$_POST["Climb"].",".$_POST["GearsPickup"].",".$_POST["Defended"].",".$_POST["FuelDrive"];
 				echo $lineToAppend;
 				$pitData = fopen("PitData.csv","a+");
 				if (!is_writable("PitData.csv")) {
