@@ -1,7 +1,7 @@
 <?php
 header("Content-Type: application/json");
 
-include "/config.php";
+include "../../config.php";
 
 $baseUrl = 'http://www.thebluealliance.com/api/v3/';
 
