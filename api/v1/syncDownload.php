@@ -4,22 +4,27 @@ header("Content-Type: application/json");
 include "../../config.php";
 
 $baseUrl = 'http://www.thebluealliance.com/api/v3/';
-
-#Request 1: District Events
-$url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/keys';
+?>
+{
+ "Events" : <?php #Request 1: District Events
+$url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
 $ch1 = curl_init($url1);
 curl_setopt($ch1, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
 $districtEventsJson = curl_exec($ch1);
 curl_close($ch1);
+?>,
+ "TeamsByEvent" : <?php #Request 2: Teams for each event
+$teamsAtEvents = array();
+foreach (json_decode($districtEventsJson) as $event) {
 
-#Request 2: Teams for each event
-#foreach ($eventKey as json_decode($districtEventsJson)) {
-
-#}
-
-echo $url1;
+    $url2 = $baseUrl.'event/'.$event['key'].'/events/keys';
+    $ch2 = curl_init($url2);
+    curl_setopt($ch2, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+    $teamsAtEvents[$event['key']] = curl_exec($ch2);
+    curl_close($ch2);
+    echo json_encode($teamsAtEvents);
+}
 ?>
-{
- "Events" : <?php echo $districtEventsJson ?>   
 }
