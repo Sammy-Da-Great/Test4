@@ -17,6 +17,8 @@ curl_close($ch1);
 #foreach ($eventKey as json_decode($districtEventsJson)) {
 
 #}
+
+echo $url1;
 ?>
 {
  "Events" : <?php echo $districtEventsJson ?>   
