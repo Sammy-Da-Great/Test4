@@ -4,12 +4,6 @@
 			if (isSet($_POST["Version"]) && isSet($_POST["ScouterName"]) && isSet($_POST["TeamNumber"])&& isSet($_POST["MatchNumber"]) && isSet($_POST["LowGoalFuel"]) && isSet($_POST["HighGoalFuel"]) && isSet($_POST["GearsDelivered"]) && isSet($_POST["Notes"]) && isSet($_POST["AutoNotes"]) && isSet($_POST["TeleopNotes"]) && isSet($_POST["DOF"]) && isSet($_POST["Climb"]) && isSet($_POST["GearsPickup"]) && isSet($_POST["NoAlliance"]) && isSet($_POST["FuelDrive"]) && isSet($_POST["Defended"])) {
 				$lineToAppend = $_POST["Version"].",".$_POST["ScouterName"].",".$_POST["TeamNumber"].",".$_POST["MatchNumber"].",".$_POST["LowGoalFuel"].",".$_POST["HighGoalFuel"].",".$_POST["GearsDelivered"].",".$_POST["Notes"].",".$_POST["AutoNotes"].",".$_POST["TeleopNotes"].",".$_POST["DOF"].",".$_POST["Climb"].",".$_POST["GearsPickup"].",".$_POST["NoAlliance"].",".$_POST["FuelDrive"].",".$_POST["Defended"]; //Climb = 11
 				echo $lineToAppend;
-				$standData = fopen("StandData.csv","a+");
-				if (!is_writable("StandData.csv")) {
-					http_response_code(500);
-				}
-				fwrite($standData, $lineToAppend."\n");
-				fclose($standData);
 				
 				$teamPath = getOrCreateTeamFolder($_POST["TeamNumber"]);
 				$rawData = fopen($teamPath."rawData.csv","a");

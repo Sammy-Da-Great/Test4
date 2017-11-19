@@ -1,9 +1,5 @@
-*
 **/
-!.gitignore
-!favicon.ico
-!*.php
 !/sortableTable
-!sortableTable/*.gif
-!noalliance.php
-!api/**
+!sortableTable/*
+!/api
+!/api/**
