@@ -1,7 +1,6 @@
 <?php 
 	if (isSet($_POST["App"])) {
 		if ($_POST["App"] == "stand") {
-			//echo "Welcome to stand scouting!";
 			if (isSet($_POST["Version"]) && isSet($_POST["ScouterName"]) && isSet($_POST["TeamNumber"])&& isSet($_POST["MatchNumber"]) && isSet($_POST["LowGoalFuel"]) && isSet($_POST["HighGoalFuel"]) && isSet($_POST["GearsDelivered"]) && isSet($_POST["Notes"]) && isSet($_POST["AutoNotes"]) && isSet($_POST["TeleopNotes"]) && isSet($_POST["DOF"]) && isSet($_POST["Climb"]) && isSet($_POST["GearsPickup"]) && isSet($_POST["NoAlliance"]) && isSet($_POST["FuelDrive"]) && isSet($_POST["Defended"])) {
 				$lineToAppend = $_POST["Version"].",".$_POST["ScouterName"].",".$_POST["TeamNumber"].",".$_POST["MatchNumber"].",".$_POST["LowGoalFuel"].",".$_POST["HighGoalFuel"].",".$_POST["GearsDelivered"].",".$_POST["Notes"].",".$_POST["AutoNotes"].",".$_POST["TeleopNotes"].",".$_POST["DOF"].",".$_POST["Climb"].",".$_POST["GearsPickup"].",".$_POST["NoAlliance"].",".$_POST["FuelDrive"].",".$_POST["Defended"]; //Climb = 11
 				echo $lineToAppend;
@@ -50,20 +49,19 @@
 		http_response_code(400);
 	}
 	
-	function getOrCreateTeamFolder($teamNumber) {
-		if (!file_exists($teamNumber."/index.php")) {
-			if (mkdir($teamNumber)) {
-				$filesToCopy = array("index.php","picture.png","rawData.csv","teamNumber.txt","pitScout.csv","noalliance.php");
-				foreach($filesToCopy as $file) {
-					copy("template/".$file,$teamNumber."/".$file);
+	function getOrCreateTeamFolder($teamNumber, $eventCode) {
+		$path = $eventCode."/".$teamNumber;
+		if (!file_exists($path)) {
+			if (mkdir($path,0777,true)) {
+				$filesToMake = array("rawData.csv","pitScout.csv");
+				foreach($filesToMake as $file) {
+					$newFile = fopen($path."/".$file,"w+");
+					fclose($newFile);
 				}
-				$teamNumberTxt = fopen($teamNumber."/teamNumber.txt","w");
-				fwrite($teamNumberTxt,$teamNumber);
-				fclose($teamNumberTxt);
 			} else {
 				http_response_code(400);
 			}
 		}
-		return $teamNumber."/";
+		return $path."/";
 	}
 ?>

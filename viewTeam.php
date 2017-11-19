@@ -1,26 +1,33 @@
 <?php
-if (filesize("teamNumber.txt")>0) {
-$file = fopen("teamNumber.txt", "r");
-$teamNumber = fread($file,filesize("teamNumber.txt"));
-fclose($file);
+if (!isSet($_GET["teamNumber"])) {
+		include "error.php?error=teamNumberNotSet";
+		exit;
 } else {
-	$teamNumber = "ERROR";
+	$teamNumber = $_GET["teamNumber"];
 }
 
-if (filesize("pitScout.csv")>0) {
-$file = fopen("pitScout.csv","r");
-$raw = explode(",",fread ($file,filesize("pitScout.csv")));
-$autonomousPit = $raw[7];
-$notesPit = $raw[6];
-$lowPit = $raw[3];
-$highPit = $raw[4];
-$climbPit = $raw[9];
-$gearsDeliverPit = $raw[5];
-$teleopPit = $raw[8];
-$gearsPickupPit = $raw[10];
-$defensePit = $raw[11];
-$fuelDrivePit = $ray[12];
-fclose($file);
+if (!isSet($_GET["eventCode"])) {
+		include "error.php?error=eventCodeNotSet";
+		exit;
+} else {
+	$eventCode = $_GET["eventCode"];
+	$seasonYear = substr($eventCode,0,4);
+}
+
+if (filesize($eventCode."/".$teamNumber."/pitScout.csv")>0) {
+	$file = fopen($eventCode."/".$teamNumber."/pitScout.csv","r");
+	$raw = explode(",",fread($file,filesize($eventCode."/".$teamNumber."/pitScout.csv")));
+	$autonomousPit = $raw[7];
+	$notesPit = $raw[6];
+	$lowPit = $raw[3];
+	$highPit = $raw[4];
+	$climbPit = $raw[9];
+	$gearsDeliverPit = $raw[5];
+	$teleopPit = $raw[8];
+	$gearsPickupPit = $raw[10];
+	$defensePit = $raw[11];
+	$fuelDrivePit = $ray[12];
+	fclose($file);
 } else {
 	$autonomousPit = "Unknown";
 	$notesPit = "Unknown";
@@ -34,9 +41,9 @@ fclose($file);
 	$fuelDrivePit = "Unknown";
 }
 
-if (filesize("rawData.csv")>0) {
-	$file = fopen("rawData.csv","r");
-	$rawLine = explode("\n",fread ($file,filesize("rawData.csv")));
+if (filesize($eventCode."/".$teamNumber."/rawData.csv")>0) {
+	$file = fopen($eventCode."/".$teamNumber."/rawData.csv","r");
+	$rawLine = explode("\n",fread ($file,filesize($eventCode."/".$teamNumber."/rawData.csv")));
 	$GearsDelivered = 0;
 	$Low = 0;
 	$High = 0;
@@ -71,29 +78,31 @@ if (filesize("rawData.csv")>0) {
 	$High = "Unknown";
 	$GearsPickup = "Unknown";
 }
+
+include "config.php";
 ?>
 
 <head>
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
-<script type="text/javascript" src="/js/sortable.js"></script>
+<script type="text/javascript" src="/sortableTable/sortable.js"></script>
 <title><?php echo $teamNumber ?> - ORF Scouting</title>
 <style>
 a {
-	color:white;
+	color: white;
 }
 table, th, td {
     border: 1px solid white;
 }
 table.center {
-	margin-left:auto;
-	margin-right:auto;
+	margin-left: auto;
+	margin-right: auto;
 	width: 65%;
 }
 #center {
-	margin-left:auto;
-	margin-right:auto;
+	margin-left: auto;
+	margin-right: auto;
 	width: 65%;
 }
 p, h1, h3, td, th {
@@ -123,22 +132,29 @@ function getBackPage() {
 }
 
 function onLoad() {
+	$("#ShareLink").attr("href",window.location.href);
+	$("#ShareLink").html(window.location.href);
 	
-	var teamShareUrl = getBackPage()+"?team=<?php echo $teamNumber ?>";
-	document.getElementById("ShareLink").href = teamShareUrl;
-	document.getElementById("ShareLink").innerHTML = teamShareUrl;
-	
-	$.ajaxSetup({headers: {"X-TBA-App-Id": "4450:scouting_images:v0.1"}})
-	if (isNaN(<?php echo $teamNumber ?>) == false) {
-		$.get("https://www.thebluealliance.com/api/v2/team/frc<?php echo $teamNumber ?>/media", function(data, status) {
-			var primary = data[0];
-			switch (primary.type) {
-				case "imgur":
-					document.getElementById("logo").src = "http://imgur.com/"+primary.foreign_key+".png";
-				break;
+	$.ajaxSetup({headers: {"X-TBA-Auth-Key": "<?php echo $TBAAuthKey; ?>"}})
+	if (isNaN(<?php echo $teamNumber; ?>) == false && <?php echo file_exists($eventCode."/".$teamNumber."/picture.png"); ?> == false) {
+		$.get("https://www.thebluealliance.com/api/v3/team/frc<?php echo $teamNumber ?>/media/<?php echo $seasonYear; ?>", function(data, status) {
+			for (i = 0; i < data.length; i++) {
+				var primary = data[i];
+				switch (primary.type) {
+					case "imgur":
+						$("#logo").attr("src","http://imgur.com/"+primary.foreign_key+".png");
+						console.log(primary.foreign_key);
+						i = data.length;
+						break;
 				
-				case "cdphotothread":
-					document.getElementById("logo").src = "http://www.chiefdelphi.com/media/img/"+primary.details.image_partial;
+					case "cdphotothread":
+						$("#logo").attr("http://www.chiefdelphi.com/media/img/"+primary.details.image_partial);
+						i = data.length;
+						break;
+						
+					default:
+						continue;
+				}
 			}
 		});
 	}
@@ -147,7 +163,7 @@ function onLoad() {
 </head>
 <body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $teamNumber ?></h1>
-<img id="logo" src="picture.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
+<img id="logo" src="<?php echo $eventCode."/".$teamNumber."/picture.png"; ?>" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr>
@@ -167,9 +183,9 @@ function onLoad() {
 <table class="sortable" id = "center">
 <tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>Low Goal Visits</th><th>High Goal Visits</th><th>Gears Picked up</th><th>Gears Delivered</th><th>Climb</th><th>Dead On Field</th><th>Fuel impacts driving</th><th>Blocked by defense</th><th class="unsortable">Autonomous Notes</th><th class="unsortable">Teleoperated Notes</th><th class="unsortable">General Notes</th></tr>
 <?php
-if (filesize("rawdata.csv") > 0) {
-	$rawFile = fopen("rawData.csv","r");
-	$rawData = explode("\n",fread($rawFile,filesize("rawData.csv")));
+if (filesize($eventCode."/".$teamNumber."/rawData.csv") > 0) {
+	$rawFile = fopen($eventCode."/".$teamNumber."/rawData.csv","r");
+	$rawData = explode("\n",fread($rawFile,filesize($eventCode."/".$teamNumber."/rawData.csv")));
 	foreach ($rawData as $dataLine) {
 		if ($dataLine == "") continue;
 		$dataArray = explode(",",$dataLine);
