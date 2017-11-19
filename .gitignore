@@ -3,14 +3,7 @@
 !.gitignore
 !favicon.ico
 !*.php
-!/template
-!template/index.php
-!template/picture.png
-!template/pitScout.csv
-!template/rawData.csv
-!template/teamNumber.txt
-!/js
-!js/sortable.js
 !/sortableTable
 !sortableTable/*.gif
 !noalliance.php
+!api/**
