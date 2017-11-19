@@ -12,6 +12,7 @@ $ch1 = curl_init($url1);
 curl_setopt($ch1, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
 $districtEventsJson = curl_exec($ch1);
+echo $districtEventsJson;
 curl_close($ch1);
 ?>,
  "TeamsByEvent" : <?php #Request 2: Teams for each event
@@ -28,3 +29,4 @@ foreach (json_decode($districtEventsJson) as $event) {
 }
 ?>
 }
+<?php var_dump($teamsAtEvents); ?>
