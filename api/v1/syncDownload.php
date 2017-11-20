@@ -6,6 +6,7 @@ include "../../config.php";
 $baseUrl = 'http://www.thebluealliance.com/api/v3/';
 ?>
 {
+ "CurrentVersion" : [ "2017", "1", "0"],
  "Events" : <?php #Request 1: District Events
 $url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
 $ch1 = curl_init($url1);
