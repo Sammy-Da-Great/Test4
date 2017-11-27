@@ -19,7 +19,6 @@ curl_close($ch1);
  "TeamsByEvent" : [
 	 <?php #Request 2: Teams for each event
 foreach (json_decode($districtEventsJson) as $event) {
-
     $url2 = $baseUrl.'event/'.$event->key.'/teams/simple';
     $ch2 = curl_init($url2);
     curl_setopt($ch2, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
