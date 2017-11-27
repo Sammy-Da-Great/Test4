@@ -35,6 +35,6 @@ foreach (json_decode($districtEventsJson) as $event) {
     "name": "Long Name",
     "nickname": "Nick Name",
     "state_prov": "State/Prov",
-    "team_number": 0000
+    "team_number": 0
   }]}}]
 }
