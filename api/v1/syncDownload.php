@@ -24,7 +24,7 @@ foreach (json_decode($districtEventsJson) as $event) {
     $ch2 = curl_init($url2);
     curl_setopt($ch2, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
     curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-	echo "{ \"EventKey\": \"".$event->key."\", ".curl_exec($ch2)."},".PHP_EOL;
+	echo "{ \"EventKey\": \"".$event->key."\", \"EventData\": ".curl_exec($ch2)."},".PHP_EOL;
     curl_close($ch2);
 }
 ?>
