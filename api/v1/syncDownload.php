@@ -28,7 +28,7 @@ foreach (json_decode($districtEventsJson) as $event) {
     curl_close($ch2);
 }
 ?>
-	{ "EventKey": "0000null", "TeamList" : {[{
+	{ "EventKey": "0000null", "TeamList" : [{
     "city": "City",
     "country": "Country",
     "key": "frc0000",
@@ -36,5 +36,5 @@ foreach (json_decode($districtEventsJson) as $event) {
     "nickname": "Nick Name",
     "state_prov": "State/Prov",
     "team_number": 0
-  }]}}]
+  }]}]
 }
