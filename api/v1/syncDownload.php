@@ -21,7 +21,7 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	$ch1Cmp = curl_init($url1Cmp);
 	curl_setopt($ch1Cmp, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 	curl_setopt($ch1Cmp, CURLOPT_RETURNTRANSFER, true);
-	$districtEventsJson .= PHP_EOL . curl_exec($ch1Cmp);
+	$districtEventsJson .= ",".PHP_EOL . curl_exec($ch1Cmp);
 	curl_close($ch1Cmp);
 }
 
