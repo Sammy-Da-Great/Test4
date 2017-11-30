@@ -12,7 +12,7 @@ $url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
 $ch1 = curl_init($url1);
 curl_setopt($ch1, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
-$districtEventsJson = curl_exec($ch1);
+$districtEventsJson = substr(curl_exec($ch1),0,-1);
 
 $worldCmpEventKeys = array("carv","gal","hop","new","roe","tur","tes","dar","dal","cur","cars","arc");
 
@@ -21,11 +21,11 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	$ch1Cmp = curl_init($url1Cmp);
 	curl_setopt($ch1Cmp, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 	curl_setopt($ch1Cmp, CURLOPT_RETURNTRANSFER, true);
-	$districtEventsJson .= ",".PHP_EOL . curl_exec($ch1Cmp);
+	$districtEventsJson .= ','.PHP_EOL . curl_exec($ch1Cmp);
 	curl_close($ch1Cmp);
 }
 
-echo $districtEventsJson;
+echo $districtEventsJson."]";
 curl_close($ch1);
 ?>,
  "TeamsByEvent" : [
