@@ -13,6 +13,18 @@ $ch1 = curl_init($url1);
 curl_setopt($ch1, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
 $districtEventsJson = curl_exec($ch1);
+
+$worldCmpEventKeys = new array("carv","gal","hop","new","roe","tur","tes","dar","dal","cur","cars","arc");
+
+foreach($worldCmpEventKeys as $cmpKey) {
+	$url1Cmp = $baseUrl.'event/'.$seasonYear.$cmpKey.'/simple';
+	$ch1Cmp = curl_init($url1Cmp);
+	curl_setopt($ch1Cmp, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
+	curl_setopt($ch1Cmp, CURLOPT_RETURNTRANSFER, true);
+	$districtEventsJson .= PHP_EOL.curl_exec($ch1Cmp);
+	curl_close($ch1Cmp);
+}
+
 echo $districtEventsJson;
 curl_close($ch1);
 ?>,
