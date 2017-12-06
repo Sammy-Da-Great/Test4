@@ -4,10 +4,12 @@ header("Content-Type: application/json");
 include "../../config.php";
 
 $baseUrl = 'http://www.thebluealliance.com/api/v3/';
-?>
-{
- "CurrentVersion" : [ "2017", "1", "0"],
- "Events" : <?php #Request 1: District Events
+
+$resultJson = "{
+ \"CurrentVersion\" : [ \"2017\", \"1\", \"0\"],
+ \"Events\" :";
+
+ #Request 1: District Events
 $url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
 $ch1 = curl_init($url1);
 curl_setopt($ch1, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
@@ -25,28 +27,39 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	curl_close($ch1Cmp);
 }
 
-echo $districtEventsJson."]";
+$resultJson .= $districtEventsJson."]
+\"TeamsByEvent\" : [";
 curl_close($ch1);
-?>,
- "TeamsByEvent" : [
-	 <?php #Request 2: Teams for each event
+
+#Request 2: Teams for each event
+$teamJson = "";
 foreach (json_decode($districtEventsJson) as $event) {
 	
     $url2 = $baseUrl.'event/'.$event->key.'/teams/simple';
     $ch2 = curl_init($url2);
     curl_setopt($ch2, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
     curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-	echo "{ \"EventKey\": \"".$event->key."\", \"TeamList\": ".curl_exec($ch2)."},".PHP_EOL;
+	$teamJson =. "{ \"EventKey\": \"".$event->key."\", \"TeamList\": ".curl_exec($ch2)."},".PHP_EOL;
     curl_close($ch2);
 }
-?>
-	{ "EventKey": "0000null", "TeamList" : [{
-    "city": "City",
-    "country": "Country",
-    "key": "frc0000",
-    "name": "Long Name",
-    "nickname": "Nick Name",
-    "state_prov": "State/Prov",
-    "team_number": 0
+
+$resultJson .= $teamJson."{ \"EventKey\": \"0000null\", \"TeamList\" : [{
+    \"city\": \"City\",
+    \"country\": \"Country\",
+    \"key\": \"frc0000\",
+    \"name\": \"Long Name\",
+    \"nickname\": \"Nick Name\",
+    \"state_prov\": \"State/Prov\",
+    \"team_number\": 0
   }]}]
+}";
+
+$json = json_decode($resultJson, true);
+
+foreach ($json["Events"] as &$event) {
+	if ($event["district"] == null) $event["district"] = new array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
 }
+unset($event);
+
+echo json_encode($json);
+?>
