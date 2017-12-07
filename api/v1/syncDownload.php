@@ -57,7 +57,7 @@ $resultJson .= $teamJson."{ \"EventKey\": \"0000null\", \"TeamList\" : [{
 $json = json_decode($resultJson, true);
 
 foreach ($json["Events"] as &$event) {
-	if ($event["district"] == null) $event["district"] = new array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
+	if ($event["district"] == null) $event["district"] = array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
 }
 unset($event);
 
