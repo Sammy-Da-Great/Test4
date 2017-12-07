@@ -27,13 +27,13 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	curl_close($ch1Cmp);
 }
 
-$resultJson .= $districtEventsJson."]
+$resultJson .= $districtEventsJson."],
 \"TeamsByEvent\" : [";
 curl_close($ch1);
 
 #Request 2: Teams for each event
 $teamJson = "";
-foreach (json_decode($districtEventsJson) as $event) {
+foreach (json_decode($districtEventsJson.']') as $event) {
 	
     $url2 = $baseUrl.'event/'.$event->key.'/teams/simple';
     $ch2 = curl_init($url2);
