@@ -51,9 +51,13 @@ div {
 function onLoad() {
 	document.getElementById("team").defaultValue = "<?php echo $default; ?>";
 }
+
+function loadTeamAtEvent(team,event) {
+	window.location.href = document.domain + "/viewTeam.php?eventCode="+ event + "&teamNumber=" + team;
+}
 </script></head><body onload="onLoad()">
 <div>
-	<img src="template/picture.png"/>
+	<img src="logo.png"/>
 	<form method="get">
 	<p>Team Number:</p>
 	<p><input id="team" name="team" type="number"></input></p>
