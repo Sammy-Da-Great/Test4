@@ -36,7 +36,7 @@ if (filesize($teamDataPath."/pitScout.csv")>0) {
 	$teleopPit = $raw[8];
 	$gearsPickupPit = $raw[10];
 	$defensePit = $raw[11];
-	$fuelDrivePit = $ray[12];
+	$fuelDrivePit = $raw[12];
 	fclose($file);
 } else {
 	$autonomousPit = "Unknown";

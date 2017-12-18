@@ -22,7 +22,7 @@ if (isSet($_GET["team"]) && $error == "") {
 	}
 }
 
-include "config.php";
+include "./config.php";
 	
 function getNameEventCode($code) {
 	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
