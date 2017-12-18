@@ -31,16 +31,13 @@ body {
 	background-color: black;
 }
 img {
-    width: 80%;
+	width: 25%;
 }
 p, h1, h2, h3 {
 	color: white;
 }
 
 div {
-    width: 50%;
-    height: 70%;
-	border: 1px solid white;
     position: absolute;
     top:0;
     bottom: 0;
@@ -52,7 +49,7 @@ div {
 }
 </style><script>
 function onLoad() {
-	<?php if ($error == "") {
+	<?php if ($error == "" && $teamNumber != "") {
 	echo "document.getElementById(\"team\").defaultValue = ".$teamNumber.";";
 	}
 	?>
@@ -64,19 +61,27 @@ function loadTeamAtEvent(team,event) {
 </script></head><body onload="onLoad()">
 <div>
 	<img src="logo.png"/>
-	<form method="get" action="index.php">
+	<h1>Welcome to the ORF Scouting Viewer!</h1>
+	<?php
+	if (!(count($events) > 0)) {
+	echo "<form method=\"get\" action=\"index.php\">
 	<p>Team Number:</p>
-	<p><input id="team" name="team" type="number"></input></p>
-	<p><input type="submit"></input></p>
-	</form>
+	<p><input id=\"team\" name=\"team\" type=\"number\"></input></p>
+	<p><input type=\"submit\"></input></p>
+	</form>";
+	}
+	?>
+	
 	<p><?php echo $error ?></p>
 	<?php
 	if (count($events) > 0 && $error == "") {
 		echo "<p>Team ".$teamNumber." has been scouted at these event codes:</p>";
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
-			echo "<p><a href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\">".$eventCode."</a></p>";
+			echo "<p><button onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\"'>".$eventCode."</button></p>";
 		}
+		
+		echo "<br/><p><button onClick='window.location.href=\"index.php\"'>Go Back</button>";
 	}
 	?>
 </div>
