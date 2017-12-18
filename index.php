@@ -1,21 +1,24 @@
 <?php
-$error = "";
-$default = "";
-if (isSet($_GET["team"])) {
-	$default = $_GET["team"];
-	$directories = glob('*' , GLOB_ONLYDIR);
-	$teams = array();
-	foreach($directories as $fileName) {
-		if ($fileName != "template" && $fileName != "js" && $fileName != "sortableTable"){
-			array_push($teams, $fileName);
+if (!isSet($error)) {
+	$error = "";
+}
+$teamNumber = "";
+$events = array();
+
+if (isSet($_GET["team"]) && $error == "") {
+	$teamNumber = $_GET["team"];
+	$eventDirectories = glob('api/v1/*' , GLOB_ONLYDIR);
+	foreach($eventDirectories as $fileName) {
+		$teamDirectories = glob($fileName."/*", GLOB_ONLYDIR);
+		foreach($teamDirectories as $teamFolder) {
+			if (explode("/",$teamFolder)[3] == $teamNumber) {
+				array_push($events, $teamFolder);
+			}
 		}
 	}
-	foreach ($teams as $team) {
-		if ($_GET["team"] == $team) {
-			header("Location: ./".$team,true);
-		}
-	}
+	if (count($events) == 0) {
 	$error = "Team number not found! They may not have been scouted yet!";
+	}
 }
 ?>
 
@@ -49,19 +52,31 @@ div {
 }
 </style><script>
 function onLoad() {
-	document.getElementById("team").defaultValue = "<?php echo $default; ?>";
+	<?php if ($error == "") {
+	echo "document.getElementById(\"team\").defaultValue = ".$teamNumber.";";
+	}
+	?>
 }
 
 function loadTeamAtEvent(team,event) {
-	window.location.href = document.domain + "/viewTeam.php?eventCode="+ event + "&teamNumber=" + team;
+	window.location.href = "viewTeam.php?eventCode="+ event + "&teamNumber=" + team;
 }
 </script></head><body onload="onLoad()">
 <div>
 	<img src="logo.png"/>
-	<form method="get">
+	<form method="get" action="index.php">
 	<p>Team Number:</p>
 	<p><input id="team" name="team" type="number"></input></p>
 	<p><input type="submit"></input></p>
 	</form>
 	<p><?php echo $error ?></p>
+	<?php
+	if (count($events) > 0 && $error == "") {
+		echo "<p>Team ".$teamNumber." has been scouted at these event codes:</p>";
+		foreach($events as $event) {
+			$eventCode = explode("/",$event)[2];
+			echo "<p><a href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\">".$eventCode."</a></p>";
+		}
+	}
+	?>
 </div>

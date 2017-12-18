@@ -1,22 +1,32 @@
 <?php
 if (!isSet($_GET["teamNumber"])) {
-		include "error.php?error=teamNumberNotSet";
-		exit;
+	$error = "Something went wrong, please try again.";
+	include "index.php";
+	exit;
 } else {
 	$teamNumber = $_GET["teamNumber"];
 }
 
 if (!isSet($_GET["eventCode"])) {
-		include "error.php?error=eventCodeNotSet";
-		exit;
+	$error = "Something went wrong, please try again.";
+	include "index.php";
+	exit;
 } else {
 	$eventCode = $_GET["eventCode"];
 	$seasonYear = substr($eventCode,0,4);
 }
 
-if (filesize($eventCode."/".$teamNumber."/pitScout.csv")>0) {
-	$file = fopen($eventCode."/".$teamNumber."/pitScout.csv","r");
-	$raw = explode(",",fread($file,filesize($eventCode."/".$teamNumber."/pitScout.csv")));
+$teamDataPath = "api/v1/".$eventCode."/".$teamNumber;
+
+if (!file_exists($teamDataPath)) {
+	$error = "The team entered hasn't been scouted yet!";
+	include "index.php";
+	exit;
+}
+
+if (filesize($teamDataPath."/pitScout.csv")>0) {
+	$file = fopen($teamDataPath."/pitScout.csv","r");
+	$raw = explode(",",fread($file,filesize($teamDataPath."/pitScout.csv")));
 	$autonomousPit = $raw[7];
 	$notesPit = $raw[6];
 	$lowPit = $raw[3];
@@ -41,9 +51,9 @@ if (filesize($eventCode."/".$teamNumber."/pitScout.csv")>0) {
 	$fuelDrivePit = "Unknown";
 }
 
-if (filesize($eventCode."/".$teamNumber."/rawData.csv")>0) {
-	$file = fopen($eventCode."/".$teamNumber."/rawData.csv","r");
-	$rawLine = explode("\n",fread ($file,filesize($eventCode."/".$teamNumber."/rawData.csv")));
+if (filesize($teamDataPath."/rawData.csv")>0) {
+	$file = fopen($teamDataPath."/rawData.csv","r");
+	$rawLine = explode("\n",fread ($file,filesize($teamDataPath."/rawData.csv")));
 	$GearsDelivered = 0;
 	$Low = 0;
 	$High = 0;
@@ -86,7 +96,7 @@ include "config.php";
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
-<script type="text/javascript" src="/sortableTable/sortable.js"></script>
+<script type="text/javascript" src="sortableTable/sortable.js"></script>
 <title><?php echo $teamNumber ?> - ORF Scouting</title>
 <style>
 a {
@@ -136,7 +146,7 @@ function onLoad() {
 	$("#ShareLink").html(window.location.href);
 	
 	$.ajaxSetup({headers: {"X-TBA-Auth-Key": "<?php echo $TBAAuthKey; ?>"}})
-	if (isNaN(<?php echo $teamNumber; ?>) == false && <?php echo file_exists($eventCode."/".$teamNumber."/picture.png"); ?> == false) {
+	if (isNaN(<?php echo $teamNumber; ?>) == false) {
 		$.get("https://www.thebluealliance.com/api/v3/team/frc<?php echo $teamNumber ?>/media/<?php echo $seasonYear; ?>", function(data, status) {
 			for (i = 0; i < data.length; i++) {
 				var primary = data[i];
@@ -163,7 +173,7 @@ function onLoad() {
 </head>
 <body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $teamNumber ?></h1>
-<img id="logo" src="<?php echo $eventCode."/".$teamNumber."/picture.png"; ?>" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
+<img id="logo" src="<?php echo $teamDataPath."/".$eventCode."/".$teamNumber."/picture.png"; ?>" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr>
@@ -183,9 +193,9 @@ function onLoad() {
 <table class="sortable" id = "center">
 <tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>Low Goal Visits</th><th>High Goal Visits</th><th>Gears Picked up</th><th>Gears Delivered</th><th>Climb</th><th>Dead On Field</th><th>Fuel impacts driving</th><th>Blocked by defense</th><th class="unsortable">Autonomous Notes</th><th class="unsortable">Teleoperated Notes</th><th class="unsortable">General Notes</th></tr>
 <?php
-if (filesize($eventCode."/".$teamNumber."/rawData.csv") > 0) {
-	$rawFile = fopen($eventCode."/".$teamNumber."/rawData.csv","r");
-	$rawData = explode("\n",fread($rawFile,filesize($eventCode."/".$teamNumber."/rawData.csv")));
+if (filesize($teamDataPath."/rawData.csv") > 0) {
+	$rawFile = fopen($teamDataPath."/rawData.csv","r");
+	$rawData = explode("\n",fread($rawFile,filesize($teamDataPath."/rawData.csv")));
 	foreach ($rawData as $dataLine) {
 		if ($dataLine == "") continue;
 		$dataArray = explode(",",$dataLine);
