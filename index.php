@@ -37,6 +37,7 @@ function getNameEventCode($code) {
 	} else {
 		return $code;
 	}
+	curl_close($ch);
 }
 ?>
 
