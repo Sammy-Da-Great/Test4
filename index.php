@@ -22,8 +22,9 @@ if (isSet($_GET["team"]) && $error == "") {
 	}
 }
 
+include "config.php";
+	
 function getNameEventCode($code) {
-	include_once "config.php";
 	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
 	$urlSuffix = '/simple';
 	
