@@ -1,4 +1,5 @@
 <?php
+
 if (!isSet($error)) {
 	$error = "";
 }
@@ -18,6 +19,23 @@ if (isSet($_GET["team"]) && $error == "") {
 	}
 	if (count($events) == 0) {
 	$error = "Team number not found! They may not have been scouted yet!";
+	}
+}
+
+function getNameEventCode($code) {
+	include_once "config.php";
+	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
+	$urlSuffix = '/simple';
+	
+	$url = $urlPrefix.$code.$urlSuffix;
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$result = json_decode(curl_exec($ch),true);
+	if (isSet($result["name"])) {
+		return $result["name"];
+	} else {
+		return $code;
 	}
 }
 ?>
@@ -78,10 +96,10 @@ function loadTeamAtEvent(team,event) {
 	<p><?php echo $error ?></p>
 	<?php
 	if (count($events) > 0 && $error == "") {
-		echo "<p style='font-size:24;'>Team ".$teamNumber." has been scouted at these event codes:</p>";
+		echo "<p style='font-size:24;'>Team ".$teamNumber." has been scouted at these events:</p>";
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
-			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\"'>".$eventCode."</button></p>";
+			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\"'>".getNameEventCode($eventCode)."</button></p>";
 		}
 		
 		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button>";
