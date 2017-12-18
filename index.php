@@ -75,7 +75,7 @@ function loadTeamAtEvent(team,event) {
 	<p><?php echo $error ?></p>
 	<?php
 	if (count($events) > 0 && $error == "") {
-		echo "<p>Team ".$teamNumber." has been scouted at these event codes:</p>";
+		echo "<p style='font-size:24;'>Team ".$teamNumber." has been scouted at these event codes:</p>";
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
 			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\"'>".$eventCode."</button></p>";
