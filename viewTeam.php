@@ -19,7 +19,7 @@ if (!isSet($_GET["eventCode"])) {
 $teamDataPath = "api/v1/".$eventCode."/".$teamNumber;
 
 if (!file_exists($teamDataPath)) {
-	$error = "The team entered hasn't been scouted yet!";
+	$error = "The team entered hasn't been scouted yet for that event!";
 	include "index.php";
 	exit;
 }

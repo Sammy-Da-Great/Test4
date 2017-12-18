@@ -17,7 +17,7 @@ if (isSet($_GET["team"]) && $error == "") {
 		}
 	}
 	if (count($events) == 0) {
-	$error = "Team number not found! They may not have been scouted yet for that event!";
+	$error = "Team number not found! They may not have been scouted yet!";
 	}
 }
 ?>
