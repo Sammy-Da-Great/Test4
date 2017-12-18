@@ -125,9 +125,7 @@ body {
 </style>
 <script>
 function returnHome() {
-	
-	newUrl = getBackPage()+"/index.php";
-	window.location.href = newUrl;
+	window.location.href = "index.php";
 }
 
 function getBackPage() {
