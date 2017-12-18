@@ -203,6 +203,6 @@ if (filesize($teamDataPath."/rawData.csv") > 0) {
 } ?>
 </table>
 <p></p>
-<p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p>
-<div style="text-align:center"><input type="button" onclick="returnHome()" value="Go Back"></div>
+<p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p><br/>
+<div style="text-align:center;"><input type="button" style="font-size: 20;" onclick="returnHome()" value="Go Back"></div><br/>
 </body>

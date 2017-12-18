@@ -33,6 +33,9 @@ body {
 img {
 	width: 25%;
 }
+p {
+	font-size: 25;
+}
 p, h1, h2, h3 {
 	color: white;
 }
@@ -66,8 +69,8 @@ function loadTeamAtEvent(team,event) {
 	if (!(count($events) > 0)) {
 	echo "<form method=\"get\" action=\"index.php\">
 	<p>Team Number:</p>
-	<p><input id=\"team\" name=\"team\" type=\"number\"></input></p>
-	<p><input type=\"submit\"></input></p>
+	<p><input style=\"font-size: 20; text-align:center;\" id=\"team\" name=\"team\" type=\"number\"></input></p>
+	<p><input style=\"font-size: 20;\" type=\"submit\"></input></p>
 	</form>";
 	}
 	?>
@@ -81,7 +84,7 @@ function loadTeamAtEvent(team,event) {
 			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\"'>".$eventCode."</button></p>";
 		}
 		
-		echo "<br/><p><button onClick='window.location.href=\"index.php\"'>Go Back</button>";
+		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button>";
 	}
 	?>
 </div>
