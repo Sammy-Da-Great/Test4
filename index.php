@@ -22,9 +22,9 @@ if (isSet($_GET["team"]) && $error == "") {
 	}
 }
 
-include "./config.php";
+include "config.php";
 	
-function getNameEventCode($code) {
+function getNameEventCode($code, $TBAAuthKey) {
 	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
 	$urlSuffix = '/simple';
 	
@@ -101,7 +101,7 @@ function loadTeamAtEvent(team,event) {
 		echo "<p style='font-size:24;'>Team ".$teamNumber." has been scouted at these events:</p>";
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
-			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\"'>".getNameEventCode($eventCode)."</button></p>";
+			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$teamNumber."\"'>".getNameEventCode($eventCode, $TBAAuthKey)."</button></p>";
 		}
 		
 		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button>";
