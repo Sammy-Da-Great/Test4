@@ -32,7 +32,7 @@ if ($error == "" && $input != "") {
 		}
 	}
 	if (count($events) == 0 && count($teams) == 0) {
-	$error = "Team number or Event Code not found! There may be scouting data yet!";
+	$error = "Team number or Event Code not found! There may not be scouting data yet!";
 	}
 }
 
