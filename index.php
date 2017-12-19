@@ -7,6 +7,7 @@ $events = array();
 $teams = array();
 $inputTeam = false;
 $inputEvent = false;
+$input = ""
 
 if (isSet($_GET["input"]) && $error == "") {
 	$input = $_GET["input"];
@@ -54,7 +55,7 @@ function getNameTeamNumber($teamNumber, $TBAAuthKey) {
 	$urlPrefix = 'http://www.thebluealliance.com/api/v3/team/';
 	$urlSuffix = '/simple';
 	
-	$url = $urlPrefix.$code.$urlSuffix;
+	$url = $urlPrefix.$teamNumber.$urlSuffix;
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
