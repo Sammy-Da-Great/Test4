@@ -122,7 +122,7 @@ function loadTeamAtEvent(team,event) {
 </script></head><body onload="onLoad()">
 <div>
 	<img src="logo.png"/>
-	<h1>Welcome to the ORF Scouting Viewer!</h1>
+	<h1>Welcome to ORF's Scouting Data Viewer!</h1>
 	<?php
 	if (!(count($events) > 0) && !(count($teams) >0)) {
 	echo "<form method=\"get\" action=\"index.php\">
