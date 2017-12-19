@@ -136,10 +136,12 @@ function loadTeamAtEvent(team,event) {
 	<p><?php echo $error ?></p>
 	<?php
 	if (count($events) > 0 && $error == "" && $inputTeam && !$inputEvent) {
-		echo "<p style='font-size:24;'>Team ".$input." has been scouted at these events:</p>";
+		echo "<p style='font-size:24;'>Team ".$input." has been scouted at these events this season:</p>";
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
-			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$input."\"'>".getNameEventCode($eventCode)."</button></p>";
+			if (substr($eventCode,0,4) == $seasonYear) {
+				echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$input."\"'>".getNameEventCode($eventCode)."</button></p>";
+			}
 		}
 		
 		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
