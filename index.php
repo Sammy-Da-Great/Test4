@@ -9,8 +9,11 @@ $inputTeam = false;
 $inputEvent = false;
 $input = "";
 
-if (isSet($_GET["input"]) && $error == "") {
+if (isSet($_GET["input"])) {
 	$input = $_GET["input"];
+}
+
+if ($error == "" && $input != "") {
 	$eventDirectories = glob('api/v1/*' , GLOB_ONLYDIR);
 	foreach($eventDirectories as $fileName) {
 		if (explode("/", $fileName)[2] == $input) {
@@ -100,7 +103,7 @@ div {
 </style><script>
 function onLoad() {
 	<?php if ($error == "" && $input != "") {
-	echo "document.getElementById(\"input\").defaultValue = \"".$input."\";";
+	echo "document.getElementById(\"input\").defaultValue = '".$input."';";
 	}
 	?>
 }
@@ -113,7 +116,7 @@ function loadTeamAtEvent(team,event) {
 	<img src="logo.png"/>
 	<h1>Welcome to the ORF Scouting Viewer!</h1>
 	<?php
-	if (!(count($events) > 0)) {
+	if (!(count($events) > 0) && !(count($teams) >0)) {
 	echo "<form method=\"get\" action=\"index.php\">
 	<p>Team Number or Event Key:</p>
 	<p><input style=\"font-size: 20; text-align:center;\" id=\"input\" name=\"input\" type=\"text\"></input></p>
