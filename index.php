@@ -38,7 +38,8 @@ if ($error == "" && $input != "") {
 
 include "config.php";
 	
-function getNameEventCode($code, $TBAAuthKey) {
+function getNameEventCode($code) {	
+	global $TBAAuthKey;
 	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
 	$urlSuffix = '/simple';
 	
@@ -54,19 +55,26 @@ function getNameEventCode($code, $TBAAuthKey) {
 	}
 	curl_close($ch);
 }
-function getNameTeamNumber($teamNumber, $TBAAuthKey) {
-	$urlPrefix = 'http://www.thebluealliance.com/api/v3/team/frc';
-	$urlSuffix = '/simple';
+
+$teamNameAtEvent = array();
+function getNameTeamNumber($teamNumber, $event) {
+	global $TBAAuthKey, $teamNameAtEvent;
+	if (count($teamNameAtEvent) == 0) {
+		$url = 'http://www.thebluealliance.com/api/v3/event/'.$event.'/teams/simple';
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$result = json_decode(curl_exec($ch),true);
+		curl_close($ch);
+		foreach ($result as $team) {
+			$teamNameAtEvent[$team["team_number"]] = $team["nickname"];
+		}
+	}
 	
-	$url = $urlPrefix.$teamNumber.$urlSuffix;
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$result = json_decode(curl_exec($ch),true);
-	curl_close($ch);
-	if (isSet($result["nickname"])) {
-		return $result["nickname"];
-	} else {
+	if (isSet($teamNameAtEvent[$teamNumber])) {
+		return $teamNameAtEvent[$teamNumber];
+	}
+	else {
 		return $teamNumber;
 	}
 }
@@ -131,17 +139,19 @@ function loadTeamAtEvent(team,event) {
 		echo "<p style='font-size:24;'>Team ".$input." has been scouted at these events:</p>";
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
-			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$input."\"'>".getNameEventCode($eventCode, $TBAAuthKey)."</button></p>";
+			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$input."\"'>".getNameEventCode($eventCode)."</button></p>";
 		}
 		
 		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
 	}
 	
 	if (count($teams) > 0 && $error == "" && !$inputTeam && $inputEvent) {
-		echo "<p style='font-size:24;'>These teams have been scouted from the event \"".getNameEventCode($input, $TBAAuthKey)."\":</p>";
+		echo "<p style='font-size:24;'>These teams have been scouted from the event \"".getNameEventCode($input)."\":</p>";
 		foreach($teams as $team) {
 			$teamNumber = explode("/",$team)[3];
-			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$input."&teamNumber=".$teamNumber."\"'>".$teamNumber." - ".getNameTeamNumber($teamNumber, $TBAAuthKey)."</button></p>";
+			if (getNameTeamNumber($teamNumber, $input) != $teamNumber) {
+				echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$input."&teamNumber=".$teamNumber."\"'>".$teamNumber." - ".getNameTeamNumber($teamNumber, $input)."</button></p>";
+			}
 		}
 		
 		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
