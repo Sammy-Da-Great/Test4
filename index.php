@@ -7,7 +7,7 @@ $events = array();
 $teams = array();
 $inputTeam = false;
 $inputEvent = false;
-$input = ""
+$input = "";
 
 if (isSet($_GET["input"]) && $error == "") {
 	$input = $_GET["input"];
@@ -52,7 +52,7 @@ function getNameEventCode($code, $TBAAuthKey) {
 	curl_close($ch);
 }
 function getNameTeamNumber($teamNumber, $TBAAuthKey) {
-	$urlPrefix = 'http://www.thebluealliance.com/api/v3/team/';
+	$urlPrefix = 'http://www.thebluealliance.com/api/v3/team/frc';
 	$urlSuffix = '/simple';
 	
 	$url = $urlPrefix.$teamNumber.$urlSuffix;
@@ -131,7 +131,7 @@ function loadTeamAtEvent(team,event) {
 			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$input."\"'>".getNameEventCode($eventCode, $TBAAuthKey)."</button></p>";
 		}
 		
-		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button>";
+		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
 	}
 	
 	if (count($teams) > 0 && $error == "" && !$inputTeam && $inputEvent) {
@@ -141,7 +141,7 @@ function loadTeamAtEvent(team,event) {
 			echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$input."&teamNumber=".$teamNumber."\"'>".$teamNumber." - ".getNameTeamNumber($teamNumber, $TBAAuthKey)."</button></p>";
 		}
 		
-		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button>";
+		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
 	}
 	?>
 </div>
