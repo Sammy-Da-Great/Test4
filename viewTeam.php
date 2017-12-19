@@ -90,6 +90,23 @@ if (filesize($teamDataPath."/rawData.csv")>0) {
 }
 
 include "config.php";
+
+function getNameEventCode($code, $TBAAuthKey) {
+	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
+	$urlSuffix = '/simple';
+	
+	$url = $urlPrefix.$code.$urlSuffix;
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$result = json_decode(curl_exec($ch),true);
+	if (isSet($result["name"])) {
+		return $result["name"];
+	} else {
+		return $code;
+	}
+	curl_close($ch);
+}
 ?>
 
 <head>
@@ -97,7 +114,7 @@ include "config.php";
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <script type="text/javascript" src="sortableTable/sortable.js"></script>
-<title><?php echo $teamNumber ?> - ORF Scouting</title>
+<title><?php echo $teamNumber." at ".getNameEventCode($eventCode, $TBAAuthKey); ?> - ORF Scouting</title>
 <style>
 a {
 	color: white;
@@ -170,11 +187,12 @@ function onLoad() {
 </script>
 </head>
 <body onload="onLoad()">
-<h1 style="text-align:center"><?php echo $teamNumber ?></h1>
+<h1 style="text-align:center"><?php echo $teamNumber." at ".getNameEventCode($eventCode, $TBAAuthKey); ?></h1>
 <img id="logo" src="<?php echo $teamDataPath."/".$eventCode."/".$teamNumber."/picture.png"; ?>" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
-<tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr>
+<tr><td>Team Number:</td><td><?php echo $teamNumber ?></td></tr
+<tr><td>Event Key:</td><td><a target="_blank" href="index.php?input=<?php echo $eventCode; ?>"><?php echo $eventCode; ?></a> (<a target="_blank" href=<?php echo "\"https://www.thebluealliance.com/event/".$eventCode."\"" ?>>TBA</a>)</td></tr>
 <tr><td>Autonomous:</td><td><?php echo $autonomousPit ?></td></tr>
 <tr><td>Teleoperated:</td><td><?php echo $teleopPit ?></td></tr>
 <tr><td>General Notes:</td><td><?php echo $notesPit ?></td></tr>
