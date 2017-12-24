@@ -208,7 +208,7 @@ function onLoad() {
 </script>
 </head>
 <body onload="onLoad()">
-<h1 style="text-align:center"><?php echo $teamNumber." at ".getNameEventCode($eventCode); ?></h1>
+<h1 style="text-align:center">Team <?php echo $teamNumber." at ".getNameEventCode($eventCode); ?></h1>
 <img id="logo" src="<?php echo $teamDataPath."/".$eventCode."/".$teamNumber."/picture.png"; ?>" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
