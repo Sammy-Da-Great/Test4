@@ -212,7 +212,7 @@ function onLoad() {
 <img id="logo" src="<?php echo $teamDataPath."/".$eventCode."/".$teamNumber."/picture.png"; ?>" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
-<tr><td>Team Number:</td><td colspan="2"><?php echo $teamNumber ?> (<a target="_blank" href="<?php echo "http://thebluealliance.com/team/".$teamNumber."/".$seasonYear; ?>">View on The Blue Alliance</a>)</td></tr>
+<tr><td>Team Number:</td><td colspan="2"><a target="_blank" href="index.php?input=<?php echo $teamNumber; ?>"><?php echo $teamNumber ?></a> (<a target="_blank" href="<?php echo "http://thebluealliance.com/team/".$teamNumber."/".$seasonYear; ?>">View on The Blue Alliance</a>)</td></tr>
 <tr><td>Event Key:</td><td colspan="2"><a target="_blank" href="index.php?input=<?php echo $eventCode; ?>"><?php echo $eventCode; ?></a> (<a target="_blank" href=<?php echo "\"https://www.thebluealliance.com/event/".$eventCode."\"" ?>>View on The Blue Alliance</a>)</td></tr>
 <tr><td>Team@Event Status:</td><td colspan="2"><?php echo getTeamAtEventStatus(); ?></td></tr>
 <tr><td>Autonomous:</td><td><?php echo $autonomousPit ?></td></tr>
