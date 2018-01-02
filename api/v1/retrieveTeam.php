@@ -41,6 +41,9 @@ if (filesize($teamDataPath."/pitScout.json")>0) {
         "ClimbRating" => $pitData["Climb"],
         "Defendable" => $pitData["Defended"],
     );
+    if (isSet($_GET["showNoAlliance"])) {
+        $data["Pit"]["NoAlliance"] = $pitData["NoAlliance"];
+    }
 	fclose($file);
 } else {
 	$data["Pit"] = array(
@@ -55,6 +58,9 @@ if (filesize($teamDataPath."/pitScout.json")>0) {
         "ClimbRating" => "Unknown",
         "Defendable" => "Unknown",
     );
+    if (isSet($_GET["showNoAlliance"])) {
+        $data["Pit"]["NoAlliance"] = "Unknown";
+    }
 }
 
 if (filesize($teamDataPath."/rawData.json")>0) {
@@ -67,11 +73,15 @@ if (filesize($teamDataPath."/rawData.json")>0) {
     $matchData = array();
 	foreach($rawLine as $line) {
         $json = json_decode($line,true);
+        if (!isSet($_GET["showNoAlliance"])) {
+            unset($json["NoAlliance"]);
+        }
         $matchData[$json["MatchNumber"]] = $json;
-		$Low += $json["LowGoalFuel"];
-		$High += $json["HighGoalFuel"];
+		$Low += $json["LowGoalVisits"];
+		$High += $json["HighGoalVisits"];
 		$GearsDelivered += $json["GearsDelivered"];
-		$GearsPickup += $json["GearsPickup"];
+        $GearsPickup += $json["GearsPickup"];
+        
     }
     $data["Stand"] = array(
         "Matches" => $matchData,

@@ -13,6 +13,17 @@ if (isSet($_GET["input"])) {
 	$input = $_GET["input"];
 }
 
+$showNoAlliance = isset($_GET["showNoAlliance"]);
+if (strtolower($input) == "noalliance" && !$showNoAlliance) {
+	$input = "";
+	$error = "No Alliance view enabled.";
+	$showNoAlliance = true;
+} else if (strtolower($input) == "noalliance" && $showNoAlliance) {
+	$input = "";
+	$error = "No Alliance view disabled.";
+	$showNoAlliance = false;
+}
+
 if ($error == "" && $input != "") {
 	$eventDirectories = glob('api/v1/*' , GLOB_ONLYDIR);
 	foreach($eventDirectories as $fileName) {
@@ -115,10 +126,6 @@ function onLoad() {
 	}
 	?>
 }
-
-function loadTeamAtEvent(team,event) {
-	window.location.href = "viewTeam.php?eventCode="+ event + "&teamNumber=" + team;
-}
 </script></head><body onload="onLoad()">
 <div>
 	<img src="logo.png"/>
@@ -127,8 +134,9 @@ function loadTeamAtEvent(team,event) {
 	if (!(count($events) > 0) && !(count($teams) >0)) {
 	echo "<form method=\"get\" action=\"index.php\">
 	<p>Team Number or Event Key:</p>
-	<p><input style=\"font-size: 20; text-align:center;\" id=\"input\" name=\"input\" type=\"text\"></input></p>
-	<p><input style=\"font-size: 20;\" type=\"submit\"></input></p>
+	<p><input style=\"font-size: 20; text-align:center;\" id=\"input\" name=\"input\" type=\"text\"></input></p>".
+	(($showNoAlliance) ? "<input style=\"display:none\" id=\"showNoAlliance\" name=\"showNoAlliance\" type=\"text\" value=\"1\"></input>" : "")
+	."<p><input style=\"font-size: 20;\" type=\"submit\"></input></p>
 	</form>";
 	}
 	?>
@@ -140,7 +148,7 @@ function loadTeamAtEvent(team,event) {
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
 			if (substr($eventCode,0,4) == $seasonYear) {
-				echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$input."\"'>".getNameEventCode($eventCode)."</button></p>";
+				echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$eventCode."&teamNumber=".$input.(($showNoAlliance) ? "&showNoAlliance=1" : "")."\"'>".getNameEventCode($eventCode)."</button></p>";
 			}
 		}
 		
@@ -152,7 +160,7 @@ function loadTeamAtEvent(team,event) {
 		foreach($teams as $team) {
 			$teamNumber = explode("/",$team)[3];
 			if (getNameTeamNumber($teamNumber, $input) != $teamNumber) {
-				echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$input."&teamNumber=".$teamNumber."\"'>".$teamNumber." - ".getNameTeamNumber($teamNumber, $input)."</button></p>";
+				echo "<p><button style='font-size: 30;' onClick='window.location.href=\"viewTeam.php?eventCode=".$input."&teamNumber=".$teamNumber.(($showNoAlliance) ? "&showNoAlliance=1" : "")."\"'>".$teamNumber." - ".getNameTeamNumber($teamNumber, $input)."</button></p>";
 			}
 		}
 		

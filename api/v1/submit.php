@@ -1,28 +1,27 @@
 <?php 
 
 $expectedFormInputCommon = array(
-	//Format array("KEY","TYPE OF KEY"),
-	array("App","string"),
-	array("Version","string"),
-	array("ScouterName","string"),
-	array("EventKey","string"),
-	array("TeamNumber","integer"),
-	array("LowGoalFuel","integer"),
-	array("HighGoalFuel","integer"),
-	array("GearsDelivered","integer"),
-	array("Notes","string"),
-	array("AutoNotes","string"),
-	array("TeleopNotes","string"),
-	array("Climb","string"),
-	array("GearsPickup","integer"),
-	array("FuelDrive","boolean"),
-	array("Defended","boolean"),
+	"App",
+	"Version",
+	"ScouterName",
+	"EventKey",
+	"TeamNumber",
+	"LowGoalFuel",
+	"HighGoalFuel",
+	"GearsDelivered",
+	"Notes",
+	"AutoNotes",
+	"TeleopNotes",
+	"Climb",
+	"GearsPickup",
+	"FuelDrive",
+	"Defended",
+	"NoAlliance",
 );
 
 $expectedFormInputStand = array(
-	array("MatchNumber","integer"),
-	array("DOF","boolean"),
-	array("NoAlliance","boolean"),
+	"MatchNumber",
+	"DOF",
 );
 
 $expectedFormInputPit = array(
@@ -32,27 +31,26 @@ $expectedFormInputPit = array(
 	if (isSet($_POST["App"])) {
 		$dataArray = array();
 		foreach($expectedFormInputCommon as $input) {
-			if (isSet($_POST[$input[0]])) {
-				if (gettype($_POST[$input[0]]) == $input[1]) {
-					$dataArray[$input[0]] = ($input[1] == "string") ? seralizeString($_POST[$input[0]]) : $_POST[$input[0]];
-				} else {
-					http_response_code(400);
-					exit;
-				}
+			if (isSet($_POST[$input])) {
+					$dataArray[$input] = seralizeString($_POST[$input]);
 			} else {
 				http_response_code(400);
 				exit;
 			}
 		}
 
+		include_once "../../config.php";
+
 		$url = 'http://www.thebluealliance.com/api/v3/team/frc'.$_POST["TeamNumber"].'/event/'.$_POST["EventKey"].'/status';
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_exec($ch);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
 		if ($httpCode != 200) {
+			echo " Error: ".$httpCode." URL: ".$url;
 			http_response_code(400);
 			exit;
 		}
@@ -60,12 +58,7 @@ $expectedFormInputPit = array(
 		if ($_POST["App"] == "stand") {
 			foreach($expectedFormInputStand as $input) {
 				if (isSet($_POST[$input])) {
-					if (gettype($_POST[$input[0]]) == $input[1]) {
-						$dataArray[$input[0]] = ($input[1] == "string") ? seralizeString($_POST[$input[0]]) : $_POST[$input[0]];
-					} else {
-						http_response_code(400);
-						exit;
-					}
+						$dataArray[$input] = seralizeString($_POST[$input]);
 				} else {
 					http_response_code(400);
 					exit;
@@ -74,12 +67,7 @@ $expectedFormInputPit = array(
 		} elseif ($_POST["App"] == "pit") {
 			foreach($expectedFormInputPit as $input) {
 				if (isSet($_POST[$input])) {
-					if (gettype($_POST[$input[0]]) == $input[1]) {
-						$dataArray[$input[0]] = ($input[1] == "string") ? seralizeString($_POST[$input[0]]) : $_POST[$input[0]];
-					} else {
-						http_response_code(400);
-						exit;
-					}
+						$dataArray[$input] = seralizeString($_POST[$input]);
 				} else {
 					http_response_code(400);
 					exit;
@@ -125,6 +113,8 @@ $expectedFormInputPit = array(
 	}
 
 	function seralizeString($stringToValidate) {
-		$newString = preg_replace("/\\/","", preg_replace("/\"/","'", $stringToValidate)); //Changes double quotes to single, and removes escaping characters.
+		$newString = preg_replace('~(\\ | \n)\~',' ', preg_replace('/\"/', '\'', $stringToValidate)); //Changes double quotes to single, and removes escaping characters.
+		echo $newString;
+		return $newString;
 	}
 ?>

@@ -12,7 +12,12 @@ for ($i = 2; $i < count($urlParts)-1; $i++) {
 	$baseURL += ".".$urlParts[$i];
 }
 $url = 'http://'.$_SERVER["HTTP_HOST"]."/".$baseURL.'/api/v1/retrieveTeam.php?teamNumber='.$_GET["teamNumber"]."&eventCode=".$_GET["eventCode"];
-echo $url;
+
+$showNoAlliance = isSet($_GET["showNoAlliance"]);
+
+if ($showNoAlliance) {
+	$url .= "&showNoAlliance=1";
+}
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $result = json_decode(curl_exec($ch),true);
@@ -24,7 +29,7 @@ curl_close($ch);
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <script type="text/javascript" src="sortableTable/sortable.js"></script>
-<title><?php echo $result["TeamNumber"]."at ".$result["EventName"]; ?> - ORF Scouting</title>
+<title><?php echo $result["TeamNumber"]." at ".$result["EventName"]; ?> - ORF Scouting</title>
 <style>
 a {
 	color: white;
@@ -111,15 +116,16 @@ function onLoad() {
 <tr><td>Affected by fuel on field:</td><td>Pit: <?php echo $result["Pit"]["AffectedByFuelOnField"]; ?></td><td>Average: See table below</td></tr>
 <tr><td>Affected by defense:</td><td>Pit: <?php echo $result["Pit"]["Defendable"]; ?></td><td>Average: See table below</td></tr>
 <tr><td>Climb:</td><td>Pit: <?php echo $result["Pit"]["ClimbRating"] ?></td><td>Average: See table below</td></tr>
+<?php if ($showNoAlliance) echo "<tr><td>No Alliance:</td><td>Pit: ".$result["Pit"]["NoAlliance"]."</td><td>Average: See table below</td></tr>" ?>
 </table>
 <p></p>
 <h3 style="text-align:center">Raw Data</h3>
 <table class="sortable" id = "center">
-<tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>Low Goal Visits</th><th>High Goal Visits</th><th>Gears Picked up</th><th>Gears Delivered</th><th>Climb</th><th>Dead On Field</th><th>Fuel impacts driving</th><th>Blocked by defense</th><th class="unsortable">Autonomous Notes</th><th class="unsortable">Teleoperated Notes</th><th class="unsortable">General Notes</th></tr>
+<tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>Low Goal Visits</th><th>High Goal Visits</th><th>Gears Picked up</th><th>Gears Delivered</th><th>Climb</th><th>Dead On Field</th><th>Fuel impacts driving</th><th>Blocked by defense</th><th class="unsortable">Autonomous Notes</th><th class="unsortable">Teleoperated Notes</th><th class="unsortable">General Notes</th><?php if ($showNoAlliance) echo "<th>No Alliance</th>" ?></tr>
 <?php
 foreach ($result["Stand"]["Matches"] as $match) {
 	if ($match == null) continue;
-	echo "<tr><td>".$match["TeamNumber"]."</td><td>".$match["ScouterName"]."</td><td>".$match["MatchNumber"]."</td><td>".$match["LowGoalVisits"]."</td><td>".$match["HighGoalVisits"]."</td><td>".$match["GearsPickup"]."</td><td>".$match["GearsDelivered"]."</td><td>".$match["Climb"]."</td><td>".$match["DOF"]."</td><td>".$match["FuelDrive"]."</td><td>".$match["Defended"]."</td><td>".$match["AutoNotes"]."</td><td>".$match["TeleopNotes"]."</td><td>".$match["Notes"]."</td></tr>\n";
+	echo "<tr><td>".$match["TeamNumber"]."</td><td>".$match["ScouterName"]."</td><td>".$match["MatchNumber"]."</td><td>".$match["LowGoalVisits"]."</td><td>".$match["HighGoalVisits"]."</td><td>".$match["GearsPickup"]."</td><td>".$match["GearsDelivered"]."</td><td>".$match["Climb"]."</td><td>".$match["DOF"]."</td><td>".$match["FuelDrive"]."</td><td>".$match["Defended"]."</td><td>".$match["AutoNotes"]."</td><td>".$match["TeleopNotes"]."</td><td>".$match["Notes"]."</td>".(($showNoAlliance) ? "<td>".$match["NoAlliance"]."</td>" : "")."</tr>\n";
 } ?>
 </table>
 <p></p>
