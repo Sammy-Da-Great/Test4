@@ -32,7 +32,12 @@ $expectedFormInputPit = array(
 		$dataArray = array();
 		foreach($expectedFormInputCommon as $input) {
 			if (isSet($_POST[$input])) {
+				if (seralizeString($_POST[$input]) !== false) {
 					$dataArray[$input] = seralizeString($_POST[$input]);
+				} else {
+					http_response_code(400);
+					exit;
+				}
 			} else {
 				http_response_code(400);
 				exit;
@@ -58,7 +63,12 @@ $expectedFormInputPit = array(
 		if ($_POST["App"] == "stand") {
 			foreach($expectedFormInputStand as $input) {
 				if (isSet($_POST[$input])) {
+					if (seralizeString($_POST[$input]) !== false) {
 						$dataArray[$input] = seralizeString($_POST[$input]);
+					} else {
+						http_response_code(400);
+						exit;
+					}
 				} else {
 					http_response_code(400);
 					exit;
@@ -67,7 +77,12 @@ $expectedFormInputPit = array(
 		} elseif ($_POST["App"] == "pit") {
 			foreach($expectedFormInputPit as $input) {
 				if (isSet($_POST[$input])) {
+					if (seralizeString($_POST[$input]) !== false) {
 						$dataArray[$input] = seralizeString($_POST[$input]);
+					} else {
+						http_response_code(400);
+						exit;
+					}
 				} else {
 					http_response_code(400);
 					exit;
@@ -113,8 +128,11 @@ $expectedFormInputPit = array(
 	}
 
 	function seralizeString($stringToValidate) {
-		$newString = preg_replace('~(\\ | \n)\~',' ', preg_replace('/\"/', '\'', $stringToValidate)); //Changes double quotes to single, and removes escaping characters.
+		$newString = preg_replace('~(\\ | \n)~',' ', preg_replace('/\"/', '\'', $stringToValidate)); //Changes double quotes to single, and removes escaping characters.
 		echo $newString;
-		return $newString;
+		if ($newString != null) {
+			return $newString;
+		}
+		return false;
 	}
 ?>

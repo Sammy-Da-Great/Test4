@@ -27,7 +27,7 @@ if (!file_exists($teamDataPath)) {
 }
 
 if (filesize($teamDataPath."/pitScout.json")>0) {
-	$file = fopen($teamDataPath."/pitScout.josn","r");
+	$file = fopen($teamDataPath."/pitScout.json","r");
 	$pitData = json_decode(fread($file,filesize($teamDataPath."/pitScout.json")),true);
     $data["Pit"] = array(
         "AutonomousNotes" => $pitData["AutoNotes"],

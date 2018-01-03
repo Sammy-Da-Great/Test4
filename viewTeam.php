@@ -34,25 +34,34 @@ curl_close($ch);
 a {
 	color: white;
 }
+
 table, th, td {
     border: 1px solid white;
 }
+
 table.center {
 	margin-left: auto;
 	margin-right: auto;
 	width: 65%;
 }
+
 #center {
 	margin-left: auto;
 	margin-right: auto;
 	width: 65%;
 }
+
 p, h1, h3, td, th {
 	color: white;
 	text-align: center;
 }
+
 body {
 	background-color: black;
+}
+
+td, th { 
+	padding: 5px; 
 }
 </style>
 <script>
