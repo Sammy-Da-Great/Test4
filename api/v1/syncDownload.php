@@ -60,6 +60,7 @@ if (file_exists($districtEventsCacheDir."districtEvents.json")) {
 $url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
 $result1 = curlRequest($url1,$httpHeader); //From cache, nothing's changed.
 if ($result1["http_code"] == 304) {
+	echo "devent ";
 	$data["Events"] = json_decode($cachedJSON, true); 
 } elseif ($result1["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 	if (isSet($cachedJSON)) {
@@ -106,6 +107,7 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	$url1Cmp = $baseUrl.'event/'.$seasonYear.$cmpKey.'/simple';
 	$result1Cmp = curlRequest($url1Cmp,$httpHeader);
 	if ($result1Cmp["http_code"] == 304) { //Nothing changed! Use the cached data!
+		echo $cmpKey." ";
 		$data["Events"][$cmpKey] = json_decode($cachedJSON, true); 
 	} elseif ($result1Cmp["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 		if (isSet($cachedJSON)) {
@@ -155,6 +157,7 @@ foreach ($data["Events"] as $event) {
 	
 	$data["TeamsByEvent"][$event["key"]]["EventKey"] = $event["key"];
 	if ($result2["http_code"] == 304) {
+		echo $event["key"]."List "; 
 		$data["TeamsByEvent"][$event["key"]]["TeamList"] = json_decode($cachedJSON, true); 
 	} elseif ($result2["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 		if (isSet($cachedJSON)) {
@@ -203,6 +206,7 @@ foreach ($data["Events"] as &$event) {
 		
 		$tmpArray = array( "EventKey" => $event["key"] , "TeamNumber" => $team["team_number"]);
 		if ($result3["http_code"] == 304) {
+			echo $event["key"].$team["key"]."Matches ";
 			$tmpArray["Matches"] = json_decode($cachedJSON, true); 
 		} elseif ($result3["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 			if (isSet($cachedJSON)) {
