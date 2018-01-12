@@ -88,7 +88,6 @@ if ($result1["http_code"] == 304) {
 	$data["Events"] = json_decode($result1["body"], true);
 	$dataToWrite = $result1["header"]["last-modified"]."\n".str_replace("\n","",$result1["body"]);
 	file_put_contents($districtEventsCacheDir."districtEvents.json",$dataToWrite);
-	echo "devent ";
 }
 
 $worldCmpEventKeys = array("carv","gal","hop","new","roe","tur","tes","dar","dal","cur","cars","arc");
@@ -135,7 +134,6 @@ foreach($worldCmpEventKeys as $cmpKey) {
 		$data["Events"][$cmpKey] = json_decode($result1Cmp["body"], true);
 		$dataToWrite = $result1Cmp["header"]["last-modified"]."\n".str_replace("\n","",$result1Cmp["body"]);
 		file_put_contents($worldCmpCacheDir.$seasonYear.$cmpKey.".json",$dataToWrite);
-		echo $cmpKey." ";
 	}
 }
 
@@ -176,7 +174,6 @@ foreach ($data["Events"] as $event) {
 		$data["TeamsByEvent"][$event["key"]]["TeamList"] = json_decode($result2["body"], true);
 		$dataToWrite = $result2["header"]["last-modified"]."\n".str_replace("\n","",$result2["body"]);
 		file_put_contents($teamAtEventCacheDir.$event["key"].".json", $dataToWrite);
-		echo $event["key"]."List ";
 	}
 }
 
@@ -249,7 +246,6 @@ foreach ($data["Events"] as &$event) {
 			$tmpArray["Matches"] = json_decode($result3["body"], true);
 			$dataToWrite = $result3["header"]["last-modified"]."\n".str_replace("\n","",$result3["body"]);
 			file_put_contents($teamMatchesEventCacheDir.$team["key"].".json", $dataToWrite);
-			echo $event["key"].$team["key"]."Matches ";
 		}
 		
 		$data["EventMatches"] += $tmpArray;
@@ -258,5 +254,5 @@ foreach ($data["Events"] as &$event) {
 }
 unset($event);
 
-//echo json_encode($data);
+echo json_encode($data);
 ?>
