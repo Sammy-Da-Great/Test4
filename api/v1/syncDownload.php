@@ -193,7 +193,6 @@ foreach ($data["Events"] as &$event) {
 	}
 	if (isSet($event->district)) if ($event->district == null) $event->district = array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
 }
-	$tmpDataEvent = array();
 	
 foreach ($data["TeamsByEvent"] as $eventData) {
 	$event = (object) array ("key" => $eventData["EventKey"]);
@@ -257,13 +256,11 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 			file_put_contents($teamMatchesEventCacheDir.($team->key).".json", $dataToWrite);
 		}	
 	
-		$tmpDataEvent[] = $tmpDataTeam;
+		$data["EventMatches"][] = $tmpDataTeam;
 	}
 }
 	
-$data["EventMatches"][] = $tmpDataEvent;
-	
-unset($event, $tmpDataEvent, $tmpDataTeam);
+unset($event, $tmpDataTeam);
 
 echo json_encode($data);
 ?>
