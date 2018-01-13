@@ -150,7 +150,7 @@ foreach ($data["Events"] as $event) {
 		$cachedJSON = $file[1];
 		$httpHeader[1] = "If-Modified-Since: ".$lastModified;
 	}
-    $url2 = $baseUrl.'event/'.$event=>key.'/teams/simple';
+    $url2 = $baseUrl.'event/'.$event->key.'/teams/simple';
     $result2 = curlRequest($url2,$httpHeader);
 	
 	$data["TeamsByEvent"][$event->key]["EventKey"] = $event->key;
