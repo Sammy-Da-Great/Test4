@@ -203,12 +203,12 @@ foreach ($data["Events"] as &$event) {
 		
 		$data["EventMatches"][$event->key][$team->team_number] = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);
 		if ($result3["http_code"] == 304) {
-			$data["EventMatches"][$event->key][$team["team_number"]]["Matches"] = json_decode($cachedJSON); 
+			$data["EventMatches"][$event->key][$team[->team_number]["Matches"] = json_decode($cachedJSON); 
 		} elseif ($result3["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 			if (isSet($cachedJSON)) {
-				$data["EventMatches"][$event->key][$team->team_number]]["Matches"] = json_decode($cachedJSON); 
+				$data["EventMatches"][$event->key][$team->team_number]["Matches"] = json_decode($cachedJSON); 
 			} else {
-			$data["EventMatches"][$event->key][$team->team_number]]["Matches"] = array(array(
+			$data["EventMatches"][$event->key][$team->team_number]["Matches"] = array(array(
 				"actual_time" => 0,
 				"alliances" => array(
 					"blue" => [
@@ -243,7 +243,7 @@ foreach ($data["Events"] as &$event) {
 			));
 		}
 		} else { //New data!
-			$data["EventMatches"][$event->key][$team->team_number]]["Matches"] = json_decode($result3["body"], true);
+			$data["EventMatches"][$event->key][$team->team_number]["Matches"] = json_decode($result3["body"], true);
 			$dataToWrite = $result3["header"]["last-modified"]."\n".str_replace("\n","",$result3["body"]);
 			file_put_contents($teamMatchesEventCacheDir.$team->key.".json", $dataToWrite);
 		}
