@@ -251,5 +251,5 @@ foreach ($data["Events"] as &$event) {
 }
 unset($event);
 
-echo json_encode($data);
+echo json_encode($data, JSON_FORCE_OBJECT);
 ?>
