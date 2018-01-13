@@ -195,7 +195,8 @@ foreach ($data["Events"] as &$event) {
 }
 	$tmpDataEvent = array();
 	
-foreach ($data["TeamsByEvent"] as $event) {
+foreach ($data["TeamsByEvent"] as $eventData) {
+	$event = (object) array ("key" => $eventData["EventKey"]);
 	foreach($event["TeamList"] as $team) {
 		$tmpDataTeam = array();
 	
