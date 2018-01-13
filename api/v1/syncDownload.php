@@ -188,7 +188,7 @@ foreach ($data["Events"] as &$event) {
 	if (!file_exists($teamMatchesEventCacheDir)) {
 		mkdir($teamMatchesEventCacheDir);
 	}
-	if (isSet($event["district"])) if ($event["district"] == null) $event["district"] = array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
+	if (isSet($event->district)) if ($event->district == null) $event->district = array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
 	
 	foreach ($data["TeamsByEvent"][$event->key]["TeamList"] as $team) {
 		$httpHeader = array('X-TBA-Auth-Key: '.$TBAAuthKey);
@@ -203,7 +203,7 @@ foreach ($data["Events"] as &$event) {
 		
 		$data["EventMatches"][$event->key][$team->team_number] = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);
 		if ($result3["http_code"] == 304) {
-			$data["EventMatches"][$event->key][$team[->team_number]["Matches"] = json_decode($cachedJSON); 
+			$data["EventMatches"][$event->key][$team->team_number]["Matches"] = json_decode($cachedJSON); 
 		} elseif ($result3["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 			if (isSet($cachedJSON)) {
 				$data["EventMatches"][$event->key][$team->team_number]["Matches"] = json_decode($cachedJSON); 
