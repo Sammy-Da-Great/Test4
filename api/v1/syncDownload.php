@@ -177,9 +177,10 @@ foreach ($data["Events"] as $event) {
 		file_put_contents($teamAtEventCacheDir.$event["key"].".json", $dataToWrite);
 	}
 	$data["TeamsByEvent"][] = $tmpData;
-	var_dump($data["TeamsByEvent"]);
 	unset($tmpData);
 }
+
+var_dump($data["TeamsByEvent"]);
 
 #Request 3: Matches for each team for each event.
 $teamMatchesCacheDir = $cacheDir."teamMatches/";
