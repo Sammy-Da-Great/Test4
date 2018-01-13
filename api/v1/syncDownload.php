@@ -176,7 +176,7 @@ foreach ($data["Events"] as $event) {
 		$dataToWrite = $result2["header"]["last-modified"]."\n".str_replace("\n","",$result2["body"]);
 		file_put_contents($teamAtEventCacheDir.$event["key"].".json", $dataToWrite);
 	}
-	
+	var_dump($tmpData);
 	$data["TeamsByEvent"] = $data["TeamsByEvent"] + array($tmpData);
 	unset($tmpData);
 }
@@ -263,5 +263,5 @@ foreach ($data["Events"] as &$event) {
 }
 unset($event, $tmpDataEvent, $tmpDataTeam);
 
-echo json_encode($data);
+//echo json_encode($data);
 ?>
