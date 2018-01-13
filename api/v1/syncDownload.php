@@ -106,7 +106,7 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	$url1Cmp = $baseUrl.'event/'.$seasonYear.$cmpKey.'/simple';
 	$result1Cmp = curlRequest($url1Cmp,$httpHeader);
 	if ($result1Cmp["http_code"] == 304) { //Nothing changed! Use the cached data!
-		$data["Events"] = $data["Events"] + json_decode($cachedJSON,true)); 
+		$data["Events"] = $data["Events"] + json_decode($cachedJSON,true); 
 	} elseif ($result1Cmp["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 		if (isSet($cachedJSON)) {
 		$data["Events"] = $data["Events"] + json_decode($cachedJSON,true);
