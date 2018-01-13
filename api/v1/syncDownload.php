@@ -1,5 +1,5 @@
 <?php
-ini_set('max_execution_time', 600); //In seconds
+ini_set('max_execution_time', 900); //In seconds
 header("Content-Type: application/json");
 
 include "../../config.php";
