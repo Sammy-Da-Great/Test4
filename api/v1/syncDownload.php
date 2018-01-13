@@ -180,8 +180,6 @@ foreach ($data["Events"] as $event) {
 	unset($tmpData);
 }
 
-var_dump($data["TeamsByEvent"]);
-
 #Request 3: Matches for each team for each event.
 $teamMatchesCacheDir = $cacheDir."teamMatches/";
 if (!file_exists($teamMatchesCacheDir)) {
@@ -266,5 +264,5 @@ foreach ($data["Events"] as &$event) {
 }
 unset($event, $tmpDataEvent, $tmpDataTeam);
 
-//echo json_encode($data);
+echo json_encode($data);
 ?>
