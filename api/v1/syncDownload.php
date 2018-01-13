@@ -176,6 +176,8 @@ foreach ($data["Events"] as $event) {
 		$dataToWrite = $result2["header"]["last-modified"]."\n".str_replace("\n","",$result2["body"]);
 		file_put_contents($teamAtEventCacheDir.$event["key"].".json", $dataToWrite);
 	}
+	echo $tmpData;
+	exit;
 	$data["TeamsByEvent"][] = $tmpData;
 	unset($tmpData);
 }
