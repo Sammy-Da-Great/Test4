@@ -142,6 +142,7 @@ $teamAtEventCacheDir = $cacheDir."TeamList/";
 if (!file_exists($teamAtEventCacheDir)) {
 	mkdir($teamAtEventCacheDir);
 }
+$data["TeamsByEvent"] = array();
 foreach ($data["Events"] as $event) {
 	$httpHeader = array('X-TBA-Auth-Key: '.$TBAAuthKey);
 	if (file_exists($teamAtEventCacheDir.$event->key.".json")) {
