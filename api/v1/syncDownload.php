@@ -197,8 +197,6 @@ foreach ($data["Events"] as &$event) {
 	
 foreach ($data["TeamsByEvent"] as $event) {
 	foreach($event["TeamList"] as $team) {
-		echo ($team->team_number);
-		exit;
 		$tmpDataTeam = array();
 	
 		$httpHeader = array('X-TBA-Auth-Key: '.$TBAAuthKey);
