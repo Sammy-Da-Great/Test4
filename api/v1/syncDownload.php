@@ -109,7 +109,7 @@ foreach($worldCmpEventKeys as $cmpKey) {
 		$data["Events"][] = json_decode($cachedJSON); 
 	} elseif ($result1Cmp["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 		if (isSet($cachedJSON)) {
-		$data["Events"][] = json_decode($cachedJSON));
+		$data["Events"][] = json_decode($cachedJSON);
 		} else {
 		$data["Events"] = $data["Events"] + array(
 			"city" => "Error",
