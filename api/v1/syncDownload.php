@@ -198,6 +198,7 @@ foreach ($data["Events"] as &$event) {
 foreach ($data["TeamsByEvent"] as $event) {
 	foreach($event["TeamList"] as $team) {
 		var_dump($team);
+		echo ($team->key);
 		exit;
 		$tmpDataTeam = array();
 	
