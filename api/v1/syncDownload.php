@@ -145,13 +145,13 @@ if (!file_exists($teamAtEventCacheDir)) {
 $data["TeamsByEvent"] = array();
 foreach ($data["Events"] as $event) {
 	$httpHeader = array('X-TBA-Auth-Key: '.$TBAAuthKey);
-	if (file_exists($teamAtEventCacheDir.$event->key.".json")) {
-		$file = file($teamAtEventCacheDir.$event->key.".json", FILE_IGNORE_NEW_LINES);
+	if (file_exists($teamAtEventCacheDir.($event->key).".json")) {
+		$file = file($teamAtEventCacheDir.($event->key).".json", FILE_IGNORE_NEW_LINES);
 		$lastModified = $file[0];
 		$cachedJSON = $file[1];
 		$httpHeader[1] = "If-Modified-Since: ".$lastModified;
 	}
-    $url2 = $baseUrl.'event/'.$event->key.'/teams/simple';
+    $url2 = $baseUrl.'event/'.($event->key).'/teams/simple';
     $result2 = curlRequest($url2,$httpHeader);
 	
 	$tmpData = array("EventKey"=> $event->key);
@@ -187,7 +187,7 @@ if (!file_exists($teamMatchesCacheDir)) {
 }
 $data["EventMatches"] = array();
 foreach ($data["Events"] as &$event) {
-	$teamMatchesEventCacheDir = $teamMatchesCacheDir."/".$event->key."/";
+	$teamMatchesEventCacheDir = $teamMatchesCacheDir."/".($event->key)."/";
 	if (!file_exists($teamMatchesEventCacheDir)) {
 		mkdir($teamMatchesEventCacheDir);
 	}
@@ -197,19 +197,18 @@ foreach ($data["Events"] as &$event) {
 	
 foreach ($data["TeamsByEvent"] as $event) {
 	foreach($event["TeamList"] as $team) {
-		var_dump($team);
-		echo ($team->key);
+		echo ($team->team_number);
 		exit;
 		$tmpDataTeam = array();
 	
 		$httpHeader = array('X-TBA-Auth-Key: '.$TBAAuthKey);
-		if (file_exists($teamMatchesEventCacheDir.$team->key.".json")) {
-			$file = file($teamMatchesEventCacheDir.$team->key.".json", FILE_IGNORE_NEW_LINES);
+		if (file_exists($teamMatchesEventCacheDir.($team->key).".json")) {
+			$file = file($teamMatchesEventCacheDir.($team->key).".json", FILE_IGNORE_NEW_LINES);
 			$lastModified = $file[0];
 			$cachedJSON = $file[1];
 			$httpHeader[1] = "If-Modified-Since: ".$lastModified;
 		}
-		$url3 = $baseUrl.'team/'.$team->key.'/event/'.$event->key.'/matches/simple';
+		$url3 = $baseUrl.'team/'.$team->key.'/event/'.($event->key).'/matches/simple';
 		$result3 = curlRequest($url3,$httpHeader);
 	
 		$tmpDataTeam = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);
@@ -256,7 +255,7 @@ foreach ($data["TeamsByEvent"] as $event) {
 		} else { //New data!
 			$tmpDataTeam["Matches"] = json_decode($result3["body"]);
 			$dataToWrite = $result3["header"]["last-modified"]."\n".str_replace("\n","",$result3["body"]);
-			file_put_contents($teamMatchesEventCacheDir.$team["key"].".json", $dataToWrite);
+			file_put_contents($teamMatchesEventCacheDir.($team->key).".json", $dataToWrite);
 		}	
 	
 		$tmpDataEvent[] = $tmpDataTeam;
