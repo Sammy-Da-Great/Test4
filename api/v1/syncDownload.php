@@ -131,7 +131,7 @@ foreach($worldCmpEventKeys as $cmpKey) {
 			);
 		}
 	} else { //New data!
-		$data["Events"] = $data["Events"] + array(json_decode($result1Cmp["body"],true));
+		$data["Events"][] = json_decode($result1Cmp["body"],true);
 		$dataToWrite = $result1Cmp["header"]["last-modified"]."\n".str_replace("\n","",$result1Cmp["body"]);
 		file_put_contents($worldCmpCacheDir.$seasonYear.$cmpKey.".json",$dataToWrite);
 	}
@@ -176,7 +176,7 @@ foreach ($data["Events"] as $event) {
 		$dataToWrite = $result2["header"]["last-modified"]."\n".str_replace("\n","",$result2["body"]);
 		file_put_contents($teamAtEventCacheDir.$event["key"].".json", $dataToWrite);
 	}
-	$data["TeamsByEvent"] = array_merge($data["TeamsByEvent"],array($tmpData));
+	$data["TeamsByEvent"][] = $tmpData;
 	var_dump($data["TeamsByEvent"]);
 	unset($tmpData);
 }
@@ -256,10 +256,10 @@ foreach ($data["Events"] as &$event) {
 			file_put_contents($teamMatchesEventCacheDir.$team->key.".json", $dataToWrite);
 		}
 		
-		$tmpDataEvent = $tmpDataEvent + array($tmpDataTeam);
+		$tmpDataEvent[] = $tmpDataTeam;
 	}
 	
-	$data["EventMatches"] = $data["EventMatches"] + array($tmpDataEvent);
+	$data["EventMatches"][] = $tmpDataEvent;
 }
 unset($event, $tmpDataEvent, $tmpDataTeam);
 
