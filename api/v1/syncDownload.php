@@ -174,7 +174,7 @@ foreach ($data["Events"] as $event) {
 	} else { //New data!
 		$tmpData["TeamList"] = json_decode($result2["body"]);
 		$dataToWrite = $result2["header"]["last-modified"]."\n".str_replace("\n","",$result2["body"]);
-		file_put_contents($teamAtEventCacheDir.$event["key"].".json", $dataToWrite);
+		file_put_contents($teamAtEventCacheDir.($event->key).".json", $dataToWrite);
 	}
 	$data["TeamsByEvent"][] = $tmpData;
 	unset($tmpData);
@@ -187,15 +187,17 @@ if (!file_exists($teamMatchesCacheDir)) {
 }
 $data["EventMatches"] = array();
 foreach ($data["Events"] as &$event) {
-	$teamMatchesEventCacheDir = $teamMatchesCacheDir."/".($event->key)."/";
-	if (!file_exists($teamMatchesEventCacheDir)) {
-		mkdir($teamMatchesEventCacheDir);
-	}
 	if (isSet($event->district)) if ($event->district == null) $event->district = array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
 }
 	
 foreach ($data["TeamsByEvent"] as $eventData) {
 	$event = (object) array ("key" => $eventData["EventKey"]);
+	
+	$teamMatchesEventCacheDir = $teamMatchesCacheDir."/".($event->key)."/";
+	if (!file_exists($teamMatchesEventCacheDir)) {
+		mkdir($teamMatchesEventCacheDir);
+	}
+	
 	foreach($eventData["TeamList"] as $team) {
 		$tmpDataTeam = array();
 	
