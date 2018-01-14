@@ -206,7 +206,7 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 			$cachedJSON = $file[1];
 			$httpHeader[1] = "If-Modified-Since: ".$lastModified;
 		}
-		$url3 = $baseUrl.'team/'.$team->key.'/event/'.($event->key).'/matches/simple';
+		$url3 = $baseUrl.'team/'.$team->key.'/event/'.($event->key).'/matches/keys';
 		$result3 = curlRequest($url3,$httpHeader);
 	
 		$tmpDataTeam = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);
@@ -216,39 +216,7 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 			if (isSet($cachedJSON)) {
 				$tmpDataTeam["Matches"] = json_decode($cachedJSON); 
 			} else {
-			$tmpDataTeam["Matches"] = array(array(
-				"actual_time" => 0,
-				"alliances" => array(
-					"blue" => [
-						"dq_team_keys" => [],
-						"score" => 0,
-						"surrogate_team_keys" => [],
-						"team_keys" => [
-							"frc0000",
-							"frc0000",
-							"frc0000"
-						]
-					],
-					"red" => [
-						"dq_team_keys" => [],
-						"score" => 0,
-						"surrogate_team_keys" => [],
-						"team_keys" => [
-							"frc0000",
-							"frc0000",
-							"frc0000"
-						]
-					]
-				),
-				"comp_level" => "er",
-				"event_key" => "0000error",
-				"key" => "0000error_er0",
-				"match_number" => 0,
-				"predicted_time" => 0,
-				"set_number" => 0,
-				"time" => 0,
-				"winning_alliance" => "error"
-			));	
+			$tmpDataTeam["Matches"] = array("0000error_er0");	
 			}
 		} else { //New data!
 			$tmpDataTeam["Matches"] = json_decode($result3["body"]);
