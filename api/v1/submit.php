@@ -1,5 +1,8 @@
 <?php 
 
+http_response_code(418);
+exit;
+
 $expectedFormInputCommon = array(
 	"App",
 	"Version",
@@ -47,9 +50,6 @@ $expectedFormInputPit = array(
 
 		include_once "../../config.php";
 		error_log ("Config Included");
-		
-		http_response_code(418);
-		exit;
 		
 		$url = 'http://www.thebluealliance.com/api/v3/team/frc'.$_POST["TeamNumber"].'/event/'.$_POST["EventKey"].'/status';
 		$ch = curl_init($url);
