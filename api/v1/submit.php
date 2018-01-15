@@ -6,8 +6,8 @@ $expectedFormInputCommon = array(
 	"ScouterName",
 	"EventKey",
 	"TeamNumber",
-	"LowGoalFuel",
-	"HighGoalFuel",
+	"LowGoalVisits",
+	"HighGoalVisits",
 	"GearsDelivered",
 	"Notes",
 	"AutoNotes",
@@ -136,7 +136,6 @@ $expectedFormInputPit = array(
 
 	function seralizeString($stringToValidate) {
 		$newString = preg_replace('~(\\ | \n)~',' ', preg_replace('/\"/', '\'', $stringToValidate)); //Changes double quotes to single, and removes escaping characters.
-		echo $newString;
 		if ($newString != null) {
 			return $newString;
 		}

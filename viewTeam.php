@@ -109,7 +109,7 @@ function onLoad() {
 </head>
 <body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $result["TeamName"]." (".$result["TeamNumber"].") at ".$result["EventName"]; ?></h1>
-<img id="logo" src="<?php echo $teamDataPath."/".$eventCode."/".$teamNumber."/picture.png"; ?>" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
+<img id="logo" src="/picture.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td colspan="2"><a target="_blank" href="index.php?input=<?php echo $result["TeamNumber"].(($showNoAlliance) ? "&showNoAlliance=1": ""); ?>"><?php echo $result["TeamNumber"] ?></a> (<a target="_blank" href="<?php echo "http://thebluealliance.com/team/".$result["TeamNumber"]."/".$result["SeasonYear"]; ?>">View on The Blue Alliance</a>)</td></tr>
