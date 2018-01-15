@@ -1,8 +1,5 @@
 <?php 
 
-http_response_code(418);
-exit;
-
 $expectedFormInputCommon = array(
 	"App",
 	"Version",
