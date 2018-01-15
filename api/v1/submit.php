@@ -25,10 +25,11 @@ $expectedFormInputStand = array(
 );
 
 $expectedFormInputPit = array(
-	//Insert Pit only form inputs here
+	//Insert Pit only form fields here
 );
 
 	if (isSet($_POST["App"])) {
+		error_log ("App is set");
 		$dataArray = array();
 		foreach($expectedFormInputCommon as $input) {
 			if (isSet($_POST[$input])) {
@@ -45,7 +46,8 @@ $expectedFormInputPit = array(
 		}
 
 		include_once "../../config.php";
-
+		error_log ("Config Included");
+		
 		$url = 'http://www.thebluealliance.com/api/v3/team/frc'.$_POST["TeamNumber"].'/event/'.$_POST["EventKey"].'/status';
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
@@ -53,6 +55,7 @@ $expectedFormInputPit = array(
 		curl_exec($ch);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
+		error_log ("Request Complete Http Code:".$httpCode." url: ".$url);
 
 		if ($httpCode != 200) {
 			echo " Error: ".$httpCode." URL: ".$url;
@@ -61,6 +64,7 @@ $expectedFormInputPit = array(
 		}
 
 		if ($_POST["App"] == "stand") {
+			error_log ("App is stand");
 			foreach($expectedFormInputStand as $input) {
 				if (isSet($_POST[$input])) {
 					if (seralizeString($_POST[$input]) !== false) {
@@ -75,6 +79,7 @@ $expectedFormInputPit = array(
 				}
 			}
 		} elseif ($_POST["App"] == "pit") {
+			error_log ("App is pit");
 			foreach($expectedFormInputPit as $input) {
 				if (isSet($_POST[$input])) {
 					if (seralizeString($_POST[$input]) !== false) {
@@ -95,9 +100,10 @@ $expectedFormInputPit = array(
 
 		$lineToAppend = json_encode($dataArray);
 		echo $lineToAppend;
+		error_log ("LineToAppend: ".$lineToAppend);
 		
 		$teamPath = getOrCreateTeamFolder($_POST["TeamNumber"], $_POST["EventKey"]);
-		echo $teamPath;
+		error_log ($teamPath);
 		if ($_POST["App"] == "stand") {
 			$dataFile = fopen($teamPath."rawData.json","a");
 		} else {
@@ -105,6 +111,7 @@ $expectedFormInputPit = array(
 		}
 		fwrite($dataFile, $lineToAppend."\n");
 		fclose($dataFile);
+		error_log ("Data written");
 
 	} else {
 		http_response_code(400);
