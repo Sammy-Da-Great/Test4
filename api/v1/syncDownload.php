@@ -44,7 +44,7 @@ $data = array();
 $data["CurrentVersion"] = ["2017","1","0"];
 
 #Request 1: District Events
-
+logToFile("Start District Events");
 $districtEventsCacheDir = $cacheDir."EventInfo/";
 if (!file_exists($districtEventsCacheDir)) {
 	mkdir($districtEventsCacheDir);
@@ -90,7 +90,8 @@ if ($result1["http_code"] == 304) {
 	$dataToWrite = $result1["header"]["last-modified"]."\n".str_replace("\n","",$result1["body"]);
 	file_put_contents($districtEventsCacheDir."districtEvents.json",$dataToWrite);
 }
-
+logToFile("End District Events");
+logToFile("Start World Events");
 $worldCmpEventKeys = array("carv","gal","hop","new","roe","tur","tes","dar","dal","cur","cars","arc");
 $worldCmpCacheDir = $cacheDir."EventInfo/worldCmp/";
 if (!file_exists($worldCmpCacheDir)) {
@@ -137,8 +138,9 @@ foreach($worldCmpEventKeys as $cmpKey) {
 		file_put_contents($worldCmpCacheDir.$seasonYear.$cmpKey.".json",$dataToWrite);
 	}
 }
-
+logToFile("End World Events");
 #Request 2: Teams for each event
+logToFile("Start Team List for Events");
 $teamAtEventCacheDir = $cacheDir."TeamList/";
 if (!file_exists($teamAtEventCacheDir)) {
 	mkdir($teamAtEventCacheDir);
@@ -180,8 +182,9 @@ foreach ($data["Events"] as $event) {
 	$data["TeamsByEvent"][] = $tmpData;
 	unset($tmpData);
 }
-
+logToFile("End Team List for Events");
 #Request 3: Matches for each team for each event.
+logToFile("Start Match Keys for Team at Event");
 $teamMatchesCacheDir = $cacheDir."teamMatches/";
 if (!file_exists($teamMatchesCacheDir)) {
 	mkdir($teamMatchesCacheDir);
@@ -232,6 +235,6 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 }
 	
 unset($event, $tmpDataTeam);
-
+logToFile("End Match Keys for Team at Event");
 echo json_encode($data);
 ?>
