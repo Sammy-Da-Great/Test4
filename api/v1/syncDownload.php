@@ -3,6 +3,7 @@ ini_set('max_execution_time', 900); //In seconds
 header("Content-Type: application/json");
 
 include "../../config.php";
+include "../../util.php";
 
 $baseUrl = 'http://www.thebluealliance.com/api/v3/';
 $cacheDir = __DIR__."/Cache/";
@@ -15,9 +16,9 @@ function curlRequest($url,$httpHeaders) {
 	curl_setopt($ch, CURLOPT_HEADER, 1);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $httpHeaders);
-	
+	logToFile("Start request: ".$url);
 	$rawResult = curl_exec($ch);
-	
+	logToFile("End request: ".$url);
 	$result = array();
 	
 	$headersString = trim(substr($rawResult,0,curl_getinfo($ch, CURLINFO_HEADER_SIZE)));

@@ -1,5 +1,6 @@
 <?php 
-
+include_once "../../util.php";
+logToFile("Submit request");
 $expectedFormInputCommon = array(
 	"App",
 	"Version",
@@ -27,9 +28,9 @@ $expectedFormInputStand = array(
 $expectedFormInputPit = array(
 	//Insert Pit only form fields here
 );
-
+logToFile("Variables defined");
 	if (isSet($_POST["App"])) {
-		error_log ("App is set");
+		logToFile ("App is set");
 		$dataArray = array();
 		foreach($expectedFormInputCommon as $input) {
 			if (isSet($_POST[$input])) {
@@ -46,7 +47,7 @@ $expectedFormInputPit = array(
 		}
 
 		include_once "../../config.php";
-		error_log ("Config Included");
+		logToFile ("Config Included");
 		
 		$url = 'http://www.thebluealliance.com/api/v3/team/frc'.$_POST["TeamNumber"].'/event/'.$_POST["EventKey"].'/status';
 		$ch = curl_init($url);
@@ -55,7 +56,7 @@ $expectedFormInputPit = array(
 		curl_exec($ch);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-		error_log ("Request Complete Http Code:".$httpCode." url: ".$url);
+		logToFile ("Request Complete Http Code:".$httpCode." url: ".$url);
 
 		if ($httpCode != 200) {
 			echo " Error: ".$httpCode." URL: ".$url;
@@ -64,7 +65,7 @@ $expectedFormInputPit = array(
 		}
 
 		if ($_POST["App"] == "stand") {
-			error_log ("App is stand");
+			logToFile ("App is stand");
 			foreach($expectedFormInputStand as $input) {
 				if (isSet($_POST[$input])) {
 					if (seralizeString($_POST[$input]) !== false) {
@@ -79,7 +80,7 @@ $expectedFormInputPit = array(
 				}
 			}
 		} elseif ($_POST["App"] == "pit") {
-			error_log ("App is pit");
+			logToFile ("App is pit");
 			foreach($expectedFormInputPit as $input) {
 				if (isSet($_POST[$input])) {
 					if (seralizeString($_POST[$input]) !== false) {
@@ -100,10 +101,10 @@ $expectedFormInputPit = array(
 
 		$lineToAppend = json_encode($dataArray);
 		echo $lineToAppend;
-		error_log ("LineToAppend: ".$lineToAppend);
+		logToFile ("LineToAppend: ".$lineToAppend);
 		
 		$teamPath = getOrCreateTeamFolder($_POST["TeamNumber"], $_POST["EventKey"]);
-		error_log ($teamPath);
+		logToFile ($teamPath);
 		if ($_POST["App"] == "stand") {
 			$dataFile = fopen($teamPath."rawData.json","a");
 		} else {
@@ -111,7 +112,7 @@ $expectedFormInputPit = array(
 		}
 		fwrite($dataFile, $lineToAppend."\n");
 		fclose($dataFile);
-		error_log ("Data written");
+		logToFile ("Data written");
 
 	} else {
 		http_response_code(400);
