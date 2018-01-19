@@ -13,8 +13,7 @@ if (!file_exists($cacheDir)) {
 
 if (file_exists($cacheDir."/fullResponse.json")) {
 	$cachedFile = file($cacheDir."/fullResponse.json");
-	$cacheTime = strtotime($cachedFile[0]);
-	if (time() - $cacheTime < 300) {
+	if (time() - $cachedFile[0] < 300) {
 		echo $cachedFile[1];
 		exit;
 	} else {
