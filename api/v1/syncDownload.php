@@ -11,6 +11,17 @@ if (!file_exists($cacheDir)) {
 	mkdir($cacheDir);
 }
 
+if (file_exists($cacheDir."/fullResponse.json")) {
+	$cachedFile = file($cacheDir."/fullResponse.json");
+	$cacheTime = strtotime($cachedFile[0]);
+	if (time() - $cacheTime < 300) {
+		echo $cachedFile[1];
+		exit;
+	} else {
+		unlink($cacheDir."/fullResponse.json");
+	}
+}
+
 function curlRequest($url,$httpHeaders) {
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_HEADER, 1);
@@ -236,5 +247,9 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 	
 unset($event, $tmpDataTeam);
 logToFile("End Match Keys for Team at Event");
+
+$responseCache = fopen($cacheDir."/fullResponse.json","w");
+fwrite($responseCache,time()."\n".json_encode($data));
+fclose($responseCache);
 echo json_encode($data);
 ?>
