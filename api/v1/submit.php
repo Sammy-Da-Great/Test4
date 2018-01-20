@@ -37,10 +37,12 @@ if (isSet($_POST["App"])) {
 			if (seralizeString($_POST[$input]) !== false) {
 				$dataArray[$input] = seralizeString($_POST[$input]);
 			} else {
+				logToFile("Seralize Failed for ".$input);
 				http_response_code(400);
 				exit;
 				}
 		} else {
+			logToFile("POST not set for ".$input);
 			http_response_code(400);
 			exit;
 		}
@@ -56,8 +58,8 @@ if (isSet($_POST["App"])) {
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch);
 	logToFile ("Request Complete Http Code:".$httpCode." url: ".$url);
-		if ($httpCode != 200) {
-		echo " Error: ".$httpCode." URL: ".$url;
+	if ($httpCode != 200) {
+		logToFile("Error: ".$httpCode." URL: ".$url);
 		http_response_code(400);
 		exit;
 	}
@@ -67,14 +69,16 @@ if (isSet($_POST["App"])) {
 			if (isSet($_POST[$input])) {
 				if (seralizeString($_POST[$input]) !== false) {
 					$dataArray[$input] = seralizeString($_POST[$input]);
-				} else {
-					http_response_code(400);
-					exit;
-				}
 			} else {
+				logToFile("Seralize Failed for ".$input);
 				http_response_code(400);
 				exit;
-			}
+				}
+		} else {
+			logToFile("POST not set for ".$input);
+			http_response_code(400);
+			exit;
+		}
 		}
 	} elseif ($_POST["App"] == "pit") {
 		logToFile ("App is pit");
@@ -82,16 +86,19 @@ if (isSet($_POST["App"])) {
 			if (isSet($_POST[$input])) {
 				if (seralizeString($_POST[$input]) !== false) {
 					$dataArray[$input] = seralizeString($_POST[$input]);
-				} else {
-					http_response_code(400);
-					exit;
-				}
 			} else {
+				logToFile("Seralize Failed for ".$input);
 				http_response_code(400);
 				exit;
-			}
+				}
+		} else {
+			logToFile("POST not set for ".$input);
+			http_response_code(400);
+			exit;
+		}
 		}
 	} else {
+		logToFile("App not valid");
 		http_response_code(400);
 		exit;
 	}
@@ -110,7 +117,8 @@ if (isSet($_POST["App"])) {
 	fclose($dataFile);
 	logToFile ("Data written");
 	} else {
-	http_response_code(400);
+		logToFile("App not set");
+		http_response_code(400);
 	exit;
 }
 
@@ -118,12 +126,13 @@ function getOrCreateTeamFolder($teamNumber, $eventCode) {
 	$path = $eventCode."/".$teamNumber;
 	if (!file_exists($path)) {
 		if (mkdir($path,0777,true)) {
-			$filesToMake = array("rawData.csv","pitScout.csv");
+			$filesToMake = array("rawData.json","pitScout.json");
 			foreach($filesToMake as $file) {
 				$newFile = fopen($path."/".$file,"w+");
 				fclose($newFile);
 			}
 		} else {
+			logToFile("Error making team folder");
 			http_response_code(400);
 		}
 	}
