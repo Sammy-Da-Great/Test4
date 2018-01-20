@@ -9,8 +9,9 @@ if (!isSet($_GET,$_GET["teamNumber"],$_GET["eventCode"])) {
 $urlParts = explode("/",$_SERVER["REQUEST_URI"]);
 $baseURL = $urlParts[1];
 for ($i = 2; $i < count($urlParts)-1; $i++) {
-	$baseURL += ".".$urlParts[$i];
+	$baseURL .= ".".$urlParts[$i];
 }
+echo $baseURL;
 $url = 'http://'.$_SERVER["HTTP_HOST"]."/".$baseURL.'/api/v1/retrieveTeam.php?teamNumber='.$_GET["teamNumber"]."&eventCode=".$_GET["eventCode"];
 
 $showNoAlliance = isSet($_GET["showNoAlliance"]);
