@@ -248,7 +248,7 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 unset($event, $tmpDataTeam);
 logToFile("End Match Keys for Team at Event");
 
-$responseCache = fopen($cacheDir."/fullResponse.json","w");
+$responseCache = fopen($cacheDir."/fullResponse.json","w"); //Cache full response so it can be used in the next 5 minutes.
 fwrite($responseCache,time()."\n".json_encode($data));
 fclose($responseCache);
 echo json_encode($data);

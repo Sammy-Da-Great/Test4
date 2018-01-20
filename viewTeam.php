@@ -6,7 +6,7 @@ if (!isSet($_GET,$_GET["teamNumber"],$_GET["eventCode"])) {
 	exit;
 }
 
-$urlParts = split("/",$_SERVER["REQUEST_URI"]);
+$urlParts = explode("/",$_SERVER["REQUEST_URI"]);
 $baseURL = $urlParts[1];
 for ($i = 2; $i < count($urlParts)-1; $i++) {
 	$baseURL += ".".$urlParts[$i];
