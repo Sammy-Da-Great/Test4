@@ -7,21 +7,26 @@ $expectedFormInputCommon = array(
 	"ScouterName",
 	"EventKey",
 	"TeamNumber",
-	"LowGoalVisits",
-	"HighGoalVisits",
-	"GearsDelivered",
 	"Notes",
-	"AutoNotes",
-	"TeleopNotes",
-	"Climb",
-	"GearsPickup",
-	"FuelDrive",
-	"Defended",
 	"NoAlliance",
 );
 
 $expectedFormInputStand = array(
+	"Pre_NoShow",
+	"Pre_StartingPos",	
 	"MatchNumber",
+	"Auto_CrossedBaseline",
+	"Auto_Notes",
+	"Auto_PlaceSwitch",
+	"Auto_PlaceScale",
+	"Teleop_ScalePlace",
+	"Teleop_SwitchPlace",
+	"Teleop_ExchangeVisit",
+	"Teleop_Notes",
+	"Teleop_BoostUsed",
+	"Teleop_ForceUsed",
+	"Teleop_LevitateUsed",
+	"Post_Climb",
 	"DOF",
 );
 
@@ -37,7 +42,7 @@ if (isSet($_POST["App"])) {
 			if (seralizeString($_POST[$input]) !== false) {
 				$dataArray[$input] = seralizeString($_POST[$input]);
 			} else {
-				logToFile("Seralize Failed for ".$input);
+				logToFile("Serialize Failed for ".$input);
 				http_response_code(400);
 				exit;
 				}
