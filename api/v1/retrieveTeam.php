@@ -26,7 +26,7 @@ if (!file_exists($teamDataPath)) {
 	exit;
 }
 
-if (filesize($teamDataPath."/pitScout.json")>0) {
+if (filesize($teamDataPath."/pitScout.json")>0) { //TODO UPDATE PIT DATA
 	$file = fopen($teamDataPath."/pitScout.json","r");
 	$pitData = json_decode(fread($file,filesize($teamDataPath."/pitScout.json")),true);
     $data["Pit"] = array(
@@ -66,10 +66,9 @@ if (filesize($teamDataPath."/pitScout.json")>0) {
 if (filesize($teamDataPath."/rawData.json")>0) {
 	$file = fopen($teamDataPath."/rawData.json","r");
 	$rawLine = explode("\n",fread ($file,filesize($teamDataPath."/rawData.json")));
-	$GearsDelivered = 0;
 	$Low = 0;
 	$High = 0;
-    $GearsPickup = 0;
+    $Exchange = 0;
     $matchData = array();
 	foreach($rawLine as $line) {
         $json = json_decode($line,true);
@@ -77,27 +76,25 @@ if (filesize($teamDataPath."/rawData.json")>0) {
             unset($json["NoAlliance"]);
         }
         $matchData[$json["MatchNumber"]] = $json;
-		$Low += $json["LowGoalVisits"];
-		$High += $json["HighGoalVisits"];
-		$GearsDelivered += $json["GearsDelivered"];
+		$Low += $json["Auto_PlaceSwitch"] + $json["Teleop_PlaceSwitch"];
+		$High += $json["Auto_PlaceScale"] + $json["Teleop_PlaceScale"];
+		$Exchange += $json["Teleop_ExchangeVisit"];
         $GearsPickup += $json["GearsPickup"];
         
     }
     $data["Stand"] = array(
         "Matches" => $matchData,
-        "AvgGearsDelivered" => $GearsDelivered/(count($rawLine)-1),
-        "AvgGearsPickedUp" => $GearsPickup/(count($rawLine)-1),
-        "AvgLowGoalVisits" => $Low/(count($rawLine)-1),
-        "AvgHighGoalVisits" => $High/(count($rawLine)-1),
+        "AvgExchangeVisits" => $Exchange/(count($rawLine)-1),
+        "AvgSwitchVisits" => $Low/(count($rawLine)-1),
+        "AvgScaleVisits" => $High/(count($rawLine)-1),
     );
 	fclose($file);
 } else {
     $data["Stand"] = array(
         "Matches" => array(),
-        "AvgGearsDelivered" => "Unknown",
-        "AvgGearsPickedUp" => "Unknown",
-        "AvgLowGoalVisits" => "Unknown",
-        "AvgHighGoalVisits" => "Unknown",
+        "AvgExchangeVisits" => "Unknown",
+        "AvgSwitchVisits" => "Unknown",
+        "AvgScaleVisits" => "Unknown",
     );
 }
 
