@@ -145,7 +145,7 @@ function getOrCreateTeamFolder($teamNumber, $eventCode) {
 }
 
 function seralizeString($stringToValidate) {
-	$newString = addslashes($stringToValidate); //Escape dangerous characters.
+	$newString = preg_replace('~(\\ | \n)~',' ', preg_replace('/\"/', '\'', $stringToValidate)); //Changes double quotes to single, and removes escaping characters.
 	if ($newString != null) {
 		return $newString;
 	}

@@ -76,10 +76,9 @@ if (filesize($teamDataPath."/rawData.json")>0) {
             unset($json["NoAlliance"]);
         }
         $matchData[$json["MatchNumber"]][] = $json;
-		$Low += ($json["Auto_PlaceSwitch"] == "Placed" ? 1 : 0) + $json["Teleop_PlaceSwitch"];
-		$High += ($json["Auto_PlaceScale"]] == "Placed" ? 1 : 0) + $json["Teleop_PlaceScale"];
+		$Low += ($json["Auto_PlaceSwitch"] == "Placed" ? 1 : 0) + $json["Teleop_SwitchPlace"];
+		$High += ($json["Auto_PlaceScale"] == "Placed" ? 1 : 0) + $json["Teleop_ScalePlace"];
 		$Exchange += $json["Teleop_ExchangeVisit"];
-        $GearsPickup += $json["GearsPickup"];
         
     }
     $data["Stand"] = array(
