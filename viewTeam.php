@@ -139,9 +139,9 @@ function openWindow(type, description) {
 <tr><td>Autonomous:</td><td><?php echo $result["Pit"]["AutonomousNotes"]; ?></td></tr>
 <tr><td>Teleoperated:</td><td><?php echo $result["Pit"]["TeleoperatedNotes"]; ?></td></tr>
 <tr><td>General Notes:</td><td><?php echo $result["Pit"]["GeneralNotes"]; ?></td></tr>
-<!-- <tr><td>Switch visits per match:</td><td>Pit: <?php //echo $result["Pit"]["SwitchVists"]; ?></td><td>Average: <?php //echo $result["Stand"]["AvgSwitchVisits"]; ?></td></tr>
+<tr><td>Switch visits per match:</td><td>Pit: <?php //echo $result["Pit"]["SwitchVists"]; ?></td><td>Average: <?php //echo $result["Stand"]["AvgSwitchVisits"]; ?></td></tr>
 <tr><td>Scale visits per match:</td><td>Pit: <?php //echo $result["Pit"]["ScaleVisits"]; ?></td><td>Average: <?php //echo $result["Stand"]["AvgScaleVisits"]; ?></td></tr>
-<tr><td>Exchange visits per match:</td><td>Pit: <?php// echo $result["Pit"]["ExchangeVisits"]; ?></td><td>Average: <?php// echo $result["Stand"]["AvgExchangeVisits"]; ?></td></tr> -->
+<tr><td>Exchange visits per match:</td><td>Pit: <?php// echo $result["Pit"]["ExchangeVisits"]; ?></td><td>Average: <?php// echo $result["Stand"]["AvgExchangeVisits"]; ?></td></tr>
 <tr><td>Climb:</td><td>Pit: <?php //echo $result["Pit"]["ClimbRating"] ?></td><td>Average: See table below</td></tr>
 <?php if ($showNoAlliance) echo "<tr><td>No Alliance:</td><td>Pit: ".$result["Pit"]["NoAlliance"]."</td><td>Average: See table below</td></tr>" ?>
 </table>
