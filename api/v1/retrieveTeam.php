@@ -19,9 +19,10 @@ if (!isSet($_GET["eventCode"])) {
 }
 
 $teamDataPath = $data["EventCode"]."/".$data["TeamNumber"];
-
+	
 if (!file_exists($teamDataPath)) {
     echo "{ \"Error\": \"Team data not found for the specified event!\" }";
+	echo $teamDataPath;
 	http_response_code(404);
 	exit;
 }
