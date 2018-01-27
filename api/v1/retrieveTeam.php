@@ -100,8 +100,9 @@ if (filesize($teamDataPath."/rawData.json")>0) {
     );
 }
 
+if (!isSet($TBAAuthKey)) {
 include "../../config.php";
-
+}
 
 $url1 = 'http://www.thebluealliance.com/api/v3/event/'.$data["EventCode"].'/simple';
 $ch1 = curl_init($url1);

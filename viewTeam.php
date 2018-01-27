@@ -8,7 +8,7 @@ if (!isSet($_GET,$_GET["teamNumber"],$_GET["eventCode"])) {
 
 include_once "util.php";
 LogToFile("ViewTeam start");
-
+include_once "config.php";
 LogToFile("Begin API call");
 ob_start();
 include_once "api/v1/retrieveTeam.php";
