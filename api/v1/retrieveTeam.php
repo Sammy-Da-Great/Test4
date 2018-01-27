@@ -22,7 +22,7 @@ $teamDataPath = $data["EventCode"]."/".$data["TeamNumber"];
 	
 if (!file_exists($teamDataPath)) {
 	$teamDataPath = "api/v1/".$teamDataPath;
-	if (!file_exists($teamDataPath) {
+	if (!file_exists($teamDataPath)) {
 		echo "{ \"Error\": \"Team data not found for the specified event!\" }";
 		http_response_code(404);
 		exit;
