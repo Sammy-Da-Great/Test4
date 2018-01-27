@@ -10,7 +10,7 @@ include_once "util.php";
 LogToFile("ViewTeam start");
 
 LogToFile("Begin API call");
-ob_start(PHP_OUTPUT_HANDLER_CLEANABLE);
+ob_start();
 include_once "api/v1/retrieveTeam.php";
 $result = json_decode(ob_get_clean(), true);
 LogToFile("API Call complete");
