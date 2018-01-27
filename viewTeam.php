@@ -7,6 +7,7 @@ if (!isSet($_GET,$_GET["teamNumber"],$_GET["eventCode"])) {
 }
 
 include "util.php";
+LogToFile("ViewTeam");
 
 $urlParts = explode("/",$_SERVER["REQUEST_URI"]);
 $baseURL = $urlParts[1];
@@ -139,9 +140,9 @@ function openWindow(type, description) {
 <tr><td>Autonomous:</td><td><?php echo $result["Pit"]["AutonomousNotes"]; ?></td></tr>
 <tr><td>Teleoperated:</td><td><?php echo $result["Pit"]["TeleoperatedNotes"]; ?></td></tr>
 <tr><td>General Notes:</td><td><?php echo $result["Pit"]["GeneralNotes"]; ?></td></tr>
-<tr><td>Switch visits per match:</td><td>Pit: <?php //echo $result["Pit"]["SwitchVists"]; ?></td><td>Average: <?php //echo $result["Stand"]["AvgSwitchVisits"]; ?></td></tr>
-<tr><td>Scale visits per match:</td><td>Pit: <?php //echo $result["Pit"]["ScaleVisits"]; ?></td><td>Average: <?php //echo $result["Stand"]["AvgScaleVisits"]; ?></td></tr>
-<tr><td>Exchange visits per match:</td><td>Pit: <?php// echo $result["Pit"]["ExchangeVisits"]; ?></td><td>Average: <?php// echo $result["Stand"]["AvgExchangeVisits"]; ?></td></tr>
+<tr><td>Switch visits per match:</td><td>Pit: <?php //echo $result["Pit"]["SwitchVists"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgSwitchVisits"]; ?></td></tr>
+<tr><td>Scale visits per match:</td><td>Pit: <?php //echo $result["Pit"]["ScaleVisits"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgScaleVisits"]; ?></td></tr>
+<tr><td>Exchange visits per match:</td><td>Pit: <?php //echo $result["Pit"]["ExchangeVisits"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgExchangeVisits"]; ?></td></tr>
 <tr><td>Climb:</td><td>Pit: <?php //echo $result["Pit"]["ClimbRating"] ?></td><td>Average: See table below</td></tr>
 <?php if ($showNoAlliance) echo "<tr><td>No Alliance:</td><td>Pit: ".$result["Pit"]["NoAlliance"]."</td><td>Average: See table below</td></tr>" ?>
 </table>
@@ -149,7 +150,7 @@ function openWindow(type, description) {
 <h3 style="text-align:center">Raw Data</h3>
 <table class="sortable" id = "center">
 <tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>No Show</th><th>Starting Position</th><th>Auto - Baseline</th><th>Auto - Placed Switch</th><th>Auto - Placed Scale</th><th class="unsortable">Auto - Notes</th><th>Teleop - Switch Visits</th><th>Teleop - Scale Visits</th><th>Teleop - Exchange Visits</th><th class="unsortable">Teleop - Notes</th><th>Teleop - Boost Used</th><th>Teleop - Force Used</th><th>Teleop - Levitate Used</th><th>Climb</th><th>Died On Field</th><th class="unsortable">General Notes</th><?php if ($showNoAlliance) echo "<th>No Alliance</th>" ?></tr>
-<?php
+<?php /*
 foreach ($result["Stand"]["Matches"] as $match) {
 	if ($match == null || $match[0] == null) continue;
 	$processedMatch = array();
@@ -162,7 +163,7 @@ foreach ($result["Stand"]["Matches"] as $match) {
 		}
 	}
 	echo "<td>".$processedMatch["TeamNumber"][0]."</td><td><a href=\"#\" onclick=\"openWindow('Scouts for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["ScouterName"]).")\">Show All</a></td><td>".$processedMatch["MatchNumber"][0]."</td><td><a href=\"#\" onclick=\"openWindow('No Show by ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Pre_NoShow"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Starting positions for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Pre_StartingPos"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Baseline crosses in Auto for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Auto_CrossedBaseline"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Power Cube placed on Switch in Auto by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Auto_PlaceSwitch"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Power Cube placed on Scale in Auto by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Auto_PlaceScale"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Autonomous Notes for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Auto_Notes"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Switch visits in Teleop by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Teleop_SwitchPlace"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Scale visits in Teleop by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Teleop_ScalePlace"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Exchange Zone Visits by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Teleop_ExchangeVisit"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Teleop Notes for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Teleop_Notes"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Boost used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Teleop_BoostUsed"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Force used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Teleop_ForceUsed"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Levitate used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Teleop_LevitateUsed"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('Climb status for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Post_Climb"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('DOFs for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["DOF"]).")\">Show All</a></td><td><a href=\"#\" onclick=\"openWindow('General Notes for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["Notes"]).")\">Show All</a></td>".(($showNoAlliance) ? "<td><a href=\"#\" onclick=\"openWindow('No Alliance markings for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0]."',".arrayToString($processedMatch["NoAlliance"]).")\">Show All</a></td>" : "")."</tr>\n";
-} ?>
+} */ ?>
 </table>
 <p></p>
 <p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $result["TeamNumber"]; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p><br/>
