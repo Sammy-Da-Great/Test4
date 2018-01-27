@@ -4,6 +4,7 @@ header("Content-Type: application/json");
 $data = array();
 
 if (!isSet($_GET["teamNumber"])) {
+	echo "{ \"Error\": \"Invalid request!\"}";
 	http_response_code(400);
 	exit;
 } else {
@@ -11,6 +12,7 @@ if (!isSet($_GET["teamNumber"])) {
 }
 
 if (!isSet($_GET["eventCode"])) {
+	echo "{ \"Error\": \"Invalid request!\"}";
 	http_response_code(400);
 	exit;
 } else {
