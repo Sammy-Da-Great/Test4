@@ -41,7 +41,10 @@ function arrayToString($array) {
 <style>
 a {
 	color: white;
+	cursor: pointer;
 }
+
+a:hover,a.hover { text-decoration: underline; }
 
 table, th, td {
     border: 1px solid white;
