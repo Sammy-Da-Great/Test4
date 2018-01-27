@@ -14,7 +14,6 @@ $baseURL = $urlParts[1];
 for ($i = 2; $i < count($urlParts)-1; $i++) {
 	$baseURL .= ".".$urlParts[$i];
 }
-echo $baseURL;
 $url = 'http://'.$_SERVER["HTTP_HOST"]."/".$baseURL.'/api/v1/retrieveTeam.php?teamNumber='.$_GET["teamNumber"]."&eventCode=".$_GET["eventCode"];
 
 $showNoAlliance = isSet($_GET["showNoAlliance"]);
@@ -26,9 +25,6 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $result = json_decode(curl_exec($ch),true);
 curl_close($ch);
-
-var_dump($result);
-exit;
 
 function arrayToString($array) {
 	$string = "[";
