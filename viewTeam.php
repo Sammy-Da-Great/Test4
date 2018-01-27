@@ -150,7 +150,7 @@ function openWindow(type, description) {
 <h3 style="text-align:center">Raw Data</h3>
 <table class="sortable" id = "center">
 <tr><th class="unsortable">Team Number</th><th>Scouter Name</th><th>Match Number</th><th>No Show</th><th>Starting Position</th><th>Auto - Baseline</th><th>Auto - Placed Switch</th><th>Auto - Placed Scale</th><th class="unsortable">Auto - Notes</th><th>Teleop - Switch Visits</th><th>Teleop - Scale Visits</th><th>Teleop - Exchange Visits</th><th class="unsortable">Teleop - Notes</th><th>Teleop - Boost Used</th><th>Teleop - Force Used</th><th>Teleop - Levitate Used</th><th>Climb</th><th>Died On Field</th><th class="unsortable">General Notes</th><?php if ($showNoAlliance) echo "<th>No Alliance</th>" ?></tr>
-<?php /*
+<?php var_dump($results);/*
 foreach ($result["Stand"]["Matches"] as $match) {
 	if ($match == null || $match[0] == null) continue;
 	$processedMatch = array();
@@ -166,6 +166,6 @@ foreach ($result["Stand"]["Matches"] as $match) {
 } */ ?>
 </table>
 <p></p>
-<p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $result["TeamNumber"]; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $teamNumber; ?></a></p><br/>
+<p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $result["TeamNumber"]; ?>">http://orfscoutingservice.azurewebsites.net/index.php?team=<?php echo $result["TeamNumber"]; ?></a></p><br/>
 <div style="text-align:center;"><input type="button" style="font-size: 20;" onclick="returnHome()" value="Go Back"></div><br/>
 </body></html>
