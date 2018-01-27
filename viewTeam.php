@@ -7,10 +7,11 @@ if (!isSet($_GET,$_GET["teamNumber"],$_GET["eventCode"])) {
 }
 
 include "util.php";
-LogToFile("ViewTeam");
+LogToFile("ViewTeam start");
 
 $urlParts = explode("/",$_SERVER["REQUEST_URI"]);
 $baseURL = $urlParts[1];
+LogToFile("Begin url construction");
 for ($i = 2; $i < count($urlParts)-1; $i++) {
 	$baseURL .= ".".$urlParts[$i];
 }
@@ -21,12 +22,15 @@ $showNoAlliance = isSet($_GET["showNoAlliance"]);
 if ($showNoAlliance) {
 	$url .= "&showNoAlliance=1";
 }
+LogToFile("URL: ".$url);
+
+LogToFile("Begin Request");
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $result = json_decode(curl_exec($ch),true);
 curl_close($ch);
-
-LogToFile(var_export($result, true));
+LogToFile("Request Complete");
+LogToFile("Result: ".var_export($result, true));
 
 function arrayToString($array) {
 	$string = "[";
