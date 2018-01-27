@@ -5,7 +5,7 @@ if (!isSet($_GET,$_GET["teamNumber"],$_GET["eventCode"])) {
 	include "index.php";
 	exit;
 }
-
+$showNoAlliance = isSet($_GET["showNoAlliance"]);
 include_once "util.php";
 LogToFile("ViewTeam start");
 include_once "config.php";
