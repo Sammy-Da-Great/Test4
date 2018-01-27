@@ -21,10 +21,12 @@ if (!isSet($_GET["eventCode"])) {
 $teamDataPath = $data["EventCode"]."/".$data["TeamNumber"];
 	
 if (!file_exists($teamDataPath)) {
-    echo "{ \"Error\": \"Team data not found for the specified event!\" }";
-	echo $teamDataPath;
-	http_response_code(404);
-	exit;
+	$teamDataPath = "api/v1/".$teamDataPath;
+	if (!file_exists($teamDataPath) {
+		echo "{ \"Error\": \"Team data not found for the specified event!\" }";
+		http_response_code(404);
+		exit;
+	}
 }
 
 if (filesize($teamDataPath."/pitScout.json")>0) { //TODO UPDATE PIT DATA
