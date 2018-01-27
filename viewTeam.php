@@ -6,31 +6,14 @@ if (!isSet($_GET,$_GET["teamNumber"],$_GET["eventCode"])) {
 	exit;
 }
 
-include "util.php";
+include_once "util.php";
 LogToFile("ViewTeam start");
 
-$urlParts = explode("/",$_SERVER["REQUEST_URI"]);
-$baseURL = $urlParts[1];
-LogToFile("Begin url construction");
-for ($i = 2; $i < count($urlParts)-1; $i++) {
-	$baseURL .= ".".$urlParts[$i];
-}
-$url = 'http://'.$_SERVER["HTTP_HOST"]."/".$baseURL.'/api/v1/retrieveTeam.php?teamNumber='.$_GET["teamNumber"]."&eventCode=".$_GET["eventCode"];
-
-$showNoAlliance = isSet($_GET["showNoAlliance"]);
-
-if ($showNoAlliance) {
-	$url .= "&showNoAlliance=1";
-}
-LogToFile("URL: ".$url);
-
-LogToFile("Begin Request");
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$result = json_decode(curl_exec($ch),true);
-curl_close($ch);
-LogToFile("Request Complete");
-LogToFile("Result: ".var_export($result, true));
+LogToFile("Begin API call");
+ob_start(PHP_OUTPUT_HANDLER_CLEANABLE);
+include_once "api/v1/retrieveTeam.php";
+$result = json_decode(ob_get_clean(), true);
+LogToFile("API Call complete");
 
 function arrayToString($array) {
 	$string = "[";
