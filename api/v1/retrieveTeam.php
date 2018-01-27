@@ -33,44 +33,43 @@ if (!file_exists($teamDataPath)) {
 
 if (filesize($teamDataPath."/pitScout.json")>0) { //TODO UPDATE PIT DATA
 	$file = fopen($teamDataPath."/pitScout.json","r");
-	$pitData = json_decode(fread($file,filesize($teamDataPath."/pitScout.json")),true);
-    $data["Pit"] = array(
-        "AutonomousNotes" => $pitData["AutoNotes"],
-        "TeleoperatedNotes" => $pitData["TeleopNotes"],
-        "GeneralNotes" => $pitData["Notes"],
-        "LowGoalVisits" => $pitData["LowGoalFuel"],
-        "HighGoalVisits" => $pitData["HighGoalFuel"],
-        "GearsDelivered" => $pitData["GearsDelivered"],
-        "GearsPickedUp" => $pitData["GearsPickup"],
-        "AffectedByFuelOnField" => $pitData["FuelDrive"],
-        "ClimbRating" => $pitData["Climb"],
-        "Defendable" => $pitData["Defended"],
-    );
-    if (isSet($_GET["showNoAlliance"])) {
-        $data["Pit"]["NoAlliance"] = $pitData["NoAlliance"];
+    $data["Pit"] = json_decode(fread($file,filesize($teamDataPath."/pitScout.json")),true);
+	
+	$unneededData = array("App","Version","EventKey","TeamNumber","ScouterName");
+	foreach($unneededData as $dataToRemove) {
+		unset($data["Pit"][$dataToRemove]);
+	}
+	
+    if (!isSet($_GET["showNoAlliance"])) {
+        unset($data["Pit"]["NoAlliance"]);
     }
+	
 	fclose($file);
+	
 } else {
 	$data["Pit"] = array(
-        "AutonomousNotes" => "Unknown",
-        "TeleoperatedNotes" => "Unknown",
-        "GeneralNotes" => "Unknown",
-        "LowGoalVisits" => "Unknown",
-        "HighGoalVisits" => "Unknown",
-        "GearsDelivered" => "Unknown",
-        "GearsPickedUp" => "Unknown",
-        "AffectedByFuelOnField" => "Unknown",
-        "ClimbRating" => "Unknown",
-        "Defendable" => "Unknown",
+		"Pre_StartingPos" => "Unknown",	
+		"Auto_CrossedBaseline" => "Unknown",
+		"Auto_Notes" => "Unknown",
+		"Auto_PlaceSwitch" => "Unknown",
+		"Auto_PlaceScale" => "Unknown",
+		"Teleop_ScalePlace" => "Unknown",
+		"Teleop_SwitchPlace" => "Unknown",
+		"Teleop_ExchangeVisit" => "Unknown",
+		"Teleop_Notes" => "Unknown",
+		"RobotNotes" => "Unknown",
+		"Teleop_Climb" => "Unknown",
+		"Strategy_PowerUp" => "Unknown",
+		"Strategy_General" => "Unknown",
     );
     if (isSet($_GET["showNoAlliance"])) {
         $data["Pit"]["NoAlliance"] = "Unknown";
     }
 }
 
-if (filesize($teamDataPath."/rawData.json")>0) {
-	$file = fopen($teamDataPath."/rawData.json","r");
-	$rawLine = explode("\n",fread ($file,filesize($teamDataPath."/rawData.json")));
+if (filesize($teamDataPath."/standScout.json")>0) {
+	$file = fopen($teamDataPath."/standScout.json","r");
+	$rawLine = explode("\n",fread ($file,filesize($teamDataPath."/standScout.json")));
 	$Low = 0;
 	$High = 0;
     $Exchange = 0;

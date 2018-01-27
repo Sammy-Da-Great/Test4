@@ -7,14 +7,8 @@ $expectedFormInputCommon = array(
 	"ScouterName",
 	"EventKey",
 	"TeamNumber",
-	"Notes",
 	"NoAlliance",
-);
-
-$expectedFormInputStand = array(
-	"Pre_NoShow",
 	"Pre_StartingPos",	
-	"MatchNumber",
 	"Auto_CrossedBaseline",
 	"Auto_Notes",
 	"Auto_PlaceSwitch",
@@ -23,6 +17,12 @@ $expectedFormInputStand = array(
 	"Teleop_SwitchPlace",
 	"Teleop_ExchangeVisit",
 	"Teleop_Notes",
+);
+
+$expectedFormInputStand = array(
+	"Notes",
+	"Pre_NoShow",
+	"MatchNumber",
 	"Teleop_BoostUsed",
 	"Teleop_ForceUsed",
 	"Teleop_LevitateUsed",
@@ -31,7 +31,10 @@ $expectedFormInputStand = array(
 );
 
 $expectedFormInputPit = array(
-	//Insert Pit only form fields here
+	"RobotNotes",
+	"Teleop_Climb",
+	"Strategy_PowerUp",
+	"Strategy_General",
 );
 logToFile("Variables defined");
 if (isSet($_POST["App"])) {
@@ -51,8 +54,9 @@ if (isSet($_POST["App"])) {
 			http_response_code(400);
 			exit;
 		}
-}
-		include_once "../../config.php";
+	}
+	
+	include_once "../../config.php";
 	logToFile ("Config Included");
 	
 	$url = 'http://www.thebluealliance.com/api/v3/team/frc'.$_POST["TeamNumber"].'/event/'.$_POST["EventKey"].'/status';
@@ -75,7 +79,7 @@ if (isSet($_POST["App"])) {
 				if (seralizeString($_POST[$input]) !== false) {
 					$dataArray[$input] = seralizeString($_POST[$input]);
 			} else {
-				logToFile("Seralize Failed for ".$input);
+				logToFile("Serialize Failed for ".$input);
 				http_response_code(400);
 				exit;
 				}
@@ -92,7 +96,7 @@ if (isSet($_POST["App"])) {
 				if (seralizeString($_POST[$input]) !== false) {
 					$dataArray[$input] = seralizeString($_POST[$input]);
 			} else {
-				logToFile("Seralize Failed for ".$input);
+				logToFile("Serialize Failed for ".$input);
 				http_response_code(400);
 				exit;
 				}
@@ -114,7 +118,7 @@ if (isSet($_POST["App"])) {
 	$teamPath = getOrCreateTeamFolder($_POST["TeamNumber"], $_POST["EventKey"]);
 	logToFile ($teamPath);
 	if ($_POST["App"] == "stand") {
-		$dataFile = fopen($teamPath."rawData.json","a");
+		$dataFile = fopen($teamPath."standScout.json","a");
 	} else {
 		$dataFile = fopen($teamPath."pitScout.json","w");
 	}
@@ -131,7 +135,7 @@ function getOrCreateTeamFolder($teamNumber, $eventCode) {
 	$path = $eventCode."/".$teamNumber;
 	if (!file_exists($path)) {
 		if (mkdir($path,0777,true)) {
-			$filesToMake = array("rawData.json","pitScout.json");
+			$filesToMake = array("standScout.json","pitScout.json");
 			foreach($filesToMake as $file) {
 				$newFile = fopen($path."/".$file,"w+");
 				fclose($newFile);

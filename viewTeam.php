@@ -135,13 +135,17 @@ function openWindow(type, description) {
 <tr><td>Team Number:</td><td colspan="2"><a target="_blank" href="index.php?input=<?php echo $result["TeamNumber"].(($showNoAlliance) ? "&showNoAlliance=1": ""); ?>"><?php echo $result["TeamNumber"] ?></a> (<a target="_blank" href="<?php echo "http://thebluealliance.com/team/".$result["TeamNumber"]."/".$result["SeasonYear"]; ?>">View on The Blue Alliance</a>)</td></tr>
 <tr><td>Event Key:</td><td colspan="2"><a target="_blank" href="index.php?input=<?php echo $result["EventCode"].(($showNoAlliance) ? "&showNoAlliance=1": ""); ?>"><?php echo $result["EventCode"]; ?></a> (<a target="_blank" href=<?php echo "\"https://www.thebluealliance.com/event/".$result["EventCode"]."\"" ?>>View on The Blue Alliance</a>)</td></tr>
 <tr><td>Team@Event Status:</td><td colspan="2"><?php echo $result["TeamStatusString"]; ?></td></tr>
-<tr><td>Autonomous:</td><td><?php echo $result["Pit"]["AutonomousNotes"]; ?></td></tr>
-<tr><td>Teleoperated:</td><td><?php echo $result["Pit"]["TeleoperatedNotes"]; ?></td></tr>
-<tr><td>General Notes:</td><td><?php echo $result["Pit"]["GeneralNotes"]; ?></td></tr>
-<tr><td>Switch visits per match:</td><td>Pit: <?php //echo $result["Pit"]["SwitchVists"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgSwitchVisits"]; ?></td></tr>
-<tr><td>Scale visits per match:</td><td>Pit: <?php //echo $result["Pit"]["ScaleVisits"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgScaleVisits"]; ?></td></tr>
-<tr><td>Exchange visits per match:</td><td>Pit: <?php //echo $result["Pit"]["ExchangeVisits"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgExchangeVisits"]; ?></td></tr>
-<tr><td>Climb:</td><td>Pit: <?php //echo $result["Pit"]["ClimbRating"] ?></td><td>Average: See table below</td></tr>
+<tr><td>Starting Position:</td><td>Pit: <?php echo $result["Pit"]["Pre_StartingPos"]; ?></td><td>Average: See table below</td></tr>
+<tr><td>Autonomous:</td><td>Pit: Baseline: <?php echo $result["Pit"]["Auto_CrossedBaseline"]; ?><br/>Score at Switch: <?php echo $result["Pit"]["Auto_PlaceSwitch"]; ?><br/>Score at Scale: <?php echo $result["Pit"]["Auto_PlaceScale"]; ?></td><td>Average: See table below</td></tr>
+<tr><td>Additional Autonomous Notes:</td><td colspan="2"><?php echo $result["Pit"]["Auto_Notes"]; ?></td></tr>
+<tr><td>Switch visits per match:</td><td>Pit: <?php echo $result["Pit"]["Teleop_SwitchPlace"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgSwitchVisits"]; ?></td></tr>
+<tr><td>Scale visits per match:</td><td>Pit: <?php echo $result["Pit"]["Teleop_ScalePlace"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgScaleVisits"]; ?></td></tr>
+<tr><td>Exchange visits per match:</td><td>Pit: <?php echo $result["Pit"]["Teleop_ExchangeVisit"]; ?></td><td>Average: <?php echo $result["Stand"]["AvgExchangeVisits"]; ?></td></tr>
+<tr><td>Additional Teleoperated Notes:</td><td colspan="2"><?php echo $result["Pit"]["Teleop_Notes"]; ?></td></tr>
+<tr><td>Climb:</td><td>Pit: <?php echo $result["Pit"]["Teleop_Climb"] ?></td><td>Average: See table below</td></tr>
+<tr><td>Strategy for Power Ups:</td><td colspan="2"><?php echo $result["Pit"]["Strategy_PowerUp"]; ?></td></tr>
+<tr><td>General Strategy:</td><td colspan="2"><?php echo $result["Pit"]["Strategy_General"]; ?></td></tr>
+<tr><td>Robot Notes:</td><td colspan="2"><?php echo $result["Pit"]["RobotNotes"]; ?></td></tr>
 <?php if ($showNoAlliance) echo "<tr><td>No Alliance:</td><td>Pit: ".$result["Pit"]["NoAlliance"]."</td><td>Average: See table below</td></tr>" ?>
 </table>
 <p></p>

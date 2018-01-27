@@ -1,7 +1,7 @@
 ## TODO
-* API all the things
+* 2018ify all the things.
 * MD5 token data
 * API documentation.
 
 ## Currently Working On:
-* API documentation.
+* 2018ify all the things.
