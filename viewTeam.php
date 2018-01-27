@@ -26,6 +26,8 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $result = json_decode(curl_exec($ch),true);
 curl_close($ch);
 
+LogToFile(var_export($result, true))
+
 function arrayToString($array) {
 	$string = "[";
 	for($i = 0; $i < count($array); $i++) {
