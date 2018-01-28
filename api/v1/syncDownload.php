@@ -13,7 +13,7 @@ if (!file_exists($cacheDir)) {
 
 if (file_exists($cacheDir."/fullResponse.json")) {
 	$cachedFile = file($cacheDir."/fullResponse.json");
-	if (time() - strtotime($cachedFile[0]) < 300 && !isSet($_GET["forceRefresh"]) {
+	if (time() - strtotime($cachedFile[0]) < 300 && !isSet($_GET["forceRefresh"])) {
 		echo $cachedFile[1];
 		logToFile("Used Full Cache.");
 		exit;
