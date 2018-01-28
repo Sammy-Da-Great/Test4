@@ -165,7 +165,6 @@ foreach ($result["Stand"]["Matches"] as $match) {
 	if ($match == null || $match[0] == null) continue;
 	$processedMatch = array();
 	$keys = array_keys($match[0]);
-	var_dump($match);
 	foreach ($match as $oneScout) {
 		foreach ($keys as $key) {
 			if (!array_key_exists($key,$processedMatch)) $processedMatch[$key] = array();
