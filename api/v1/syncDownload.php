@@ -200,11 +200,7 @@ $teamMatchesCacheDir = $cacheDir."teamMatches/";
 if (!file_exists($teamMatchesCacheDir)) {
 	mkdir($teamMatchesCacheDir);
 }
-$data["EventMatches"] = array();
-foreach ($data["Events"] as &$event) {
-	if (isSet($event->district)) if ($event->district == null) $event->district = array("abbreviation" => "na", "display_name" => "Not A District", "key" => $seasonYear."na", "year" => $seasonYear);
-}
-	
+$data["EventMatches"] = array();	
 foreach ($data["TeamsByEvent"] as $eventData) {
 	$event = (object) array ("key" => $eventData["EventKey"]);
 	
@@ -229,7 +225,7 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 		$tmpDataTeam = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);
 		if ($result3["http_code"] == 304) {
 			$tmpDataTeam["Matches"] = json_decode($cachedJSON); 
-		} elseif ($result3["http_code"] != 200 || $result[1]["body"] == null) { //Something went wrong, give cached data if possible, error entry otherwise.
+		} elseif ($result3["http_code"] != 200 || $result[1]["body"] == "NULL") { //Something went wrong, give cached data if possible, error entry otherwise.
 			if (isSet($cachedJSON)) {
 				$tmpDataTeam["Matches"] = json_decode($cachedJSON); 
 			} else {
