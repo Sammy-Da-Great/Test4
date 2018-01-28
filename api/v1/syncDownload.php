@@ -73,7 +73,7 @@ $url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
 $result1 = curlRequest($url1,$httpHeader); //From cache, nothing's changed.
 if ($result1["http_code"] == 304) {
 	$data["Events"] = json_decode($cachedJSON); 
-} elseif ($result1["http_code"] != 200 || $result1["body"] == null) { //Something went wrong, give cached data if possible, error entry otherwise.
+} elseif ($result1["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 	if (isSet($cachedJSON)) {
 		$data["Events"] = json_decode($cachedJSON);
 	} else {
@@ -120,7 +120,7 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	$result1Cmp = curlRequest($url1Cmp,$httpHeader);
 	if ($result1Cmp["http_code"] == 304) { //Nothing changed! Use the cached data!
 		$data["Events"][] = json_decode($cachedJSON); 
-	} elseif ($result1Cmp["http_code"] != 200 || $result1Cmp["body"] == null) { //Something went wrong, give cached data if possible, error entry otherwise.
+	} elseif ($result1Cmp["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 		if (isSet($cachedJSON)) {
 		$data["Events"][] = json_decode($cachedJSON);
 		} else {
@@ -171,7 +171,7 @@ foreach ($data["Events"] as $event) {
 	$tmpData = array("EventKey"=> $event->key);
 	if ($result2["http_code"] == 304) {
 		$tmpData["TeamList"] = json_decode($cachedJSON); 
-	} elseif ($result2["http_code"] != 200 || $result2["body"] == null) { //Something went wrong, give cached data if possible, error entry otherwise.
+	} elseif ($result2["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 		if (isSet($cachedJSON)) {
 		$tmpData["TeamList"] = json_decode($cachedJSON); 
 		} else {
@@ -226,7 +226,7 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 		$tmpDataTeam = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);
 		if ($result3["http_code"] == 304) {
 			$tmpDataTeam["Matches"] = json_decode($cachedJSON); 
-		} elseif ($result3["http_code"] != 200 || $result3["body"] == null) { //Something went wrong, give cached data if possible, error entry otherwise.
+		} elseif ($result3["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 			if (isSet($cachedJSON)) {
 				$tmpDataTeam["Matches"] = json_decode($cachedJSON); 
 			} else {
