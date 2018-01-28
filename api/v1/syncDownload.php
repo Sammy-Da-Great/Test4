@@ -52,7 +52,7 @@ function curlRequest($url,$httpHeaders) {
 }
 
 $data = array();
-$data["CurrentVersion"] = ["2017","1","0"];
+$data["CurrentVersion"] = ["2018","1","0"];
 
 #Request 1: District Events
 logToFile("Start District Events");
