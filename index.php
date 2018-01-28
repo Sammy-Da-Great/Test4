@@ -12,16 +12,16 @@ $input = "";
 if (isSet($_GET["input"])) {
 	$input = $_GET["input"];
 }
-
-$showNoAlliance = isset($_GET["showNoAlliance"]);
-if (strtolower($input) == "noalliance" && !$showNoAlliance) {
+include_once "config.php";
+$showHiddenData = isset($_GET["showHiddenData"]);
+if (strtolower($input) == $hiddenDataKey && !$showHiddenData) {
 	$input = "";
-	$error = "No Alliance view enabled.";
-	$showNoAlliance = true;
-} else if (strtolower($input) == "noalliance" && $showNoAlliance) {
+	$error = "Hidden data now shown.";
+	$showHiddenData = true;
+} else if (strtolower($input) == $hiddenDataKey && $showHiddenData) {
 	$input = "";
-	$error = "No Alliance view disabled.";
-	$showNoAlliance = false;
+	$error = "Hidden data now hidden.";
+	$showHiddenData = false;
 }
 
 if ($error == "" && $input != "") {
@@ -38,12 +38,14 @@ if ($error == "" && $input != "") {
 			if (explode("/",$teamFolder)[3] == $input) {
 				$inputEvent = false;
 				$inputTeam = true;
-				array_push($events, $teamFolder);
+				if (substr(explode("/",$teamFolder)[2],0,4) == $seasonYear) {
+					array_push($events, $teamFolder);
+				}
 			}
 		}
 	}
 	if (count($events) == 0 && count($teams) == 0) {
-	$error = "Team number or Event key not found! There may not be scouting data yet!";
+	$error = "Team number or Event data not found for the current season! There may not be scouting data yet!";
 	}
 }
 
@@ -134,7 +136,7 @@ function onLoad() {
 	echo "<script>onLoad();</script><h1>Welcome to ORF's Scouting Data Viewer!</h1><form method=\"get\" action=\"index.php\">
 	<p>Team Number or Event Key:</p>
 	<p><input style=\"font-size: 20; text-align:center;\" id=\"input\" name=\"input\" type=\"text\"></input></p>".
-	(($showNoAlliance) ? "<input style=\"display:none\" id=\"showNoAlliance\" name=\"showNoAlliance\" type=\"text\" value=\"1\"></input>" : "")
+	(($showHiddenData) ? "<input style=\"display:none\" id=\"showHiddenData\" name=\"showHiddenData\" type=\"text\" value=\"".$hiddenDataKey."\"></input>" : "")
 	."<p><input style=\"font-size: 20;\" type=\"submit\"></input></p>
 	</form>";
 	}
@@ -145,7 +147,7 @@ function onLoad() {
 	if (count($events) > 0 && $error == "" && $inputTeam && !$inputEvent) {
 		echo "<h1>Team ".$input." has been scouted at these events this season:</h1>";
 		echo "<form action=\"viewTeam.php\" method=\"get\"> <input type=\"text\" style=\"display:none\" name=\"teamNumber\" value=\"".$input."\"></input>";
-		if ($showNoAlliance) echo "<input type=\"text\" style=\"display:none\" name=\"showNoAlliance\" value=\"1\"></input>";
+		if ($showHiddenData) echo "<input type=\"text\" style=\"display:none\" name=\"showHiddenData\" value=\"".$hiddenDataKey."\"></input>";
 		echo "<select style= \"font-size: 1cm;\" name=\"eventCode\">";
 		foreach($events as $event) {
 			$eventCode = explode("/",$event)[2];
@@ -161,7 +163,7 @@ function onLoad() {
 	if (count($teams) > 0 && $error == "" && !$inputTeam && $inputEvent) {
 		echo "<h1>These teams have been scouted from the event \"".getNameEventCode($input)."\":</h1>";
 		echo "<form action=\"viewTeam.php\" method=\"get\"> <input type=\"text\" style=\"display:none\" name=\"eventCode\" value=\"".$input."\"></input>";
-		if ($showNoAlliance) echo "<input type=\"text\" style=\"display:none\" name=\"showNoAlliance\" value=\"1\"></input>";
+		if ($showHiddenData) echo "<input type=\"text\" style=\"display:none\" name=\"showHiddenData\" value=\"".$hiddenDataKey."\"></input>";
 		echo "<select style= \"font-size: 1cm;\" name=\"teamNumber\">";
 		foreach($teams as $team) {
 			$teamNumber = explode("/",$team)[3];
@@ -174,4 +176,4 @@ function onLoad() {
 		echo "<p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
 	}
 	?>
-</div>
+</div></body>

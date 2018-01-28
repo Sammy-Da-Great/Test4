@@ -3,6 +3,20 @@ header("Content-Type: application/json");
 
 $data = array();
 
+if (!isSet($configLoaded)) {
+include_once "../../config.php";
+}
+
+if (isSet($_GET["showHiddenData"])) {
+	if ($_GET["showHiddenData"] == $hiddenDataKey) {
+		$showHiddenData = true;
+	} else {
+		$showHiddenData = false;
+	}
+} else {
+	$showHiddenData = false;
+}
+
 if (!isSet($_GET["teamNumber"])) {
 	echo "{ \"Error\": \"Invalid request!\"}";
 	http_response_code(400);
@@ -40,7 +54,7 @@ if (filesize($teamDataPath."/pitScout.json")>0) { //TODO UPDATE PIT DATA
 		unset($data["Pit"][$dataToRemove]);
 	}
 	
-    if (!isSet($_GET["showNoAlliance"])) {
+    if (!$showHiddenData) {
         unset($data["Pit"]["NoAlliance"]);
     }
 	
@@ -62,7 +76,7 @@ if (filesize($teamDataPath."/pitScout.json")>0) { //TODO UPDATE PIT DATA
 		"Strategy_PowerUp" => "Unknown",
 		"Strategy_General" => "Unknown",
     );
-    if (isSet($_GET["showNoAlliance"])) {
+    if ($showHiddenData) {
         $data["Pit"]["NoAlliance"] = "Unknown";
     }
 }
@@ -76,7 +90,7 @@ if (filesize($teamDataPath."/standScout.json")>0) {
     $matchData = array();
 	foreach($rawLine as $line) {
         $json = json_decode($line,true);
-        if (!isSet($_GET["showNoAlliance"])) {
+        if (!$showHiddenData) {
             unset($json["NoAlliance"]);
         }
         $matchData[$json["MatchNumber"]][] = $json;
@@ -99,10 +113,6 @@ if (filesize($teamDataPath."/standScout.json")>0) {
         "AvgSwitchVisits" => "Unknown",
         "AvgScaleVisits" => "Unknown",
     );
-}
-
-if (!isSet($TBAAuthKey)) {
-include "../../config.php";
 }
 
 $url1 = 'http://www.thebluealliance.com/api/v3/event/'.$data["EventCode"].'/simple';
