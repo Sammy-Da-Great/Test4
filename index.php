@@ -1,21 +1,95 @@
 <?php
-$error = "";
-$default = "";
-if (isSet($_GET["team"])) {
-	$default = $_GET["team"];
-	$directories = glob('*' , GLOB_ONLYDIR);
-	$teams = array();
-	foreach($directories as $fileName) {
-		if ($fileName != "template" && $fileName != "js" && $fileName != "sortableTable"){
-			array_push($teams, $fileName);
+
+if (!isSet($error)) {
+	$error = "";
+}
+$events = array();
+$teams = array();
+$inputTeam = false;
+$inputEvent = false;
+$input = "";
+
+if (isSet($_GET["input"])) {
+	$input = $_GET["input"];
+}
+include_once "config.php";
+$showHiddenData = isset($_GET["showHiddenData"]);
+if (strtolower($input) == $hiddenDataKey && !$showHiddenData) {
+	$input = "";
+	$error = "Hidden data now shown.";
+	$showHiddenData = true;
+} else if (strtolower($input) == $hiddenDataKey && $showHiddenData) {
+	$input = "";
+	$error = "Hidden data now hidden.";
+	$showHiddenData = false;
+}
+
+if ($error == "" && $input != "") {
+	$eventDirectories = glob('api/v1/*' , GLOB_ONLYDIR);
+	foreach($eventDirectories as $fileName) {
+		if (explode("/", $fileName)[2] == $input) {
+			$inputTeam = false;
+			$inputEvent = true;
+			$teams = glob('api/v1/'.$input.'/*', GLOB_ONLYDIR);
+			break;
+		}
+		$teamDirectories = glob($fileName."/*", GLOB_ONLYDIR);
+		foreach($teamDirectories as $teamFolder) {
+			if (explode("/",$teamFolder)[3] == $input) {
+				$inputEvent = false;
+				$inputTeam = true;
+				if (substr(explode("/",$teamFolder)[2],0,4) == $seasonYear) {
+					array_push($events, $teamFolder);
+				}
+			}
 		}
 	}
-	foreach ($teams as $team) {
-		if ($_GET["team"] == $team) {
-			header("Location: ./".$team,true);
+	if (count($events) == 0 && count($teams) == 0) {
+	$error = "Team number or Event data not found for the current season! There may not be scouting data yet!";
+	}
+}
+
+include "config.php";
+	
+function getNameEventCode($code) {	
+	global $TBAAuthKey;
+	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
+	$urlSuffix = '/simple';
+	
+	$url = $urlPrefix.$code.$urlSuffix;
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$result = json_decode(curl_exec($ch),true);
+	if (isSet($result["name"])) {
+		return $result["name"];
+	} else {
+		return $code;
+	}
+	curl_close($ch);
+}
+
+$teamNameAtEvent = array();
+function getNameTeamNumber($teamNumber, $event) {
+	global $TBAAuthKey, $teamNameAtEvent;
+	if (count($teamNameAtEvent) == 0) {
+		$url = 'http://www.thebluealliance.com/api/v3/event/'.$event.'/teams/simple';
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$result = json_decode(curl_exec($ch),true);
+		curl_close($ch);
+		foreach ($result as $team) {
+			$teamNameAtEvent[$team["team_number"]] = $team["nickname"];
 		}
 	}
-	$error = "Team number not found! They may not have been scouted yet!";
+	
+	if (isSet($teamNameAtEvent[$teamNumber])) {
+		return $teamNameAtEvent[$teamNumber];
+	}
+	else {
+		return $teamNumber;
+	}
 }
 ?>
 
@@ -28,16 +102,16 @@ body {
 	background-color: black;
 }
 img {
-    width: 80%;
+	width: 25%;
+}
+p {
+	font-size: 25;
 }
 p, h1, h2, h3 {
 	color: white;
 }
 
 div {
-    width: 50%;
-    height: 70%;
-	border: 1px solid white;
     position: absolute;
     top:0;
     bottom: 0;
@@ -49,15 +123,57 @@ div {
 }
 </style><script>
 function onLoad() {
-	document.getElementById("team").defaultValue = "<?php echo $default; ?>";
+	<?php if ($error == "" && $input != "") {
+	echo "document.getElementById(\"input\").defaultValue = '".$input."';";
+	}
+	?>
 }
-</script></head><body onload="onLoad()">
+</script></head><body>
 <div>
-	<img src="template/picture.png"/>
-	<form method="get">
-	<p>Team Number:</p>
-	<p><input id="team" name="team" type="number"></input></p>
-	<p><input type="submit"></input></p>
-	</form>
+	<img src="logo.png"/>
+	<?php
+	if (!(count($events) > 0) && !(count($teams) >0)) {
+	echo "<script>onLoad();</script><h1>Welcome to ORF's Scouting Data Viewer!</h1><form method=\"get\" action=\"index.php\">
+	<p>Team Number or Event Key:</p>
+	<p><input style=\"font-size: 20; text-align:center;\" id=\"input\" name=\"input\" type=\"text\"></input></p>".
+	(($showHiddenData) ? "<input style=\"display:none\" id=\"showHiddenData\" name=\"showHiddenData\" type=\"text\" value=\"".$hiddenDataKey."\"></input>" : "")
+	."<p><input style=\"font-size: 20;\" type=\"submit\"></input></p>
+	</form>";
+	}
+	?>
+	
 	<p><?php echo $error ?></p>
-</div>
+	<?php
+	if (count($events) > 0 && $error == "" && $inputTeam && !$inputEvent) {
+		echo "<h1>Team ".$input." has been scouted at these events this season:</h1>";
+		echo "<form action=\"viewTeam.php\" method=\"get\"> <input type=\"text\" style=\"display:none\" name=\"teamNumber\" value=\"".$input."\"></input>";
+		if ($showHiddenData) echo "<input type=\"text\" style=\"display:none\" name=\"showHiddenData\" value=\"".$hiddenDataKey."\"></input>";
+		echo "<select style= \"font-size: 1cm;\" name=\"eventCode\">";
+		foreach($events as $event) {
+			$eventCode = explode("/",$event)[2];
+			if (substr($eventCode,0,4) == $seasonYear) {
+				echo "<option value=\"".$eventCode."\"'>".getNameEventCode($eventCode)."</option>";
+			}
+		}
+		
+		echo "</select><input style=\"font-size: 0.85cm;margin-left: 50;margin-top: 50;\" type=\"submit\" value=\"View Data\"></input></form><br/>";
+		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
+	}
+	
+	if (count($teams) > 0 && $error == "" && !$inputTeam && $inputEvent) {
+		echo "<h1>These teams have been scouted from the event \"".getNameEventCode($input)."\":</h1>";
+		echo "<form action=\"viewTeam.php\" method=\"get\"> <input type=\"text\" style=\"display:none\" name=\"eventCode\" value=\"".$input."\"></input>";
+		if ($showHiddenData) echo "<input type=\"text\" style=\"display:none\" name=\"showHiddenData\" value=\"".$hiddenDataKey."\"></input>";
+		echo "<select style= \"font-size: 1cm;\" name=\"teamNumber\">";
+		foreach($teams as $team) {
+			$teamNumber = explode("/",$team)[3];
+			if (getNameTeamNumber($teamNumber, $input) != $teamNumber) {
+				echo "<option value=\"".$teamNumber."\"'>".$teamNumber." - ".getNameTeamNumber($teamNumber, $input)."</option>";
+			}
+		}
+		
+		echo "</select><input style=\"font-size: 0.85cm;margin-left: 50;margin-top: 50;\" type=\"submit\" value=\"View Data\"></input></form><br/>";
+		echo "<p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
+	}
+	?>
+</div></body>

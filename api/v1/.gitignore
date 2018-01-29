@@ -1,0 +1,4 @@
+*/**
+!submit.php
+!syncDownload.php
+!viewTeam/*
