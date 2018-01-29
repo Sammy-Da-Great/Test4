@@ -3,7 +3,6 @@ ini_set('max_execution_time', 900); //In seconds
 header("Content-Type: application/json");
 
 include "../../config.php";
-include "../../util.php";
 
 $baseUrl = 'http://www.thebluealliance.com/api/v3/';
 $cacheDir = __DIR__."/Cache/";
@@ -15,7 +14,6 @@ if (file_exists($cacheDir."/fullResponse.json")) {
 	$cachedFile = file($cacheDir."/fullResponse.json");
 	if (time() - strtotime($cachedFile[0]) < 300 && !isSet($_GET["forceRefresh"])) {
 		echo $cachedFile[1];
-		logToFile("Used Full Cache.");
 		exit;
 	} else {
 		unlink($cacheDir."/fullResponse.json");
@@ -27,9 +25,7 @@ function curlRequest($url,$httpHeaders) {
 	curl_setopt($ch, CURLOPT_HEADER, 1);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $httpHeaders);
-	logToFile("Start request: ".$url);
 	$rawResult = curl_exec($ch);
-	logToFile("End request: ".$url);
 	$result = array();
 	
 	$headersString = trim(substr($rawResult,0,curl_getinfo($ch, CURLINFO_HEADER_SIZE)));
@@ -55,7 +51,6 @@ $data = array();
 $data["CurrentVersion"] = ["2018","1","0"];
 
 #Request 1: District Events
-logToFile("Start District Events");
 $districtEventsCacheDir = $cacheDir."EventInfo/";
 if (!file_exists($districtEventsCacheDir)) {
 	mkdir($districtEventsCacheDir);
@@ -101,8 +96,6 @@ if ($result1["http_code"] == 304) {
 	$dataToWrite = $result1["header"]["last-modified"]."\n".str_replace("\n","",$result1["body"]);
 	file_put_contents($districtEventsCacheDir."districtEvents.json",$dataToWrite);
 }
-logToFile("End District Events");
-logToFile("Start World Events");
 $worldCmpEventKeys = array("carv","gal","hop","new","roe","tur","tes","dar","dal","cur","cars","arc");
 $worldCmpCacheDir = $cacheDir."EventInfo/worldCmp/";
 if (!file_exists($worldCmpCacheDir)) {
@@ -149,9 +142,8 @@ foreach($worldCmpEventKeys as $cmpKey) {
 		file_put_contents($worldCmpCacheDir.$seasonYear.$cmpKey.".json",$dataToWrite);
 	}
 }
-logToFile("End World Events");
+
 #Request 2: Teams for each event
-logToFile("Start Team List for Events");
 $teamAtEventCacheDir = $cacheDir."TeamList/";
 if (!file_exists($teamAtEventCacheDir)) {
 	mkdir($teamAtEventCacheDir);
@@ -193,9 +185,8 @@ foreach ($data["Events"] as $event) {
 	$data["TeamsByEvent"][] = $tmpData;
 	unset($tmpData);
 }
-logToFile("End Team List for Events");
+
 #Request 3: Matches for each team for each event.
-logToFile("Start Match Keys for Team at Event");
 $teamMatchesCacheDir = $cacheDir."teamMatches/";
 if (!file_exists($teamMatchesCacheDir)) {
 	mkdir($teamMatchesCacheDir);
@@ -243,7 +234,6 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 }
 	
 unset($event, $tmpDataTeam);
-logToFile("End Match Keys for Team at Event");
 
 $responseCache = fopen($cacheDir."/fullResponse.json","w"); //Cache full response so it can be used in the next 5 minutes.
 fwrite($responseCache,time()."\n".json_encode($data));
