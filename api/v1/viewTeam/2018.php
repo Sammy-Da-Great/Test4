@@ -15,14 +15,10 @@ if (isSet($_GET["showHiddenData"])) {
 } else {
 	$showHiddenData = false;
 }
-include_once "util.php";
-LogToFile("ViewTeam start");
-LogToFile("Begin API call");
 ob_start();
 include_once "api/v1/retrieveTeam.php";
 header("Content-Type: text/html");
 $result = json_decode(ob_get_clean(), true);
-LogToFile("API Call complete");
 
 if (isSet($result["Error"])) {
 	$error = $result["Error"];
