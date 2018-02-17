@@ -60,7 +60,51 @@ switch($_GET["exportType"]) {
 		}
 		
 		$eventDirectories = glob('[0-9][0-9][0-9][0-9]*' , GLOB_ONLYDIR);
-		var_dump($eventDirectories);
+		$events = array();
+		foreach($eventDirectories as $eventDirectory) {
+			$teamDirs = glob('[0-9][0-9][0-9][0-9]', GLOB_ONLYDIR);
+			foreach ($teamDirs as $teamDir) {
+				if ($teamDir == $_GET["teamNumber"]) array_push($events, $teamDir);
+			}
+		}
+		
+		$zip = new ZipArchive;
+		$zip->open($_GET["teamNumber"].".zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
+		
+		foreach($events as $event) {
+			$pathToFolder = $event."/".$_GET["teamNumber"];
+			if (file_exists($pathToFolder)) {
+					if (count($pitDataRaw = file($pathToFolder."/pitScout.json")) > 0) {
+						$pitData = json_decode(file()[0], true);
+					
+						$pitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
+						$pitLine .= $pitData["ScouterName"].",".$pitData["ScouterTeamNumber"].",".$pitData["EventKey"].",".$pitData["TeamNumber"].",".$pitData["Pre_StartingPos"].",".$pitData["Auto_CrossedBaseline"].",".$pitData["Auto_PlaceSwitch"].",".$pitData["Auto_PlaceScale"].",".$pitData["Auto_Notes"].",".$pitData["Teleop_SwitchPlace"].",".$pitData["Teleop_ScalePlace"].",".$pitData["Teleop_ExchangeVisit"].",".$pitData["Teleop_Climb"].",".$pitData["Teleop_Notes"].",".$pitData["RobotNotes"].",".$pitData["Strategy_PowerUp"].",".$pitData["Strategy_General"].PHP_EOL;
+						$zip->addFromString($event."/pitData.csv",$pitLine);
+					}
+					
+					if (count($standDataRaw = file($pathToFolder."/standScout.json")) > 0) {
+						$standData = array();
+						foreach ($standDataRaw as $standRaw) {
+							$standData[] = json_decode($standRaw, true);
+						}
+					
+						$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+						foreach ($standData as $singleStandData) {
+							$standLine .= $singleStandData["ScouterName"].",".$singleStandData["ScouterTeamNumber"].",".$singleStandData["EventKey"].",".$singleStandData["TeamNumber"].",".$singleStandData["MatchNumber"].",".$singleStandData["Pre_StartingPos"].",".$singleStandData["Auto_CrossedBaseline"].",".$singleStandData["Auto_PlaceSwitch"].",".$singleStandData["Auto_PlaceScale"].",".$singleStandData["Auto_Notes"].",".$singleStandData["Teleop_SwitchPlace"].",".$singleStandData["Teleop_ScalePlace"].",".$singleStandData["Teleop_ExchangeVisit"].",".$singleStandData["Post_Climb"].",".$singleStandData["Teleop_Notes"].",".$singleStandData["Teleop_BoostUsed"].",".$singleStandData["Teleop_ForceUsed"].",".$singleStandData["Teleop_LevitateUsed"].",".$singleStandData["Post_Climb"].",".$singleStandData["Notes"].",".$singleStandData["Pre_NoShow"].",".$singleStandData["DOF"].PHP_EOL;
+						}
+					
+						$zip->addFromString($event."/standData.csv",$standLine);
+					}
+					$zip->close();
+					
+					header('Content-Type: application/zip');
+					header('Content-disposition: attachment; filename='.$_GET["teamNumber"].'.zip');
+					header('Content-Length: ' . filesize($_GET["teamNumber"].".zip"));
+					readfile($_GET["teamNumber"].".zip");
+					unlink($_GET["teamNumber"].".zip");
+					exit;
+				}
+		}
 		break;
 		
 	case "teamAtEventData":
