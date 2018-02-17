@@ -156,7 +156,7 @@ switch($_GET["exportType"]) {
 		$zip->open("allData.zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
 		$eventDirs = glob('[0-9][0-9][0-9][0-9]*' , GLOB_ONLYDIR);
 		foreach($eventDirs as $eventDir) {
-			$teamDirs = glob('[0-9]*', GLOB_ONLYDIR);
+			$teamDirs = glob($eventDir.'/[0-9]*', GLOB_ONLYDIR);
 			foreach ($teamDirs as $teamDir) {
 				$pathToFolder = $eventDir."/".$teamDir;
 				if (count($pitDataRaw = file($pathToFolder."/pitScout.json")) > 0) {
