@@ -58,6 +58,9 @@ switch($_GET["exportType"]) {
 			http_response_code(400);
 			exit;
 		}
+		
+		$eventDirectories = glob('[0-9][0-9][0-9][0-9]*' , GLOB_ONLYDIR);
+		var_dump($eventDirectories);
 		break;
 		
 	case "teamAtEventData":
