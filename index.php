@@ -181,7 +181,7 @@ function onLoad() {
 		
 		echo "</select><input style=\"font-size: 0.85cm;margin-left: 50;margin-top: 50;\" type=\"submit\" value=\"View Data\"></input></form><br/>";
 		echo "<p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
-		echo "<p><a href=\"api/v1/exportData.php?exportType=eventData&teamNumber=".$input."\" target=\"_blank\">Download All Data for this Event</a>";
+		echo "<p><a href=\"api/v1/exportData.php?exportType=eventData&eventKey=".$input."\" target=\"_blank\">Download All Data for this Event</a>";
 	}
 	?>
 </div></body>
