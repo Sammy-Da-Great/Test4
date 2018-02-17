@@ -1,4 +1,5 @@
 */**
+*.zip
 !submit.php
 !syncDownload.php
 !viewTeam/*
