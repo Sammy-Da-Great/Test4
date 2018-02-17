@@ -218,6 +218,7 @@ foreach ($result["Stand"]["Matches"] as $match) {
 ?>
 </table>
 <p></p>
+<p><a href="api/v1/exportData.php?exportType=teamAtEventData&teamNumber=<?php echo $result["TeamNumber"]; ?>&eventKey=<?php echo $result["EventCode"]; ?>" target="_blank">Download Data</a></p>
 <p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?input=<?php echo $result["TeamNumber"]; ?>">http://orfscoutingservice.azurewebsites.net/index.php?input=<?php echo $result["TeamNumber"]; ?></a></p><br/>
 <div style="text-align:center;"><input type="button" style="font-size: 20;" onclick="returnHome()" value="Go Back"></div><br/>
 </body></html>

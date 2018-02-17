@@ -121,6 +121,12 @@ div {
     margin: auto;
 	text-align: center;
 }
+a {
+	color: white;
+	cursor: pointer;
+}
+
+a:hover,a.hover { text-decoration: underline; }
 </style><script>
 function onLoad() {
 	<?php if ($error == "" && $input != "") {
@@ -138,7 +144,7 @@ function onLoad() {
 	<p><input style=\"font-size: 20; text-align:center;\" id=\"input\" name=\"input\" type=\"text\"></input></p>".
 	(($showHiddenData) ? "<input style=\"display:none\" id=\"showHiddenData\" name=\"showHiddenData\" type=\"text\" value=\"".$hiddenDataKey."\"></input>" : "")
 	."<p><input style=\"font-size: 20;\" type=\"submit\"></input></p>
-	</form>";
+	</form><br/><p><a href=\"api/v1/exportData.php?exportType=allData\" target=\"_blank\">Download All Data</a>";
 	}
 	?>
 	
@@ -158,6 +164,7 @@ function onLoad() {
 		
 		echo "</select><input style=\"font-size: 0.85cm;margin-left: 50;margin-top: 50;\" type=\"submit\" value=\"View Data\"></input></form><br/>";
 		echo "<br/><p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
+		echo "<p><a href=\"api/v1/exportData.php?exportType=teamData&teamNumber=".$input."\" target=\"_blank\">Download All Data for ".$input."</a>";
 	}
 	
 	if (count($teams) > 0 && $error == "" && !$inputTeam && $inputEvent) {
@@ -174,6 +181,7 @@ function onLoad() {
 		
 		echo "</select><input style=\"font-size: 0.85cm;margin-left: 50;margin-top: 50;\" type=\"submit\" value=\"View Data\"></input></form><br/>";
 		echo "<p><button style=\"font-size: 20;\" onClick='window.location.href=\"index.php\"'>Go Back</button><br/>";
+		echo "<p><a href=\"api/v1/exportData.php?exportType=eventData&eventKey=".$input."\" target=\"_blank\">Download All Data for this Event</a>";
 	}
 	?>
 </div></body>
