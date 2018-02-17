@@ -164,7 +164,7 @@ switch($_GET["exportType"]) {
 				
 					$pitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
 					$pitLine .= $pitData["ScouterName"].",".$pitData["ScouterTeamNumber"].",".$pitData["EventKey"].",".$pitData["TeamNumber"].",".$pitData["Pre_StartingPos"].",".$pitData["Auto_CrossedBaseline"].",".$pitData["Auto_PlaceSwitch"].",".$pitData["Auto_PlaceScale"].",".$pitData["Auto_Notes"].",".$pitData["Teleop_SwitchPlace"].",".$pitData["Teleop_ScalePlace"].",".$pitData["Teleop_ExchangeVisit"].",".$pitData["Teleop_Climb"].",".$pitData["Teleop_Notes"].",".$pitData["RobotNotes"].",".$pitData["Strategy_PowerUp"].",".$pitData["Strategy_General"].PHP_EOL;
-					$zip->addFromString($eventDir."/".$teamDir."/pitData.csv",$pitLine);
+					$zip->addFromString($pathToFolder."/pitData.csv",$pitLine);
 				}
 					
 				if (count($standDataRaw = file($pathToFolder."/standScout.json")) > 0) {
@@ -178,7 +178,7 @@ switch($_GET["exportType"]) {
 						$standLine .= $singleStandData["ScouterName"].",".$singleStandData["ScouterTeamNumber"].",".$singleStandData["EventKey"].",".$singleStandData["TeamNumber"].",".$singleStandData["MatchNumber"].",".$singleStandData["Pre_StartingPos"].",".$singleStandData["Auto_CrossedBaseline"].",".$singleStandData["Auto_PlaceSwitch"].",".$singleStandData["Auto_PlaceScale"].",".$singleStandData["Auto_Notes"].",".$singleStandData["Teleop_SwitchPlace"].",".$singleStandData["Teleop_ScalePlace"].",".$singleStandData["Teleop_ExchangeVisit"].",".$singleStandData["Post_Climb"].",".$singleStandData["Teleop_Notes"].",".$singleStandData["Teleop_BoostUsed"].",".$singleStandData["Teleop_ForceUsed"].",".$singleStandData["Teleop_LevitateUsed"].",".$singleStandData["Post_Climb"].",".$singleStandData["Notes"].",".$singleStandData["Pre_NoShow"].",".$singleStandData["DOF"].PHP_EOL;
 					}
 					
-					$zip->addFromString($eventDir."/".$teamDir."/standData.csv",$standLine);
+					$zip->addFromString($pathToFolder."/standData.csv",$standLine);
 				}
 			}
 		}
