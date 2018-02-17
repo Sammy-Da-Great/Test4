@@ -47,7 +47,7 @@ function returnCorrectTd($windowTitle,$array) {
 
 function returnCorrectTd2Arrays($windowTitle,$array1, $array2) {
 	if (count($array1) > 1 && count($array2) > 1) {
-		return "<a onclick=\"openWindow('".$windowTitle."',".arrayToString($array)."',".arrayToString($array2).")\">Show All</a>";
+		return "<a onclick=\"openWindow2Description('".$windowTitle."',".arrayToString($array1).",".arrayToString($array2).")\">Show All</a>";
 	} else if (count($array1) > 1) {
 		return returnCorrectTd($windowTitle,$array1);
 	} else if (count($array1) == 1 && count($array2) >= 1) {
@@ -163,8 +163,8 @@ function openWindow(type, description) {
 	newWindow.document.write("<button onclick=\"window.close()\">Close</button></body>");
 }
 
-function openWindow(type, description1, description2) {
-	var newWindow = window.open("","Description"+type+description+Math.random(),"width=500,height=500,left=50");
+function openWindow2Description(type, description1, description2) {
+	var newWindow = window.open("","Description"+type+description1+description2+Math.random(),"width=500,height=500,left=50");
 	newWindow.document.write("<body style=\"background-color:black;text-align:center;color:white;\"><h2>"+type+"</h2><br/>");
 	for(var i = 0; i < description1.length; i++) {
 		if (description2[i] != undefined) {
