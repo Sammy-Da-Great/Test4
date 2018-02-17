@@ -44,6 +44,20 @@ function returnCorrectTd($windowTitle,$array) {
 		return "";
 	}			
 }
+
+function returnCorrectTd2Arrays($windowTitle,$array1, $array2) {
+	if (count($array1) > 1 && count($array2) > 1) {
+		return "<a onclick=\"openWindow('".$windowTitle."',".arrayToString($array)."',".arrayToString($array2).")\">Show All</a>";
+	} else if (count($array1) > 1) {
+		return returnCorrectTd($windowTitle,$array1);
+	} else if (count($array1) == 1 && count($array2) >= 1) {
+		return $array1[0]." - ".$array2[0];
+	} else if (count($array1) == 1) {
+		return $array1[0];
+	} else {
+		return "";
+	}			
+}
 ?>
 
 <head>
@@ -112,11 +126,16 @@ function onLoad() {
 	var type = "<?php echo $result["Media"][0]["type"]; ?>";
 	var key = "<?php switch ($result["Media"][0]["type"]) {
 		case "imgur":
-		echo $result["Media"][0]["foreign_key"];
-		break;
+			echo $result["Media"][0]["foreign_key"];
+			break;
 
 		case "cdphotothread":
-		echo $result["Media"][0]["details"]["image_partial"];
+			echo $result["Media"][0]["details"]["image_partial"];
+			break;
+			
+		case "avatar":
+			echo "data:image/jpeg;base64,".$result["Media"][0]["base64Image"];
+			break;
 	}
 	?>";
 	
@@ -126,7 +145,11 @@ function onLoad() {
 			break;
 				
 		case "cdphotothread":
-			$("#logo").attr("http://www.chiefdelphi.com/media/img/"+key);
+			$("#logo").attr("src","http://www.chiefdelphi.com/media/img/"+key);
+			break;
+			
+		case "avatar":
+			$("#logo").attr("src",key);
 			break;
 	}
 }
@@ -136,6 +159,19 @@ function openWindow(type, description) {
 	newWindow.document.write("<body style=\"background-color:black;text-align:center;color:white;\"><h2>"+type+"</h2><br/>");
 	for(var i = 0; i < description.length; i++) {
 		newWindow.document.write("<p>"+description[i]+"</p><br/>");
+	}
+	newWindow.document.write("<button onclick=\"window.close()\">Close</button></body>");
+}
+
+function openWindow(type, description1, description2) {
+	var newWindow = window.open("","Description"+type+description+Math.random(),"width=500,height=500,left=50");
+	newWindow.document.write("<body style=\"background-color:black;text-align:center;color:white;\"><h2>"+type+"</h2><br/>");
+	for(var i = 0; i < description1.length; i++) {
+		if (description2[i] != undefined) {
+			newWindow.document.write("<p>"+description1[i]+" - "+description2[i]+"</p><br/>");
+		} else {
+			newWindow.document.write("<p>"+description1[i]+"</p><br/>");
+		}
 	}
 	newWindow.document.write("<button onclick=\"window.close()\">Close</button></body>");
 }
@@ -177,7 +213,7 @@ foreach ($result["Stand"]["Matches"] as $match) {
 			$processedMatch[$key][] = $oneScout[$key];
 		}
 	}
-	echo "<td>".returnCorrectTd("Scouts for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["ScouterName"])."</td><td>".$processedMatch["MatchNumber"][0]."</td><td>".returnCorrectTd("No Show by ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Pre_NoShow"])."</td><td>".returnCorrectTd("Starting positions for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Pre_StartingPos"])."</td><td>".returnCorrectTd("Baseline crosses in Auto for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_CrossedBaseline"])."</td><td>".returnCorrectTd("Power Cube placed on Switch in Auto by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_PlaceSwitch"])."</td><td>".returnCorrectTd("Power Cube placed on Scale in Auto by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_PlaceScale"])."</td><td>".returnCorrectTd("Autonomous Notes for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_Notes"])."</td><td>".returnCorrectTd("Switch visits in Teleop by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_SwitchPlace"])."</td><td>".returnCorrectTd("Scale visits in Teleop by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_ScalePlace"])."</td><td>".returnCorrectTd("Exchange Zone Visits by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_ExchangeVisit"])."</td><td>".returnCorrectTd("Teleop Notes for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_Notes"])."</td><td>".returnCorrectTd("Boost used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_BoostUsed"])."</td><td>".returnCorrectTd("Force used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_ForceUsed"])."</td><td>".returnCorrectTd("Levitate used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_LevitateUsed"])."</td><td>".returnCorrectTd("Climb status for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Post_Climb"])."</td><td>".returnCorrectTd("DOFs for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["DOF"])."</td><td>".returnCorrectTd("General Notes for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Notes"])."</td>".(($showHiddenData) ? "<td>".returnCorrectTd("No Alliance markings for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["NoAlliance"])."</td>" : "")."</tr>\n";
+	echo "<td>".returnCorrectTd2Arrays("Scouts for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["ScouterName"],$processedMatch["ScouterTeamNumber"])."</td><td>".$processedMatch["MatchNumber"][0]."</td><td>".returnCorrectTd("No Show by ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Pre_NoShow"])."</td><td>".returnCorrectTd("Starting positions for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Pre_StartingPos"])."</td><td>".returnCorrectTd("Baseline crosses in Auto for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_CrossedBaseline"])."</td><td>".returnCorrectTd("Power Cube placed on Switch in Auto by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_PlaceSwitch"])."</td><td>".returnCorrectTd("Power Cube placed on Scale in Auto by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_PlaceScale"])."</td><td>".returnCorrectTd("Autonomous Notes for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["Auto_Notes"])."</td><td>".returnCorrectTd("Switch visits in Teleop by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_SwitchPlace"])."</td><td>".returnCorrectTd("Scale visits in Teleop by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_ScalePlace"])."</td><td>".returnCorrectTd("Exchange Zone Visits by ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_ExchangeVisit"])."</td><td>".returnCorrectTd("Teleop Notes for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_Notes"])."</td><td>".returnCorrectTd("Boost used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_BoostUsed"])."</td><td>".returnCorrectTd("Force used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_ForceUsed"])."</td><td>".returnCorrectTd("Levitate used by ".$processedMatch["TeamNumber"][0]."\'s alliance in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Teleop_LevitateUsed"])."</td><td>".returnCorrectTd("Climb status for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Post_Climb"])."</td><td>".returnCorrectTd("DOFs for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["DOF"])."</td><td>".returnCorrectTd("General Notes for ".$processedMatch["TeamNumber"][0]." in Match ".$processedMatch["MatchNumber"][0],$processedMatch["Notes"])."</td>".(($showHiddenData) ? "<td>".returnCorrectTd("No Alliance markings for ".$processedMatch["TeamNumber"][0]." for Match ".$processedMatch["MatchNumber"][0],$processedMatch["NoAlliance"])."</td>" : "")."</tr>\n";
 }
 ?>
 </table>

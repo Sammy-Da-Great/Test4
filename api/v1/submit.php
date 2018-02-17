@@ -3,6 +3,7 @@ $expectedFormInputCommon = array(
 	"App",
 	"Version",
 	"ScouterName",
+	"ScouterTeamNumber",
 	"EventKey",
 	"TeamNumber",
 	"NoAlliance",

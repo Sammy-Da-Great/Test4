@@ -45,7 +45,7 @@ if (!file_exists($teamDataPath)) {
 	}
 }
 
-if (filesize($teamDataPath."/pitScout.json")>0) { //TODO UPDATE PIT DATA
+if (filesize($teamDataPath."/pitScout.json")>0) {
 	$file = fopen($teamDataPath."/pitScout.json","r");
     $data["Pit"] = json_decode(fread($file,filesize($teamDataPath."/pitScout.json")),true);
 	
