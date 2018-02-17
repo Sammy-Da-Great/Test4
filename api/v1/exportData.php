@@ -143,8 +143,8 @@ switch($_GET["exportType"]) {
 		$zip->close();
 				
 		header('Content-Type: application/zip');
-		header('Content-disposition: attachment; filename='.$_GET["teamNumber"].'.zip');
-		header('Content-Length: ' . filesize($_GET["teamNumber"].".zip"));
+		header('Content-disposition: attachment; filename='.$_GET["teamNumber"]."-".$_GET["eventKey"].'.zip');
+		header('Content-Length: ' . filesize($_GET["teamNumber"]."-".$_GET["eventKey"].".zip"));
 		readfile($_GET["teamNumber"]."-".$_GET["eventKey"].".zip");
 		unlink($_GET["teamNumber"]."-".$_GET["eventKey"].".zip");
 		exit;
