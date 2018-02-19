@@ -113,7 +113,7 @@ if (!file_exists($teamMatchesCacheDir)) {
 }
 $data["EventMatches"] = array();	
 foreach ($data["TeamsByEvent"] as $eventData) {
-	$event = (object) array ("key" => $eventData["EventKey"]);
+	$event = array ("key" => $eventData["EventKey"]);
 	foreach($eventData["TeamList"] as $team) {
 		$tmpDataTeam = array( "EventKey" => $event["key"] , "TeamNumber" => $team["team_number"]);
 		$tmpDataTeam["Matches"] = array("2018test_qm1","2018test_qm2","2018test_qm3","2018test_qm4","2018test_qm5","2018test_qm6","2018test_qm7","2018test_qm8","2018test_qm9");	
