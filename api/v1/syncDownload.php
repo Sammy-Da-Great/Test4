@@ -212,11 +212,11 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 		}
 		$url3 = $baseUrl.'team/'.$team->key.'/event/'.($event->key).'/matches/keys';
 		$result3 = curlRequest($url3,$httpHeader);
-		echo $result[1]["body"];
 	
 		$tmpDataTeam = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);
 		if ($result3["http_code"] == 304) {
 			$tmpDataTeam["Matches"] = json_decode($cachedJSON); 
+			if (count($tmpDataTeam["Matches"]) == 0) $tmpDataTeam["Matches"] = array("0000error_qm0");
 		} elseif ($result3["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 			if (isSet($cachedJSON)) {
 				$tmpDataTeam["Matches"] = json_decode($cachedJSON); 
