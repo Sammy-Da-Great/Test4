@@ -51,20 +51,8 @@ if (isSet($_POST["App"])) {
 		}
 	}
 	
-	include_once "../../config.php";
 	
-	$url = 'http://www.thebluealliance.com/api/v3/team/frc'.$_POST["TeamNumber"].'/event/'.$_POST["EventKey"].'/status';
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_exec($ch);
-	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	curl_close($ch);
-	if ($httpCode != 200) {
-		http_response_code(400);
-		exit;
-	}
-		if ($_POST["App"] == "stand") {
+	if ($_POST["App"] == "stand") {
 		foreach($expectedFormInputStand as $input) {
 			if (isSet($_POST[$input])) {
 				if (seralizeString($_POST[$input]) !== false) {
