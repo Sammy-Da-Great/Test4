@@ -46,34 +46,10 @@ if (!file_exists($teamAtEventCacheDir)) {
 $data["TeamsByEvent"] = array();
 foreach ($data["Events"] as $event) {
 	$tmpData = array("EventKey"=> $event["key"]);
-	$tmpData["TeamList"] = array(
-		array(
-			"key" => "frc0001",
-			"team_number" => 0001,
-			"nickname" => "Team #1",
-			"name" => "Team #1",
-			"city" => "City",
-			"state_prov" => "WA",
-			"country" => "USA"
-			),
-		array(
-			"key" => "frc0002",
-			"team_number" => 0002,
-			"nickname" => "Team #2",
-			"name" => "Team #2",
-			"city" => "City",
-			"state_prov" => "WA",
-			"country" => "USA"
-			),
-		array(
-			"key" => "frc0003",
-			"team_number" => 0003,
-			"nickname" => "Team #3",
-			"name" => "Team #3",
-			"city" => "City",
-			"state_prov" => "WA",
-			"country" => "USA"
-			),
+	$tmpData["TeamList"] = array( //Below are some example results, gathered from https://www.thebluealliance.com/api/v3/team/frc{TEAM_NUMBER}/simple, When we figure out what teams are comming, we can fill in this information.
+		json_decode('{ "city": "Olympia", "country": "USA", "key": "frc4450", "name": "The Community Foundation of South Puget Sound/Washington State Office of Superintendent of Public Education/Olympia School District/Advance Equipment Company/Boeing/Diamond Technology Innovations/H2OJet, Inc./Obee Credit Union/FastSigns, Inc./Christopher Cook/Google/Capital Industrial, Inc/Kiwanis International/Amazon/SPEEA/Capital Medical Center/SCJ alliance/Olympia School District Education Foundation/Solidworks/Microsoft&Capital High School&Avanti High School&Olympia High School", "nickname": "Olympia Robotics Federation", "state_prov": "Washington", "team_number": 4450 }',true),
+		json_decode('{ "city": "Tacoma", "country": "USA", "key": "frc2557", "name": "Boeing/OSPI/Tacoma School District/F5 Networks, Inc/Amazon/Zumar Industries Incorporated/Blue Origin/Hewitt Cabinets & Interiors/Intellectual Ventures/Elements of Education Partners/Marco Heidner foundation/FIRST Washington/Multicare/Microsoft/Aluminumand Bronze Fabricators/Pierce Aluminum Company/Northwest Pipe and Steel/Lakewood Rotary Club&Tacoma School of the Arts", "nickname": "SOTAbots ", "state_prov": "Washington", "team_number": 2557}',true),
+		json_decode('{ "city": "Bainbridge Island", "country": "USA", "key": "frc4915", "name": "Boeing/Bainbridge Schools Foundation/Office of Superintendent of Public Instruction/Xerox/Microsoft/Google/Bainbridge Island School District&Bainbridge High School", "nickname": "Spartronics", "state_prov": "Washington", "team_number": 4915 }',true),
 		array(
 			"key" => "frc0004",
 			"team_number" => 0004,
