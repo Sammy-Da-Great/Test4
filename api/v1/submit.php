@@ -6,7 +6,6 @@ $expectedFormInputCommon = array(
 	"ScouterTeamNumber",
 	"EventKey",
 	"TeamNumber",
-	"NoAlliance",
 	"Pre_StartingPos",	
 	"Auto_CrossedBaseline",
 	"Auto_Notes",
@@ -96,6 +95,7 @@ if (isSet($_POST["App"])) {
 		http_response_code(400);
 		exit;
 	}
+		$dataArray["NoAlliance"] = "N/A";
 		$lineToAppend = json_encode($dataArray);
 	echo $lineToAppend;
 	
