@@ -97,7 +97,7 @@ if (isSet($_POST["App"])) {
 	}
 		$dataArray["NoAlliance"] = "N/A";
 		$lineToAppend = json_encode($dataArray);
-	echo $lineToAppend;
+	
 	
 	$teamPath = getOrCreateTeamFolder($_POST["TeamNumber"], $_POST["EventKey"]);
 	if ($_POST["App"] == "stand") {
@@ -107,8 +107,11 @@ if (isSet($_POST["App"])) {
 	}
 	fwrite($dataFile, $lineToAppend."\n");
 	fclose($dataFile);
-	} else {
-		http_response_code(400);
+	
+	echo $lineToAppend;
+	
+} else {
+	http_response_code(400);
 	exit;
 }
 
