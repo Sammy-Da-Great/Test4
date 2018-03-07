@@ -40,7 +40,9 @@ switch($_GET["exportType"]) {
 					
 						$zip->addFromString($filePart."/standData.csv",$standLine);
 					}
-					$zip->close();
+				}
+			}
+			$zip->close();
 					
 					header('Content-Type: application/zip');
 					header('Content-disposition: attachment; filename='.$_GET["eventKey"].'.zip');
@@ -48,8 +50,6 @@ switch($_GET["exportType"]) {
 					readfile($_GET["eventKey"].".zip");
 					unlink($_GET["eventKey"].".zip");
 					exit;
-				}
-			}
 		}
 		break;
 		
