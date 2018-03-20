@@ -159,7 +159,7 @@ $result4 = json_decode(curl_exec($ch4),true);
 $data["Media"] = $result4;
 curl_close($ch4);
 
-$perferred = -1
+$perferred = -1;
 for ($i = 0; $i < count($result4) && $perferred == -1; $i++) {
 	if ($result4[$1]["preferred"] == true) $perferred = $i;
 }
