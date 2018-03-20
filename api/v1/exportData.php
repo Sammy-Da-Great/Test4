@@ -16,6 +16,10 @@ switch($_GET["exportType"]) {
 		if (file_exists($pathToEvent)) {
 			$zip = new ZipArchive;
 			$zip->open($_GET["eventKey"].".zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
+			
+			$combinedPitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
+			$combinedStandLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+			
 			$files = scandir($pathToEvent);
 			foreach($files as $filePart) {
 				if (file_exists($pathToEvent."/".$filePart) && ($filePart != "." && $filePart != "..")) {
@@ -24,6 +28,8 @@ switch($_GET["exportType"]) {
 					
 						$pitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
 						$pitLine .= "\"".$pitData["ScouterName"]."\",\"".$pitData["ScouterTeamNumber"]."\",\"".$pitData["EventKey"]."\",\"".$pitData["TeamNumber"]."\",\"".$pitData["Pre_StartingPos"]."\",\"".$pitData["Auto_CrossedBaseline"]."\",\"".$pitData["Auto_PlaceSwitch"]."\",\"".$pitData["Auto_PlaceScale"]."\",\"".$pitData["Auto_Notes"]."\",\"".$pitData["Teleop_SwitchPlace"]."\",\"".$pitData["Teleop_ScalePlace"]."\",\"".$pitData["Teleop_ExchangeVisit"]."\",\"".$pitData["Teleop_Climb"]."\",\"".$pitData["Teleop_Notes"]."\",\"".$pitData["RobotNotes"]."\",\"".$pitData["Strategy_PowerUp"]."\",\"".$pitData["Strategy_General"]."\"".PHP_EOL;
+						$combinedPitLine .= "\"".$pitData["ScouterName"]."\",\"".$pitData["ScouterTeamNumber"]."\",\"".$pitData["EventKey"]."\",\"".$pitData["TeamNumber"]."\",\"".$pitData["Pre_StartingPos"]."\",\"".$pitData["Auto_CrossedBaseline"]."\",\"".$pitData["Auto_PlaceSwitch"]."\",\"".$pitData["Auto_PlaceScale"]."\",\"".$pitData["Auto_Notes"]."\",\"".$pitData["Teleop_SwitchPlace"]."\",\"".$pitData["Teleop_ScalePlace"]."\",\"".$pitData["Teleop_ExchangeVisit"]."\",\"".$pitData["Teleop_Climb"]."\",\"".$pitData["Teleop_Notes"]."\",\"".$pitData["RobotNotes"]."\",\"".$pitData["Strategy_PowerUp"]."\",\"".$pitData["Strategy_General"]."\"".PHP_EOL;
+						
 						$zip->addFromString($filePart."/pitData.csv",$pitLine);
 					}
 					
@@ -36,12 +42,17 @@ switch($_GET["exportType"]) {
 						$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 						foreach ($standData as $singleStandData) {
 							$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+							$combinedStandLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
 						}
 					
 						$zip->addFromString($filePart."/standData.csv",$standLine);
 					}
 				}
 			}
+			
+			$zip->addFromString("combinedStandData.csv",$combinedStandLine);
+			$zip->addFromString("combinedPitData.csv",$combinedPitLine);
+			
 			$zip->close();
 					
 					header('Content-Type: application/zip');
@@ -70,6 +81,10 @@ switch($_GET["exportType"]) {
 		
 		$zip = new ZipArchive;
 		$zip->open($_GET["teamNumber"].".zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
+		
+		$combinedPitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
+		$combinedStandLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+		
 		foreach($events as $pathToFolder) {
 		    $event = explode("/",$pathToFolder)[0];
 			if (file_exists($pathToFolder)) {
@@ -78,6 +93,7 @@ switch($_GET["exportType"]) {
 					
 						$pitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
 						$pitLine .= "\"".$pitData["ScouterName"]."\",\"".$pitData["ScouterTeamNumber"]."\",\"".$pitData["EventKey"]."\",\"".$pitData["TeamNumber"]."\",\"".$pitData["Pre_StartingPos"]."\",\"".$pitData["Auto_CrossedBaseline"]."\",\"".$pitData["Auto_PlaceSwitch"]."\",\"".$pitData["Auto_PlaceScale"]."\",\"".$pitData["Auto_Notes"]."\",\"".$pitData["Teleop_SwitchPlace"]."\",\"".$pitData["Teleop_ScalePlace"]."\",\"".$pitData["Teleop_ExchangeVisit"]."\",\"".$pitData["Teleop_Climb"]."\",\"".$pitData["Teleop_Notes"]."\",\"".$pitData["RobotNotes"]."\",\"".$pitData["Strategy_PowerUp"]."\",\"".$pitData["Strategy_General"]."\"".PHP_EOL;
+						$combinedPitLine .= "\"".$pitData["ScouterName"]."\",\"".$pitData["ScouterTeamNumber"]."\",\"".$pitData["EventKey"]."\",\"".$pitData["TeamNumber"]."\",\"".$pitData["Pre_StartingPos"]."\",\"".$pitData["Auto_CrossedBaseline"]."\",\"".$pitData["Auto_PlaceSwitch"]."\",\"".$pitData["Auto_PlaceScale"]."\",\"".$pitData["Auto_Notes"]."\",\"".$pitData["Teleop_SwitchPlace"]."\",\"".$pitData["Teleop_ScalePlace"]."\",\"".$pitData["Teleop_ExchangeVisit"]."\",\"".$pitData["Teleop_Climb"]."\",\"".$pitData["Teleop_Notes"]."\",\"".$pitData["RobotNotes"]."\",\"".$pitData["Strategy_PowerUp"]."\",\"".$pitData["Strategy_General"]."\"".PHP_EOL;
 						$zip->addFromString($event."/pitData.csv",$pitLine);
 					}
 					
@@ -90,21 +106,25 @@ switch($_GET["exportType"]) {
 						$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 						foreach ($standData as $singleStandData) {
 							$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+							$combinedStandLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
 						}
 					
 						$zip->addFromString($event."/standData.csv",$standLine);
 					}
-					$zip->close();
-					
-					header('Content-Type: application/zip');
-					header('Content-disposition: attachment; filename='.$_GET["teamNumber"].'.zip');
-					header('Content-Length: ' . filesize($_GET["teamNumber"].".zip"));
-					readfile($_GET["teamNumber"].".zip");
-					unlink($_GET["teamNumber"].".zip");
-					exit;
-				}
+			}
 		}
-		break;
+		
+		$zip->addFromString("combinedStandData.csv",$combinedStandLine);
+		$zip->addFromString("combinedPitData.csv",$combinedPitLine);
+		
+		$zip->close();
+					
+		header('Content-Type: application/zip');
+		header('Content-disposition: attachment; filename='.$_GET["teamNumber"].'.zip');
+		header('Content-Length: ' . filesize($_GET["teamNumber"].".zip"));
+		readfile($_GET["teamNumber"].".zip");
+		unlink($_GET["teamNumber"].".zip");
+		exit;
 		
 	case "teamAtEventData":
 		if (!isSet($_GET["teamNumber"]) || !isSet($_GET["eventKey"])) {

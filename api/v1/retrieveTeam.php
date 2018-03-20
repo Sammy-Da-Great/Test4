@@ -157,6 +157,15 @@ curl_setopt($ch4, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch4, CURLOPT_RETURNTRANSFER, true);
 $result4 = json_decode(curl_exec($ch4),true);
 $data["Media"] = $result4;
+curl_close($ch4);
+
+$perferred = -1;
+for ($i = 0; $i < count($result4) && $perferred == -1; $i++) {
+	if ($result4[$i]["preferred"] == true) $perferred = $i;
+}
+if ($perferred == -1) $perferred = 0;
+
+$data["Media"]["Preferred"] = $perferred;
 
 echo json_encode($data);
 ?>
