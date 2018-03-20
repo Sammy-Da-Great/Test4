@@ -123,19 +123,23 @@ function onLoad() {
 	$("#ShareLink").attr("href",window.location.href);
 	$("#ShareLink").html(window.location.href);
 	
-	var type = "<?php echo $result["Media"][0]["type"]; ?>";
-	var key = "<?php switch ($result["Media"][0]["type"]) {
+	var type = "<?php if (isSet($result["Media"][$result["Media"]["Preferred"]]["type"]) echo $result["Media"][$result["Media"]["Preferred"]]["type"]; else echo "error"; ?>";
+	var key = "<?php if (isSet($result["Media"][$result["Media"]["Preferred"]]["type"]) {
+		switch ($result["Media"][$result["Media"]["Preferred"]]["type"]) {
 		case "imgur":
-			echo $result["Media"][0]["foreign_key"];
+			echo $result["Media"][$result["Media"]["Preferred"]]["foreign_key"];
 			break;
 
 		case "cdphotothread":
-			echo $result["Media"][0]["details"]["image_partial"];
+			echo $result["Media"][$result["Media"]["Preferred"]]["details"]["image_partial"];
 			break;
 			
 		case "avatar":
-			echo "data:image/jpeg;base64,".$result["Media"][0]["base64Image"];
+			echo "data:image/jpeg;base64,".$result["Media"][$result["Media"]["Preferred"]]["details"]["base64Image"];
 			break;
+		}
+	} else {
+		echo "error";
 	}
 	?>";
 	
@@ -150,6 +154,9 @@ function onLoad() {
 			
 		case "avatar":
 			$("#logo").attr("src",key);
+			break;
+			
+		default:
 			break;
 	}
 }
@@ -179,7 +186,7 @@ function openWindow2Description(type, description1, description2) {
 </head>
 <body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $result["TeamName"]." (".$result["TeamNumber"].") at ".$result["EventName"]; ?></h1>
-<img id="logo" src="/picture.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
+<img id="logo" src="/logo.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td colspan="2"><a target="_blank" href="index.php?input=<?php echo $result["TeamNumber"].(($showHiddenData) ? "&showHiddenData=".$hiddenDataKey: ""); ?>"><?php echo $result["TeamNumber"] ?></a> (<a target="_blank" href="<?php echo "http://thebluealliance.com/team/".$result["TeamNumber"]."/".$result["SeasonYear"]; ?>">View on The Blue Alliance</a>)</td></tr>
