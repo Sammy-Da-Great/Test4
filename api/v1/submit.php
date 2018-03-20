@@ -95,15 +95,36 @@ if (isSet($_POST["App"])) {
 		http_response_code(400);
 		exit;
 	}
-		$dataArray["NoAlliance"] = "N/A";
-		$lineToAppend = json_encode($dataArray);
-	
+
+	$dataArray["NoAlliance"] = "N/A";
+	$lineToAppend = json_encode($dataArray);
 	
 	$teamPath = getOrCreateTeamFolder($_POST["TeamNumber"], $_POST["EventKey"]);
+	
 	if ($_POST["App"] == "stand") {
-		$dataFile = fopen($teamPath."standScout.json","a");
+		$dataPath = $teamPath."standScout.json";
+		$lines = file($dataPath);
+		if ($lines !== false) {
+			foreach($lines as $line) {
+				if ($lineToAppend == $line) {
+					http_response_code(400);
+					exit;
+				}
+			}
+		}
+		$dataFile = fopen($dataPath,"a");
 	} else {
-		$dataFile = fopen($teamPath."pitScout.json","w");
+		$dataPath = $teamPath."pitScout.json";
+		$lines = file($dataPath);
+		if ($lines !== false) {
+			foreach($lines as $line) {
+				if ($lineToAppend == $line) {
+					http_response_code(400);
+					exit;
+				}
+			}
+		}
+		$dataFile = fopen($dataPath,"w");
 	}
 	fwrite($dataFile, $lineToAppend."\n");
 	fclose($dataFile);
