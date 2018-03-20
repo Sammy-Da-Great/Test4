@@ -47,7 +47,7 @@ function returnCorrectTd($windowTitle,$array) {
 
 function returnCorrectTd2Arrays($windowTitle,$array1, $array2) {
 	if (count($array1) > 1 && count($array2) > 1) {
-		return "<a onclick=\"openWindow2Description('".$windowTitle."',".arrayToString($array1).",".arrayToString($array2).")\">Show All</a>";
+		return "<a onclick=\"openWindow('".$windowTitle."',".arrayToString($array1).",".arrayToString($array2).")\">Show All</a>";
 	} else if (count($array1) > 1) {
 		return returnCorrectTd($windowTitle,$array1);
 	} else if (count($array1) == 1 && count($array2) >= 1) {
@@ -123,23 +123,19 @@ function onLoad() {
 	$("#ShareLink").attr("href",window.location.href);
 	$("#ShareLink").html(window.location.href);
 	
-	var type = "<?php if (isSet($result["Media"][$result["Media"]["Preferred"]]["type"])) echo $result["Media"][$result["Media"]["Preferred"]]["type"]; else echo "error"; ?>";
-	var key = "<?php if (isSet($result["Media"][$result["Media"]["Preferred"]]["type"])) {
-		switch ($result["Media"][$result["Media"]["Preferred"]]["type"]) {
+	var type = "<?php echo $result["Media"][0]["type"]; ?>";
+	var key = "<?php switch ($result["Media"][0]["type"]) {
 		case "imgur":
-			echo $result["Media"][$result["Media"]["Preferred"]]["foreign_key"];
+			echo $result["Media"][0]["foreign_key"];
 			break;
 
 		case "cdphotothread":
-			echo $result["Media"][$result["Media"]["Preferred"]]["details"]["image_partial"];
+			echo $result["Media"][0]["details"]["image_partial"];
 			break;
 			
 		case "avatar":
-			echo "data:image/jpeg;base64,".$result["Media"][$result["Media"]["Preferred"]]["details"]["base64Image"];
+			echo "data:image/jpeg;base64,".$result["Media"][0]["base64Image"];
 			break;
-		}
-	} else {
-		echo "error";
 	}
 	?>";
 	
@@ -155,9 +151,6 @@ function onLoad() {
 		case "avatar":
 			$("#logo").attr("src",key);
 			break;
-			
-		default:
-			break;
 	}
 }
 
@@ -170,8 +163,8 @@ function openWindow(type, description) {
 	newWindow.document.write("<button onclick=\"window.close()\">Close</button></body>");
 }
 
-function openWindow2Description(type, description1, description2) {
-	var newWindow = window.open("","Description"+type+description1+description2+Math.random(),"width=500,height=500,left=50");
+function openWindow(type, description1, description2) {
+	var newWindow = window.open("","Description"+type+description+Math.random(),"width=500,height=500,left=50");
 	newWindow.document.write("<body style=\"background-color:black;text-align:center;color:white;\"><h2>"+type+"</h2><br/>");
 	for(var i = 0; i < description1.length; i++) {
 		if (description2[i] != undefined) {
@@ -186,7 +179,7 @@ function openWindow2Description(type, description1, description2) {
 </head>
 <body onload="onLoad()">
 <h1 style="text-align:center"><?php echo $result["TeamName"]." (".$result["TeamNumber"].") at ".$result["EventName"]; ?></h1>
-<img id="logo" src="/logo.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
+<img id="logo" src="/picture.png" style="display: block;margin: 0 auto; border: 1px solid white; width: 70%"/>
 <h3 style="text-align:center">Quick Facts:</h3>
 <table class="center">
 <tr><td>Team Number:</td><td colspan="2"><a target="_blank" href="index.php?input=<?php echo $result["TeamNumber"].(($showHiddenData) ? "&showHiddenData=".$hiddenDataKey: ""); ?>"><?php echo $result["TeamNumber"] ?></a> (<a target="_blank" href="<?php echo "http://thebluealliance.com/team/".$result["TeamNumber"]."/".$result["SeasonYear"]; ?>">View on The Blue Alliance</a>)</td></tr>
@@ -225,7 +218,6 @@ foreach ($result["Stand"]["Matches"] as $match) {
 ?>
 </table>
 <p></p>
-<p><a href="api/v1/exportData.php?exportType=teamAtEventData&teamNumber=<?php echo $result["TeamNumber"]; ?>&eventKey=<?php echo $result["EventCode"]; ?>" target="_blank">Download Data</a></p>
 <p>Link for sharing: <a id="ShareLink" href="http://orfscoutingservice.azurewebsites.net/index.php?input=<?php echo $result["TeamNumber"]; ?>">http://orfscoutingservice.azurewebsites.net/index.php?input=<?php echo $result["TeamNumber"]; ?></a></p><br/>
 <div style="text-align:center;"><input type="button" style="font-size: 20;" onclick="returnHome()" value="Go Back"></div><br/>
 </body></html>
