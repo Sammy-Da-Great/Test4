@@ -144,14 +144,15 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	}
 }
 
-#Prune events that are not near now. (1 week before and 3 days after)
+#Only sync events that are not near now. (1 week before and 3 days after)
 $nowDT = new DateTime();
-foreach ($events as $event) {
-	$startString = $event->{"start_date"};
+foreach ($events as $eventObject) {
+	$event = (array)$eventObject;
+	$startString = $event["start_date"];
 	$eventStartDT = DateTime::CreateFromFormat("Y-m-d", $startString);
 	$eventStartDT->modify("1 week ago");
 	
-	$eventEndDT = DateTime::CreateFromFormat("Y-m-d", (string)$event->{"end_date"});
+	$eventEndDT = DateTime::CreateFromFormat("Y-m-d", (string)$event["end_date"]);
 	$eventEndDT->modify("+3 days");
 	
 	if ($eventStartDT < $nowDT && $nowDT < $eventEndDT) {
