@@ -48,8 +48,9 @@ function curlRequest($url,$httpHeaders) {
 }
 
 $data = array();
-$data["CurrentVersion"] = ["2018","1","0"];
+$data["CurrentVersion"] = ["2018","2","0"];
 
+$events = array();
 #Request 1: District Events
 $districtEventsCacheDir = $cacheDir."EventInfo/";
 if (!file_exists($districtEventsCacheDir)) {
@@ -65,14 +66,14 @@ if (file_exists($districtEventsCacheDir."districtEvents.json")) {
 }
 
 $url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
-$result1 = curlRequest($url1,$httpHeader); //From cache, nothing's changed.
-if ($result1["http_code"] == 304) {
-	$data["Events"] = json_decode($cachedJSON); 
+$result1 = curlRequest($url1,$httpHeader);
+if ($result1["http_code"] == 304) { //From cache, nothing's changed.
+	$events = json_decode($cachedJSON); 
 } elseif ($result1["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 	if (isSet($cachedJSON)) {
-		$data["Events"] = json_decode($cachedJSON);
+		$events = json_decode($cachedJSON);
 	} else {
-		$data["Events"] = array(
+		$events = array(
 		"city" => "Error",
 		"country" => "ERR",
 		"district" => array (
@@ -92,7 +93,7 @@ if ($result1["http_code"] == 304) {
 		);
 	}
 } else { //New data!
-	$data["Events"] = json_decode($result1["body"]);
+	$events = json_decode($result1["body"]);
 	$dataToWrite = $result1["header"]["last-modified"]."\n".str_replace("\n","",$result1["body"]);
 	file_put_contents($districtEventsCacheDir."districtEvents.json",$dataToWrite);
 }
@@ -112,12 +113,12 @@ foreach($worldCmpEventKeys as $cmpKey) {
 	$url1Cmp = $baseUrl.'event/'.$seasonYear.$cmpKey.'/simple';
 	$result1Cmp = curlRequest($url1Cmp,$httpHeader);
 	if ($result1Cmp["http_code"] == 304) { //Nothing changed! Use the cached data!
-		$data["Events"][] = json_decode($cachedJSON); 
+		$events[] = json_decode($cachedJSON); 
 	} elseif ($result1Cmp["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 		if (isSet($cachedJSON)) {
-		$data["Events"][] = json_decode($cachedJSON);
+		$events[] = json_decode($cachedJSON);
 		} else {
-		$data["Events"] = $data["Events"] + array(
+		$events = $events + array(
 			"city" => "Error",
 			"country" => "ERR",
 			"district" => array (
@@ -137,9 +138,24 @@ foreach($worldCmpEventKeys as $cmpKey) {
 			);
 		}
 	} else { //New data!
-		$data["Events"][] = json_decode($result1Cmp["body"]);
+		$events[] = json_decode($result1Cmp["body"]);
 		$dataToWrite = $result1Cmp["header"]["last-modified"]."\n".str_replace("\n","",$result1Cmp["body"]);
 		file_put_contents($worldCmpCacheDir.$seasonYear.$cmpKey.".json",$dataToWrite);
+	}
+}
+
+#Prune events that are not near now. (1 week before and 3 days after)
+$nowDT = new DateTime();
+foreach ($events as $event) {
+	$startString = $event->{"start_date"};
+	$eventStartDT = DateTime::CreateFromFormat("Y-m-d", $startString);
+	$eventStartDT->modify("1 week ago");
+	
+	$eventEndDT = DateTime::CreateFromFormat("Y-m-d", (string)$event->{"end_date"});
+	$eventEndDT->modify("+3 days");
+	
+	if ($eventStartDT < $nowDT && $nowDT < $eventEndDT) {
+		$data["Events"][] = $event;
 	}
 }
 

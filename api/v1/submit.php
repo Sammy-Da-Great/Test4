@@ -26,6 +26,10 @@ $expectedFormInputStand = array(
 	"Teleop_LevitateUsed",
 	"Post_Climb",
 	"DOF",
+	"Teleop_ScaleDrop",
+	"Teleop_SwitchDrop",
+	"Auto_DropSwitch",
+	"Auto_DropScale",
 );
 
 $expectedFormInputPit = array(
