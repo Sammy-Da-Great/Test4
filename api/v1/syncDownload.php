@@ -146,8 +146,12 @@ foreach($worldCmpEventKeys as $cmpKey) {
 
 #Only sync events that are not near now. (1 week before and 3 days after)
 $nowDT = new DateTime();
+$data["Events"] = array();
 foreach ($events as $event) {
-	if (!is_object($event)) continue;
+	if (!is_object($event)) {
+		var_dump($event);
+		continue;
+	}
 	$eventStartDT = DateTime::CreateFromFormat("Y-m-d", $event->start_date);
 	$eventStartDT->modify("1 week ago");
 	
