@@ -68,12 +68,12 @@ if (file_exists($districtEventsCacheDir."districtEvents.json")) {
 $url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
 $result1 = curlRequest($url1,$httpHeader);
 if ($result1["http_code"] == 304) { //From cache, nothing's changed.
-	$events = json_decode($cachedJSON); 
+	$events += json_decode($cachedJSON); 
 } elseif ($result1["http_code"] != 200) { //Something went wrong, give cached data if possible, error entry otherwise.
 	if (isSet($cachedJSON)) {
-		$events = json_decode($cachedJSON);
+		$events += json_decode($cachedJSON);
 	} else {
-		$events = array(
+		$events[] = array(
 		"city" => "Error",
 		"country" => "ERR",
 		"district" => array (
@@ -93,7 +93,7 @@ if ($result1["http_code"] == 304) { //From cache, nothing's changed.
 		);
 	}
 } else { //New data!
-	$events = json_decode($result1["body"]);
+	$events += json_decode($result1["body"]);
 	$dataToWrite = $result1["header"]["last-modified"]."\n".str_replace("\n","",$result1["body"]);
 	file_put_contents($districtEventsCacheDir."districtEvents.json",$dataToWrite);
 }
@@ -247,6 +247,10 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 			$dataToWrite = $result3["header"]["last-modified"]."\n".str_replace("\n","",$result3["body"]);
 			file_put_contents($teamMatchesEventCacheDir.($team->key).".json", $dataToWrite);
 		}	
+		
+		if (count($tmpDataTeam["Matches"]) == 0) {
+			$tmpDataTeam["Matches"][] = "0000error_er0";
+		}
 	
 		$data["EventMatches"][] = $tmpDataTeam;
 	}
