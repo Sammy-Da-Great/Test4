@@ -97,6 +97,7 @@ if ($result1["http_code"] == 304) { //From cache, nothing's changed.
 	$dataToWrite = $result1["header"]["last-modified"]."\n".str_replace("\n","",$result1["body"]);
 	file_put_contents($districtEventsCacheDir."districtEvents.json",$dataToWrite);
 }
+if (isSet($cachedJSON)) unset($cachedJSON);
 $worldCmpEventKeys = array("carv","gal","hop","new","roe","tur","tes","dar","dal","cur","cars","arc");
 $worldCmpCacheDir = $cacheDir."EventInfo/worldCmp/";
 if (!file_exists($worldCmpCacheDir)) {
@@ -143,13 +144,13 @@ foreach($worldCmpEventKeys as $cmpKey) {
 		file_put_contents($worldCmpCacheDir.$seasonYear.$cmpKey.".json",$dataToWrite);
 	}
 }
+if (isSet($cachedJSON)) unset($cachedJSON);
 
 #Only sync events that are not near now. (1 week before and 3 days after)
 $nowDT = new DateTime();
 $data["Events"] = array();
 foreach ($events as $event) {
 	if (!is_object($event)) {
-		var_dump($event);
 		continue;
 	}
 	$eventStartDT = DateTime::CreateFromFormat("Y-m-d", $event->start_date);
@@ -205,6 +206,7 @@ foreach ($data["Events"] as $event) {
 	$data["TeamsByEvent"][] = $tmpData;
 	unset($tmpData);
 }
+if (isSet($cachedJSON)) unset($cachedJSON);
 
 #Request 3: Matches for each team for each event.
 $teamMatchesCacheDir = $cacheDir."teamMatches/";
@@ -255,7 +257,7 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 		$data["EventMatches"][] = $tmpDataTeam;
 	}
 }
-	
+if (isSet($cachedJSON)) unset($cachedJSON);	
 unset($event, $tmpDataTeam);
 
 $responseCache = fopen($cacheDir."/fullResponse.json","w"); //Cache full response so it can be used in the next 5 minutes.
