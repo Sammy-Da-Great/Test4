@@ -26,6 +26,10 @@ $expectedFormInputStand = array(
 	"Teleop_LevitateUsed",
 	"Post_Climb",
 	"DOF",
+	"Teleop_ScaleDrop",
+	"Teleop_SwitchDrop",
+	"Auto_DropSwitch",
+	"Auto_DropScale",
 );
 
 $expectedFormInputPit = array(
@@ -112,7 +116,6 @@ if (isSet($_POST["App"])) {
 				}
 			}
 		}
-		$dataFile = fopen($dataPath,"a");
 	} else {
 		$dataPath = $teamPath."pitScout.json";
 		$lines = file($dataPath);
@@ -124,8 +127,8 @@ if (isSet($_POST["App"])) {
 				}
 			}
 		}
-		$dataFile = fopen($dataPath,"w");
 	}
+	$dataFile = fopen($dataPath,"a");
 	fwrite($dataFile, $lineToAppend."\n");
 	fclose($dataFile);
 	

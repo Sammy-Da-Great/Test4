@@ -84,34 +84,53 @@ if (filesize($teamDataPath."/pitScout.json")>0) {
 if (filesize($teamDataPath."/standScout.json")>0) {
 	$file = fopen($teamDataPath."/standScout.json","r");
 	$rawLine = explode("\n",fread ($file,filesize($teamDataPath."/standScout.json")));
-	$Low = 0;
-	$High = 0;
+	$LowPlace = 0;
+	$HighPlace = 0;
+	$LowDrop = 0;
+	$HighDrop = 0;
     $Exchange = 0;
     $matchData = array();
 	foreach($rawLine as $line) {
         $json = json_decode($line,true);
+		if (!isSet($json["MatchNumber"])) continue;
         if (!$showHiddenData) {
             unset($json["NoAlliance"]);
         }
+		if ($json["Auto_PlaceScale"] == "Placed") $json["Auto_PlaceScale"] = 1;
+		if ($json["Auto_PlaceSwitch"] == "Placed") $json["Auto_PlaceSwitch"] = 1;
+		
+		if (!isSet($json["Auto_DropSwitch"])) {
+			$json["Auto_DropSwitch"] = 0;
+			$json["Auto_DropScale"] = 0;
+			$json["Teleop_SwitchDrop"] = 0;
+			$json["Teleop_ScaleDrop"] = 0;
+		}
+		
         $matchData[$json["MatchNumber"]][] = $json;
-		$Low += ($json["Auto_PlaceSwitch"] == "Placed" ? 1 : 0) + $json["Teleop_SwitchPlace"];
-		$High += ($json["Auto_PlaceScale"] == "Placed" ? 1 : 0) + $json["Teleop_ScalePlace"];
+		$LowPlace += $json["Auto_PlaceSwitch"] + $json["Teleop_SwitchPlace"];
+		$HighPlace += $json["Auto_PlaceScale"] + $json["Teleop_ScalePlace"];
+		$LowDrop += $json["Auto_DropSwitch"] + $json["Teleop_SwitchDrop"];
+		$HighDrop += $json["Auto_DropScale"] + $json["Teleop_ScaleDrop"];
 		$Exchange += $json["Teleop_ExchangeVisit"];
         
     }
     $data["Stand"] = array(
         "Matches" => $matchData,
         "AvgExchangeVisits" => $Exchange/(count($rawLine)-1),
-        "AvgSwitchVisits" => $Low/(count($rawLine)-1),
-        "AvgScaleVisits" => $High/(count($rawLine)-1),
+        "AvgSwitchPlaces" => $LowPlace/(count($rawLine)-1),
+        "AvgScalePlaces" => $HighPlace/(count($rawLine)-1),
+		"AvgSwitchDrops" => $LowDrop/(count($rawLine)-1),
+        "AvgScaleDrops" => $HighDrop/(count($rawLine)-1),
     );
 	fclose($file);
 } else {
     $data["Stand"] = array(
         "Matches" => array(),
         "AvgExchangeVisits" => "Unknown",
-        "AvgSwitchVisits" => "Unknown",
-        "AvgScaleVisits" => "Unknown",
+        "AvgSwitchPlaces" => "Unknown",
+        "AvgScalePlaces" => "Unknown",
+		"AvgSwitchDrops" => "Unknown",
+        "AvgScaleDrops" => "Unknown",
     );
 }
 
