@@ -18,7 +18,7 @@ switch($_GET["exportType"]) {
 			$zip->open($_GET["eventKey"].".zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
 			
 			$combinedPitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
-			$combinedStandLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+			$combinedStandLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Dropped Cube attempting Switch,Autonomous: Dropped Cube attempting Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Dropped Cube attempting Switch,Teleop: Dropped Cube attempting Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 			
 			$files = scandir($pathToEvent);
 			foreach($files as $filePart) {
@@ -36,13 +36,20 @@ switch($_GET["exportType"]) {
 					if (count($standDataRaw = file($pathToEvent."/".$filePart."/standScout.json")) > 0) {
 						$standData = array();
 						foreach ($standDataRaw as $standRaw) {
-							$standData[] = json_decode($standRaw, true);
+							$standDataTmp = json_decode($standRaw, true);
+							if (!isSet($standDataTmp["Auto_DropSwitch"])) {
+								$standDataTmp["Auto_DropSwitch"] = 0;
+								$standDataTmp["Auto_DropScale"] = 0;
+								$standDataTmp["Teleop_SwitchDrop"] = 0;
+								$standDataTmp["Teleop_ScaleDrop"] = 0;
+							}
+							$standData[] = $standDataTmp;
 						}
 					
-						$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+						$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Dropped Cube attempting Switch,Autonomous: Dropped Cube attempting Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Dropped Cube attempting Switch,Teleop: Dropped Cube attempting Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 						foreach ($standData as $singleStandData) {
-							$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
-							$combinedStandLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+							$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_DropSwitch"]."\",\"".$singleStandData["Auto_DropScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_SwitchDrop"]."\",\"".$singleStandData["Teleop_ScaleDrop"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+							$combinedStandLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_DropSwitch"]."\",\"".$singleStandData["Auto_DropScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_SwitchDrop"]."\",\"".$singleStandData["Teleop_ScaleDrop"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
 						}
 					
 						$zip->addFromString($filePart."/standData.csv",$standLine);
@@ -83,7 +90,7 @@ switch($_GET["exportType"]) {
 		$zip->open($_GET["teamNumber"].".zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
 		
 		$combinedPitLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Robot Notes,Strategy for Power Ups,Strategy in General".PHP_EOL;
-		$combinedStandLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+		$combinedStandLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Dropped Cube attempting Switch,Autonomous: Dropped Cube attempting Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Dropped Cube attempting Switch,Teleop: Dropped Cube attempting Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 		
 		foreach($events as $pathToFolder) {
 		    $event = explode("/",$pathToFolder)[0];
@@ -100,13 +107,20 @@ switch($_GET["exportType"]) {
 					if (count($standDataRaw = file($pathToFolder."/standScout.json")) > 0) {
 						$standData = array();
 						foreach ($standDataRaw as $standRaw) {
-							$standData[] = json_decode($standRaw, true);
+							$standDataTmp = json_decode($standRaw, true);
+							if (!isSet($standDataTmp["Auto_DropSwitch"])) {
+								$standDataTmp["Auto_DropSwitch"] = 0;
+								$standDataTmp["Auto_DropScale"] = 0;
+								$standDataTmp["Teleop_SwitchDrop"] = 0;
+								$standDataTmp["Teleop_ScaleDrop"] = 0;
+							}
+							$standData[] = $standDataTmp;
 						}
 					
-						$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+						$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Dropped Cube attempting Switch,Autonomous: Dropped Cube attempting Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Dropped Cube attempting Switch,Teleop: Dropped Cube attempting Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 						foreach ($standData as $singleStandData) {
-							$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
-							$combinedStandLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+							$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_DropSwitch"]."\",\"".$singleStandData["Auto_DropScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_SwitchDrop"]."\",\"".$singleStandData["Teleop_ScaleDrop"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+							$combinedStandLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_DropSwitch"]."\",\"".$singleStandData["Auto_DropScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_SwitchDrop"]."\",\"".$singleStandData["Teleop_ScaleDrop"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
 						}
 					
 						$zip->addFromString($event."/standData.csv",$standLine);
@@ -149,13 +163,20 @@ switch($_GET["exportType"]) {
 					
 		if (count($standDataRaw = file($pathToFolder."/standScout.json")) > 0) {
 			$standData = array();
-			foreach ($standDataRaw as $standRaw) {
-				$standData[] = json_decode($standRaw, true);
-			}
+					foreach ($standDataRaw as $standRaw) {
+						$standDataTmp = json_decode($standRaw, true);
+						if (!isSet($standDataTmp["Auto_DropSwitch"])) {
+							$standDataTmp["Auto_DropSwitch"] = 0;
+							$standDataTmp["Auto_DropScale"] = 0;
+							$standDataTmp["Teleop_SwitchDrop"] = 0;
+							$standDataTmp["Teleop_ScaleDrop"] = 0;
+						}
+						$standData[] = $standDataTmp;
+					}
 					
-			$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+			$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Dropped Cube attempting Switch,Autonomous: Dropped Cube attempting Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Dropped Cube attempting Switch,Teleop: Dropped Cube attempting Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 			foreach ($standData as $singleStandData) {
-				$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+				$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_DropSwitch"]."\",\"".$singleStandData["Auto_DropScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_SwitchDrop"]."\",\"".$singleStandData["Teleop_ScaleDrop"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
 			}
 					
 			$zip->addFromString("standData.csv",$standLine);
@@ -189,12 +210,19 @@ switch($_GET["exportType"]) {
 				if (count($standDataRaw = file($teamDir."/standScout.json")) > 0) {
 					$standData = array();
 					foreach ($standDataRaw as $standRaw) {
-						$standData[] = json_decode($standRaw, true);
+						$standDataTmp = json_decode($standRaw, true);
+						if (!isSet($standDataTmp["Auto_DropSwitch"])) {
+							$standDataTmp["Auto_DropSwitch"] = 0;
+							$standDataTmp["Auto_DropScale"] = 0;
+							$standDataTmp["Teleop_SwitchDrop"] = 0;
+							$standDataTmp["Teleop_ScaleDrop"] = 0;
+						}
+						$standData[] = $standDataTmp;
 					}
 					
-					$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
+					$standLine = "Scout's Name,Scout's Team Number,Event Key,Team Number,Match Number,Starting Position,Autonomous: Crossed Baseline,Autonomous: Placed Cube on Switch,Autonomous: Placed Cube on Scale,Autonomous: Dropped Cube attempting Switch,Autonomous: Dropped Cube attempting Scale,Autonomous: Notes,Teleop: Placed Cube on Switch,Teleop: Placed Cube on Scale,Teleop: Dropped Cube attempting Switch,Teleop: Dropped Cube attempting Scale,Teleop: Number of Exchange Visits,Teleop: Climb,Teleop: Notes,Teleop: Boost Used,Teleop: Force Used,Teleop: Levitate Used,Climb,General Notes,No Show,Died on Field".PHP_EOL;
 					foreach ($standData as $singleStandData) {
-						$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
+						$standLine .= "\"".$singleStandData["ScouterName"]."\",\"".$singleStandData["ScouterTeamNumber"]."\",\"".$singleStandData["EventKey"]."\",\"".$singleStandData["TeamNumber"]."\",\"".$singleStandData["MatchNumber"]."\",\"".$singleStandData["Pre_StartingPos"]."\",\"".$singleStandData["Auto_CrossedBaseline"]."\",\"".$singleStandData["Auto_PlaceSwitch"]."\",\"".$singleStandData["Auto_PlaceScale"]."\",\"".$singleStandData["Auto_DropSwitch"]."\",\"".$singleStandData["Auto_DropScale"]."\",\"".$singleStandData["Auto_Notes"]."\",\"".$singleStandData["Teleop_SwitchPlace"]."\",\"".$singleStandData["Teleop_ScalePlace"]."\",\"".$singleStandData["Teleop_SwitchDrop"]."\",\"".$singleStandData["Teleop_ScaleDrop"]."\",\"".$singleStandData["Teleop_ExchangeVisit"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Teleop_Notes"]."\",\"".$singleStandData["Teleop_BoostUsed"]."\",\"".$singleStandData["Teleop_ForceUsed"]."\",\"".$singleStandData["Teleop_LevitateUsed"]."\",\"".$singleStandData["Post_Climb"]."\",\"".$singleStandData["Notes"]."\",\"".$singleStandData["Pre_NoShow"]."\",\"".$singleStandData["DOF"]."\"".PHP_EOL;
 					}
 					
 					$zip->addFromString($teamDir."/standData.csv",$standLine);

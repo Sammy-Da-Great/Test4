@@ -92,6 +92,7 @@ if (filesize($teamDataPath."/standScout.json")>0) {
     $matchData = array();
 	foreach($rawLine as $line) {
         $json = json_decode($line,true);
+		if (!isSet($json["MatchNumber"])) continue;
         if (!$showHiddenData) {
             unset($json["NoAlliance"]);
         }
