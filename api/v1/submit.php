@@ -116,7 +116,6 @@ if (isSet($_POST["App"])) {
 				}
 			}
 		}
-		$dataFile = fopen($dataPath,"a");
 	} else {
 		$dataPath = $teamPath."pitScout.json";
 		$lines = file($dataPath);
@@ -128,8 +127,8 @@ if (isSet($_POST["App"])) {
 				}
 			}
 		}
-		$dataFile = fopen($dataPath,"w");
 	}
+	$dataFile = fopen($dataPath,"a");
 	fwrite($dataFile, $lineToAppend."\n");
 	fclose($dataFile);
 	
