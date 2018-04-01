@@ -97,7 +97,9 @@ if (filesize($teamDataPath."/standScout.json")>0) {
             unset($json["NoAlliance"]);
         }
 		if ($json["Auto_PlaceScale"] == "Placed") $json["Auto_PlaceScale"] = 1;
+		else if ($json["Auto_PlaceScale"] == "Did not place") $json["Auto_PlaceScale"] = 1;
 		if ($json["Auto_PlaceSwitch"] == "Placed") $json["Auto_PlaceSwitch"] = 1;
+		else if ($json["Auto_PlaceSwitch"] == "Did not place") $json["Auto_PlaceSwitch"] = 1;
 		
 		if (!isSet($json["Auto_DropSwitch"])) {
 			$json["Auto_DropSwitch"] = 0;
