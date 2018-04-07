@@ -37,7 +37,15 @@ function arrayToString($array) {
 
 function returnCorrectTd($windowTitle,$array) {
 	if (count($array) > 1) {
-		return "<a onclick=\"openWindow('".$windowTitle."',".arrayToString($array).")\">Show All</a>";
+		$allEqual = true;
+		for($i=1;$i<count($array);$i++) {
+			if ($array[0] == $array[$i])
+				continue;
+			$allEqual = false;
+			break;
+		}
+		if ($allEqual) return $array[0];
+		else return "<a onclick=\"openWindow('".$windowTitle."',".arrayToString($array).")\">Show All</a>";
 	} else if (count($array) == 1) {
 		return $array[0];
 	} else {
