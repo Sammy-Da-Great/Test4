@@ -4,7 +4,6 @@ header("Content-Type: application/json");
 
 include "../../config.php";
 
-$baseUrl = 'http://www.thebluealliance.com/api/v3/';
 $cacheDir = __DIR__."/Cache/";
 if (!file_exists($cacheDir)) {
 	mkdir($cacheDir);
@@ -65,7 +64,7 @@ if (file_exists($districtEventsCacheDir."districtEvents.json")) {
 	$httpHeader[1] = "If-Modified-Since: ".trim($lastModified);
 }
 
-$url1 = $baseUrl.'district/'.$seasonYear.$districtKey.'/events/simple';
+$url1 = $TBAApiUrl.'/district/'.$seasonYear.$districtKey.'/events/simple';
 $result1 = curlRequest($url1,$httpHeader);
 if ($result1["http_code"] == 304) { //From cache, nothing's changed.
 	$events += json_decode($cachedJSON); 
@@ -111,7 +110,7 @@ foreach($worldCmpEventKeys as $cmpKey) {
 		$cachedJSON = $file[1];
 		$httpHeader[1] = "If-Modified-Since: ".$lastModified;
 	}
-	$url1Cmp = $baseUrl.'event/'.$seasonYear.$cmpKey.'/simple';
+	$url1Cmp = $TBAApiUrl.'/event/'.$seasonYear.$cmpKey.'/simple';
 	$result1Cmp = curlRequest($url1Cmp,$httpHeader);
 	if ($result1Cmp["http_code"] == 304) { //Nothing changed! Use the cached data!
 		$events[] = json_decode($cachedJSON); 
@@ -178,7 +177,7 @@ foreach ($data["Events"] as $event) {
 		$cachedJSON = $file[1];
 		$httpHeader[1] = "If-Modified-Since: ".$lastModified;
 	}
-    $url2 = $baseUrl.'event/'.($event->key).'/teams/simple';
+    $url2 = $TBAApiUrl.'/event/'.($event->key).'/teams/simple';
     $result2 = curlRequest($url2,$httpHeader);
 	
 	$tmpData = array("EventKey"=> $event->key);
@@ -232,7 +231,7 @@ foreach ($data["TeamsByEvent"] as $eventData) {
 			$cachedJSON = $file[1];
 			$httpHeader[1] = "If-Modified-Since: ".$lastModified;
 		}
-		$url3 = $baseUrl.'team/'.$team->key.'/event/'.($event->key).'/matches/keys';
+		$url3 = $TBAApiUrl.'/team/'.$team->key.'/event/'.($event->key).'/matches/keys';
 		$result3 = curlRequest($url3,$httpHeader);
 	
 		$tmpDataTeam = array( "EventKey" => $event->key , "TeamNumber" => $team->team_number);

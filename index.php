@@ -52,8 +52,8 @@ if ($error == "" && $input != "") {
 include "config.php";
 	
 function getNameEventCode($code) {	
-	global $TBAAuthKey;
-	$urlPrefix = 'http://www.thebluealliance.com/api/v3/event/';
+	global $TBAAuthKey, $TBAApiUrl;
+	$urlPrefix = $TBAApiUrl.'/event/';
 	$urlSuffix = '/simple';
 	
 	$url = $urlPrefix.$code.$urlSuffix;
@@ -71,9 +71,9 @@ function getNameEventCode($code) {
 
 $teamNameAtEvent = array();
 function getNameTeamNumber($teamNumber, $event) {
-	global $TBAAuthKey, $teamNameAtEvent;
+	global $TBAAuthKey, $TBAApiUrl, $teamNameAtEvent;
 	if (count($teamNameAtEvent) == 0) {
-		$url = 'http://www.thebluealliance.com/api/v3/event/'.$event.'/teams/simple';
+		$url = $TBAApiUrl.'/event/'.$event.'/teams/simple';
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

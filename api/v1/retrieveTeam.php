@@ -136,7 +136,7 @@ if (filesize($teamDataPath."/standScout.json")>0) {
     );
 }
 
-$url1 = 'http://www.thebluealliance.com/api/v3/event/'.$data["EventCode"].'/simple';
+$url1 = $TBAApiUrl.'/event/'.$data["EventCode"].'/simple';
 $ch1 = curl_init($url1);
 curl_setopt($ch1, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
@@ -148,7 +148,7 @@ if (isSet($result1["name"])) {
 }
 curl_close($ch1);
 
-$url2 = 'http://www.thebluealliance.com/api/v3/team/frc'.$data["TeamNumber"].'/simple';
+$url2 = $TBAApiUrl.'/team/frc'.$data["TeamNumber"].'/simple';
 $ch2 = curl_init($url2);
 curl_setopt($ch2, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
@@ -160,7 +160,7 @@ if (isSet($result2["nickname"])) {
 }
 curl_close($ch2);
 
-$url3 = 'http://www.thebluealliance.com/api/v3/team/frc'.$data["TeamNumber"].'/event/'.$data["EventCode"].'/status';
+$url3 = $TBAApiUrl.'/team/frc'.$data["TeamNumber"].'/event/'.$data["EventCode"].'/status';
 $ch3 = curl_init($url3);
 curl_setopt($ch3, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch3, CURLOPT_RETURNTRANSFER, true);
@@ -172,7 +172,7 @@ if (isSet($result3["overall_status_str"])) {
 }
 curl_close($ch3);
 
-$url4 = 'http://www.thebluealliance.com/api/v3/team/frc'.$data["TeamNumber"]."/media/".$data["SeasonYear"];
+$url4 = $TBAApiUrl.'/team/frc'.$data["TeamNumber"]."/media/".$data["SeasonYear"];
 $ch4 = curl_init($url4);
 curl_setopt($ch4, CURLOPT_HTTPHEADER, array('X-TBA-Auth-Key: '.$TBAAuthKey));
 curl_setopt($ch4, CURLOPT_RETURNTRANSFER, true);
