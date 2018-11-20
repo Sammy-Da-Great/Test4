@@ -4,7 +4,7 @@
 ## Response Type: JSON
 
 | Form Data | Description | Example |
--------------------------------------
+| -------  | -------  | ------- |
 | teamNumber | The team number of the team you want information on. |  `4450` |
 | eventCode | The event key of the event you want data about. Available through The Blue Alliance or in [syncDownload.php](syncDownload.md) | `2018waell` |
 | showHiddenData | A password used to reveal hidden data. (Nothing currently right now hidden.) | `password123` |

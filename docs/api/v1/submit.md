@@ -4,7 +4,7 @@
 ## Response Type: text/html
 
 | Form Data | Description | Example |
--------------------------------------
+| -------  | -------  | ------- |
 | App | Either `stand` or `pit`. Used to sort the incomming data into stand and pit scouting. | `stand` |
 | Version | A verion string to be recorded with the data submitted. | `v2018.2.0` |
 | ScouterName | The name of the person who recorded the data. | `Sean` |
