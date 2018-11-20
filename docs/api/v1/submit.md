@@ -1,7 +1,9 @@
 # submit.php
 
-## Request Type: POST
-## Response Type: text/html
+### Request Type: POST
+### Response Type: text/html
+
+## Form Data
 
 | Form Data | Description | Example |
 | -------  | -------  | ------- |
@@ -37,10 +39,10 @@
 | Strategy_PowerUp | (Used only for pit scouting.) The usual strategy of the team for using powerups. | `Levitate first, then while we're head, boost then force.` |
 | Strategy_General | (Used only for pit scouting.) The usual strategy of the team. | `Control their switch as fast as possible. Be offensive.` |
 
-## Response:
+## Response
 A JSON version of data submitted.
 
-## Example response
+## Example Response
 ```
 {"App":"stand","Version":"v2018.2.0","ScouterName":"Test","ScouterTeamNumber":"4450","EventKey":"2018demo","TeamNumber":"4450","Pre_StartingPos":"Center","Auto_CrossedBaseline":"Crossed","Auto_Notes":" ","Auto_PlaceSwitch":"10","Auto_PlaceScale":"22","Teleop_ScalePlace":"11","Teleop_SwitchPlace":"11","Teleop_ExchangeVisit":"22","Teleop_Notes":" ","Notes":"Best team ever","Pre_NoShow":"Showed Up","MatchNumber":"1","Teleop_BoostUsed":"Used","Teleop_ForceUsed":"Used","Teleop_LevitateUsed":"Used","Post_Climb":"No Climb - Not Parked","DOF":"Did not die on field","Teleop_ScaleDrop":"0","Teleop_SwitchDrop":"0","Auto_DropSwitch":"0","Auto_DropScale":"0","NoAlliance":"N\/A"}
 ```

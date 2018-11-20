@@ -1,7 +1,9 @@
 # retieveTeam.php
 
-## Request Type: GET
-## Response Type: JSON
+### Request Type: GET
+### Response Type: JSON
+
+## Form Data
 
 | Form Data | Description | Example |
 | -------  | -------  | ------- |
@@ -9,10 +11,10 @@
 | eventCode | The event key of the event you want data about. Available through The Blue Alliance or in [syncDownload.php](syncDownload.md) | `2018waell` |
 | showHiddenData | A password used to reveal hidden data. (Nothing currently right now hidden.) | `password123` |
 
-## Response:
+## Response
 A JSON file containing the information on the team at the specified event.
 
-## Example response
+## Example Response
 
 ```json
 {

@@ -1,12 +1,12 @@
 # syncDownload.php
 
-## Request Type: GET
-## Response Type: JSON
+### Request Type: GET
+### Response Type: JSON
 
-## Response: 
+## Response 
 A JSON file containing information on events that happen in 1 week or within the past 3 days, team lists of the teams at each event, and each match for each team at each event.
 
-## Example response
+## Example Response
 
 ```json
 {
