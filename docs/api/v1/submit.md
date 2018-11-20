@@ -1,7 +1,7 @@
 # submit.php
 
 ### Request Type: POST
-### Response Type: text/html
+### Response Type: JSON
 
 ## Form Data
 
