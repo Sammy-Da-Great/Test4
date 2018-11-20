@@ -3,3 +3,5 @@
 !sortableTable/*
 !/api
 !/api/**
+!docs/
+!docs/**
