@@ -96,33 +96,39 @@ if (filesize($teamDataPath."/standScout.json")>0) {
         if (!$showHiddenData) {
             unset($json["NoAlliance"]);
         }
-		if ($json["Auto_PlaceScale"] == "Placed") $json["Auto_PlaceScale"] = 1;
-		else if ($json["Auto_PlaceScale"] == "Did not place") $json["Auto_PlaceScale"] = 1;
-		if ($json["Auto_PlaceSwitch"] == "Placed") $json["Auto_PlaceSwitch"] = 1;
-		else if ($json["Auto_PlaceSwitch"] == "Did not place") $json["Auto_PlaceSwitch"] = 1;
+		if ($json["Auto_BallCargoShip"] == "Placed") $json["Auto_BallCargoShip"] = 1;
+		else if ($json["Auto_BallCargoShip"] == "Did not place") $json["Auto_BallCargoShip"] = 1;
+		if ($json["Auto_BallRocket"] == "Placed") $json["Auto_BallRocket"] = 1;
+		else if ($json["Auto_BallRocket"] == "Did not place") $json["Auto_BallRocket"] = 1;
+		if ($json["Auto_DiscCargoShip"] == "Placed") $json["Auto_DiscCargoShip"] = 1;
+		else if ($json["Auto_DiscCargoShip"] == "Did not place") $json["Auto_DiscCargoShip"] = 1;
+		if ($json["Auto_DiscRocket"] == "Placed") $json["Auto_DiscRocket"] = 1;
+		else if ($json["Auto_DiscRocket"] == "Did not place") $json["Auto_DiscRocket"] = 1;
 		
 		if (!isSet($json["Auto_DropSwitch"])) {
-			$json["Auto_DropSwitch"] = 0;
-			$json["Auto_DropScale"] = 0;
-			$json["Teleop_SwitchDrop"] = 0;
-			$json["Teleop_ScaleDrop"] = 0;
+			$json["Teleop_DiscDrop"] = 0;
+			$json["Teleop_BallDrop"] = 0;
 		}
 		
         $matchData[$json["MatchNumber"]][] = $json;
-		$LowPlace += $json["Auto_PlaceSwitch"] + $json["Teleop_SwitchPlace"];
-		$HighPlace += $json["Auto_PlaceScale"] + $json["Teleop_ScalePlace"];
-		$LowDrop += $json["Auto_DropSwitch"] + $json["Teleop_SwitchDrop"];
-		$HighDrop += $json["Auto_DropScale"] + $json["Teleop_ScaleDrop"];
-		$Exchange += $json["Teleop_ExchangeVisit"];
+		$DiscCargoShip += $json["Auto_DiscCargoShip"] + $json["Teleop_DiscCargoPlace"];
+		$DiscRocket += $json["Auto_DiscRocket"] + $json["Teleop_DiscRocketPlace"];
+		
+		$BallCargoShip += $json["Auto_BallCargoShip"] + $json["Teleop_BallCargoShipPlace"];
+		$BallRocket += $json["Auto_BallRocket"] + $json["Teleop_BallRocketPlace"];
+		
+		$DiscDrop += $json[ $json["Teleop_DiscDrop"];
+		$BallDrop += $json[$json["Teleop_BallDrop"];
         
     }
     $data["Stand"] = array(
         "Matches" => $matchData,
-        "AvgExchangeVisits" => $Exchange/(count($rawLine)-1),
-        "AvgSwitchPlaces" => $LowPlace/(count($rawLine)-1),
-        "AvgScalePlaces" => $HighPlace/(count($rawLine)-1),
-		"AvgSwitchDrops" => $LowDrop/(count($rawLine)-1),
-        "AvgScaleDrops" => $HighDrop/(count($rawLine)-1),
+        "AvgDiscCSPlaces" => $DiscCargoShip/(count($rawLine)-1),
+        "AvgBallCSPlaces" => $BallCargoShip/(count($rawLine)-1),
+	"AvgDiscRPlaces" => $DiscRocket/(count($rawLine)-1),
+        "AvgBallRPlaces" => $BallRocket/(count($rawLine)-1),
+	"AvgDiscDrops" => $DiscDrop/(count($rawLine)-1),
+        "AvgBallDrops" => $BallDrop/(count($rawLine)-1),
     );
 	fclose($file);
 } else {
