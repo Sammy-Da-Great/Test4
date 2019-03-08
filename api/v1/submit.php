@@ -19,6 +19,8 @@ $expectedFormInputCommon = array(
 	"Teleop_DiscRocketPlace",
 	"Teleop_BallCargoPlace",
 	"Teleop_BallRocketPlace",
+	"Teleop_DiscDrop",
+	"Teleop_BallDrop",
 	"Teleop_Level1",
 	"Teleop_Level2",
 	"Teleop_Level3",
