@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'ORF-4450ScoutingApp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2CC4D0D89294C5A8C408C0079E70C4D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_21CAA099452C4FEE81C43C98188F5AE5 }}
           package: .
